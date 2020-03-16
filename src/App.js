@@ -1,16 +1,20 @@
 import React from "react";
 import { Provider as StoreProvider } from "react-redux";
 import { ThemeProvider as SCThemeProvider } from "styled-components/macro";
+import { BrowserRouter } from "react-router-dom";
 
 import Router from "./router";
-import { theme } from "./styles";
+import { GlobalStyles, theme } from "./styles";
 import { store } from "./state";
 
 function App() {
   return (
     <StoreProvider store={store}>
       <SCThemeProvider theme={theme}>
-        <Router />
+        <GlobalStyles />
+        <BrowserRouter>
+          <Router />
+        </BrowserRouter>
       </SCThemeProvider>
     </StoreProvider>
   );
