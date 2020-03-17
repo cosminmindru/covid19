@@ -4,6 +4,7 @@ import MainLayout from "../templates/Main";
 import GlobalOverview from "../../components/GlobalOverview";
 import TrendSection from "../../components/TrendSection";
 import DeathRate from "../../components/DeathRate";
+import { ReactComponent as BacteriaIcon } from "../../assets/icons/bacteria.svg";
 
 const Wrapper = styled.div`
   display: grid;
@@ -13,7 +14,7 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 1200px;
   height: 100%;
-  padding: 1rem;
+  padding: 2rem;
 `;
 
 const Section = styled.section`
@@ -29,6 +30,7 @@ const meta = {
 const HomePage = () => {
   return (
     <MainLayout meta={meta}>
+      {/* <BacteriaIcon /> */}
       <Wrapper>
         <Section gridColumn="1 / last-line" gridRow="1 / 3" alignSelf="stretch">
           <GlobalOverview />
