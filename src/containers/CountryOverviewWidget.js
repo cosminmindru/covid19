@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components/macro";
 import get from "lodash/get";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { CountryStatsBarChart } from "../components/CountryStatsBarChart";
 import { useQuery } from "react-query";
 import { getCountries, getCountryDetails } from "../libs/covid19";
-import { CountryStatsBarChart } from "../components/CountryStatsBarChart";
-import { useEffect } from "react";
+import { formatCountriesObject } from "../utils/formatCountriesObject";
+import { formatCountryObject } from "../utils/formatCountryObject";
 
 const Wrapper = styled.section`
   display: grid;
@@ -60,47 +60,61 @@ const CountrySelectWrapper = styled.div`
 `;
 
 const CountryOverviewWidget = () => {
-  const [countryAutocompleteOpen, setCountryAutocompleteOpen] = useState(false);
-  const [countryList, setCountryList] = useState(null);
-  const [selectedCountry, setSelectedCountry] = useState({
-    name: "Afghanistan",
-    value: "AF"
-  });
+  const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const { isLoading: isLoadingCountry, data: countryData } = useQuery(
-    !!get(selectedCountry, "value") && [
-      "country",
-      { countryCode: get(selectedCountry, "value") }
-    ],
+  const [formattedCountries, setFormattedCountries] = useState([]);
+  const [formattedCountry, setFormattedCountry] = useState(null);
+
+  const {
+    isLoading: isLoadingCountries,
+    data: countriesData,
+    error: countriesError
+  } = useQuery("countries", getCountries);
+
+  const {
+    isLoading: isLoadingCountry,
+    data: countryData,
+    error: countryError
+  } = useQuery(
+    selectedCountry && [`country`, { countryCode: selectedCountry.code }],
     getCountryDetails
   );
 
-  const { isLoading: isLoadingCountryList } = useQuery(
-    "countries",
-    getCountries,
-    {
-      onSuccess: data => {
-        const countries = Object.entries(data.countries).map(country => ({
-          name: country[0],
-          value: country[1]
-        }));
-        const defaultSelectedCountry = countries[0];
-
-        setCountryList(countries);
-        setSelectedCountry(defaultSelectedCountry);
-      }
-    }
-  );
-
+  // Update formattedCountryList
   useEffect(() => {
-    console.log("dada");
-  }, [selectedCountry]);
+    if (countriesData) {
+      const newFormattedCountries = formatCountriesObject({
+        countries: countriesData
+      });
 
-  const onCountryChange = e => {
-    const newSelectedCountry = countryList.find(
-      country => country.value === e.target.value
-    );
-    setSelectedCountry(newSelectedCountry);
+      setFormattedCountries(newFormattedCountries);
+    }
+  }, [countriesData]);
+
+  // Update formattedCountry
+  useEffect(() => {
+    if (countryData) {
+      const newFormattedCountry = formatCountryObject({
+        country: countryData
+      });
+
+      setFormattedCountry(newFormattedCountry);
+    }
+  }, [countryData]);
+
+  const handleCountryChange = (_, country) => {
+    const oldSelecetedCountryCode = get(selectedCountry, "code");
+    const newSelectedCountryCode = get(country, "code");
+
+    // Do not update the selectedCountry if the same country is currently selected
+    if (
+      oldSelecetedCountryCode &&
+      newSelectedCountryCode &&
+      oldSelecetedCountryCode === newSelectedCountryCode
+    )
+      return;
+
+    setSelectedCountry(country);
   };
 
   return (
@@ -115,43 +129,20 @@ const CountryOverviewWidget = () => {
         </Typography>
         <CountrySelectWrapper>
           <Autocomplete
-            id="asynchronous-demo"
-            open={countryAutocompleteOpen}
-            onOpen={() => {
-              setCountryAutocompleteOpen(true);
-            }}
-            onClose={() => {
-              setCountryAutocompleteOpen(false);
-            }}
-            getOptionSelected={(option, value) => option.value === value.value}
+            value={selectedCountry}
+            onChange={handleCountryChange}
+            options={formattedCountries}
+            getOptionSelected={option =>
+              option.code === get(selectedCountry, "code")
+            }
             getOptionLabel={option => option.name}
-            options={countryList}
-            loading={isLoadingCountryList}
-            renderInput={params => (
-              <TextField
-                {...params}
-                label="Country"
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <React.Fragment>
-                      {isLoadingCountryList ? (
-                        <CircularProgress color="inherit" size={20} />
-                      ) : null}
-                      {params.InputProps.endAdornment}
-                    </React.Fragment>
-                  )
-                }}
-              />
-            )}
+            renderInput={params => <TextField {...params} label="country" />}
           />
         </CountrySelectWrapper>
       </HeaderSection>
       <Section gridColumn="1 / 5" gridRow="2 / last-line">
         <CountryStatsBarChart
-          confirmed={countryData.confirmed.value}
-          recovered={countryData.recovered.value}
-          deaths={countryData.deaths.value}
+          {...formattedCountry}
           isLoading={isLoadingCountry}
         />
       </Section>
