@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 import Typography from "@material-ui/core/Typography";
 import { useQuery } from "react-query";
 import { getOverview } from "../libs/covid19";
-import formatNumber from "../utils/formatNumber";
+import { formatNumber } from "../utils/formatNumber";
 
 const Wrapper = styled.section`
   display: grid;
@@ -29,7 +29,7 @@ const Item = styled.div`
   }
 `;
 
-const GlobalOverview = () => {
+const GlobalOverviewWidget = () => {
   const { data } = useQuery("overview", getOverview);
 
   return (
@@ -66,4 +66,4 @@ const GlobalOverview = () => {
   );
 };
 
-export default GlobalOverview;
+export { GlobalOverviewWidget };

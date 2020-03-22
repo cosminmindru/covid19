@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components/macro";
-import Meta from "../../components/Meta";
-import NavbarDesktop from "../../components/NavbarDesktop";
+import { Meta } from "../../components/Meta";
+import { Navbar } from "../../containers/Navbar";
+import { Footer } from "../../containers/Footer";
 
 const Wrapper = styled.div`
   display: flex;
@@ -26,16 +27,19 @@ const ContentWrapper = styled.main`
   background-color: ${props => props.theme.colors.offWhite};
 `;
 
-const MainLayout = ({ children, meta }) => {
+const MainLayout = ({ children, meta, hasNavbar, hasFooter }) => {
   return (
     <Wrapper>
       <Meta {...meta} />
-      {/* <NavbarDesktopWrapper>
-        <NavbarDesktop />
-      </NavbarDesktopWrapper> */}
+      {hasNavbar && (
+        <NavbarDesktopWrapper>
+          <Navbar />
+        </NavbarDesktopWrapper>
+      )}
       <ContentWrapper>{children}</ContentWrapper>
+      {hasFooter && <Footer />}
     </Wrapper>
   );
 };
 
-export default MainLayout;
+export { MainLayout };

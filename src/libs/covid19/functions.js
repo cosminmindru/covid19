@@ -124,15 +124,38 @@ const getCountries = async () => {
 };
 
 /**
- * Gets a list of all countries
+ * Gets details for a country
  *
  * @param {string} countryCode
  */
-const getCountryDetail = async ({ countryCode }) => {
+const getCountryDetails = async (_, { countryCode }) => {
   try {
     const response = await client.get(`/countries/${countryCode}`);
 
     return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/**
+ * Gets a list of all countries with details
+ */
+const getDetailedCountries = async () => {
+  try {
+    const countries = await getCountries();
+
+    const countriesWithDetails = [];
+
+    for await (const country of Object.values(countries.countries)) {
+      const detailedCountry = await getCountryDetails({ countryCode: country });
+
+      countriesWithDetails.push(detailedCountry);
+    }
+
+    console.log(countriesWithDetails);
+
+    return countriesWithDetails.data;
   } catch (error) {
     throw error;
   }
@@ -148,5 +171,6 @@ export {
   getDeathCasesForCountry,
   getDailySummary,
   getCountries,
-  getCountryDetail
+  getCountryDetails,
+  getDetailedCountries
 };

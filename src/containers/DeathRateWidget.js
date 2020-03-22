@@ -4,13 +4,12 @@ import Typography from "@material-ui/core/Typography";
 import { ResponsivePie } from "@nivo/pie";
 import { useQuery } from "react-query";
 import { getOverview } from "../libs/covid19";
-import calculateDeathRate from "../utils/calculateDeathRate";
-import formatNumber from "../utils/formatNumber";
+import { calculateDeathRate } from "../utils/calculateDeathRate";
 
 const Wrapper = styled.section`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 1fr 3fr;
+  grid-template-rows: 1fr 4fr;
   width: 100%;
   height: 100%;
   border: 1px solid ${props => props.theme.colors.grey};
@@ -36,7 +35,7 @@ const ChartSection = styled(Section)`
   position: relative;
   width: 100%;
   height: 100%;
-  max-height: 200px;
+  max-height: 18rem;
 `;
 
 const DeathRateOverlay = styled.div`
@@ -57,7 +56,7 @@ const DeathRateText = styled.h1`
   transform: translateY(-0.5rem);
 `;
 
-const DeathRate = () => {
+const DeathRateWidget = () => {
   const [confirmedCases, setConfirmedCases] = useState(0);
   const [deaths, setDeaths] = useState(0);
   const [deathRate, setDeathRate] = useState(0);
@@ -82,9 +81,9 @@ const DeathRate = () => {
   return (
     <Wrapper>
       <HeaderSection gridColumn="1 / last-line" gridRow="1 / 2">
-        <Typography variant="h6">Mortality Rate</Typography>
+        <Typography variant="h6">Death Rate</Typography>
       </HeaderSection>
-      <ChartSection gridColumn="1 / last-line" gridRow="2 / 2" noPadding>
+      <ChartSection gridColumn="1 / last-line" gridRow="2 / 2">
         {overviewQuery.data && (
           <>
             <DeathRateOverlay>
@@ -154,4 +153,4 @@ const DeathRate = () => {
   );
 };
 
-export default DeathRate;
+export { DeathRateWidget };

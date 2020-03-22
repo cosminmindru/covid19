@@ -5,7 +5,7 @@ import { ReactQueryConfigProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query-devtools";
 
-import Router from "./router";
+import { Router } from "./router";
 import { GlobalStyles, theme } from "./styles";
 import { store } from "./state";
 

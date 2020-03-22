@@ -3,13 +3,13 @@
  *
  * @param {number} confirmedCases
  * @param {number} deaths
- * @param {number} [decimals=2]
+ * @returns {number}
  */
-const calculateDeathRate = ({ confirmedCases, deaths, decimals = 2 }) => {
+const calculateDeathRate = ({ confirmedCases, deaths }) => {
   const deathRate = (deaths / confirmedCases) * 100;
   const formattedDeathRate = parseInt(deathRate);
 
   return formattedDeathRate;
 };
 
-export default calculateDeathRate;
+export { calculateDeathRate };
