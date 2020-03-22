@@ -16,24 +16,24 @@ const Wrapper = styled.section`
   grid-template-rows: 1fr 4fr;
   width: 100%;
   height: 100%;
-  border: 1px solid ${props => props.theme.colors.grey};
+  border: 1px solid ${(props) => props.theme.colors.grey};
   border-radius: 0.5rem;
-  background-color: ${props => props.theme.colors.white};
+  background-color: ${(props) => props.theme.colors.white};
 `;
 
 const Section = styled.section`
-  grid-column: ${props => props.gridColumn};
-  grid-row: ${props => props.gridRow};
-  align-self: ${props => props.alignSelf || "stretch"};
+  grid-column: ${(props) => props.gridColumn};
+  grid-row: ${(props) => props.gridRow};
+  align-self: ${(props) => props.alignSelf || "stretch"};
 
-  ${props =>
+  ${(props) =>
     props.xPadding &&
     css`
       padding-left: 1.25rem;
       padding-right: 1.25rem;
     `}
 
-  ${props =>
+  ${(props) =>
     props.yPadding &&
     css`
       padding-top: 1.25rem;
@@ -51,7 +51,7 @@ const HeaderSection = styled(Section)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid ${props => props.theme.colors.grey};
+  border-bottom: 1px solid ${(props) => props.theme.colors.grey};
 `;
 
 const CountrySelectWrapper = styled.div`
@@ -62,7 +62,7 @@ const CountrySelectWrapper = styled.div`
 const CountryOverviewWidget = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [formattedCountries, setFormattedCountries] = useState([]);
+  const [formattedCountries, setFormattedCountries] = useState(null);
   const [formattedCountry, setFormattedCountry] = useState(null);
 
   const {
@@ -132,19 +132,18 @@ const CountryOverviewWidget = () => {
             value={selectedCountry}
             onChange={handleCountryChange}
             options={formattedCountries}
-            getOptionSelected={option =>
+            getOptionSelected={(option) =>
               option.code === get(selectedCountry, "code")
             }
-            getOptionLabel={option => option.name}
-            renderInput={params => <TextField {...params} label="country" />}
+            getOptionLabel={(option) => option.name}
+            renderInput={(params) => <TextField {...params} label="country" />}
           />
         </CountrySelectWrapper>
       </HeaderSection>
       <Section gridColumn="1 / 5" gridRow="2 / last-line">
-        <CountryStatsBarChart
-          {...formattedCountry}
-          isLoading={isLoadingCountry}
-        />
+        {formattedCountry && <CountryStatsBarChart {...formattedCountry} />}
+        {isLoadingCountry && <p>Loading...</p>}
+        {countryError && <p>Something went wrong</p>}
       </Section>
       <Section gridColumn="5 / last-line" gridRow="2 / last-line">
         donut chart
