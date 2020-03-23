@@ -54,6 +54,10 @@ const HeaderSection = styled(Section)`
   border-bottom: 1px solid ${(props) => props.theme.colors.grey};
 `;
 
+const BarChartStatsSection = styled(Section)`
+  height: 300px;
+`;
+
 const CountrySelectWrapper = styled.div`
   width: 100%;
   max-width: 12rem;
@@ -140,11 +144,16 @@ const CountryOverviewWidget = () => {
           />
         </CountrySelectWrapper>
       </HeaderSection>
-      <Section gridColumn="1 / 5" gridRow="2 / last-line">
-        {formattedCountry && <CountryStatsBarChart {...formattedCountry} />}
+      <BarChartStatsSection
+        gridColumn="1 / 5"
+        gridRow="2 / last-line"
+        xPadding={false}
+        yPadding={false}
+      >
+        {formattedCountry && <CountryStatsBarChart stats={formattedCountry} />}
         {isLoadingCountry && <p>Loading...</p>}
         {countryError && <p>Something went wrong</p>}
-      </Section>
+      </BarChartStatsSection>
       <Section gridColumn="5 / last-line" gridRow="2 / last-line">
         donut chart
       </Section>
