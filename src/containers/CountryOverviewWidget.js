@@ -5,9 +5,9 @@ import Autocomplete from "@material-ui/lab/Autocomplete";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import { CountryStatsBarChart } from "../components/CountryStatsBarChart";
+import { CountryStatsDonutChart } from "../components/CountryStatsDonutChart";
 import { useQuery } from "react-query";
 import { getCountries, getCountryDetails } from "../libs/covid19";
-import { formatCountriesObject } from "../utils/formatCountriesObject";
 import { formatCountryObject } from "../utils/formatCountryObject";
 
 const Wrapper = styled.section`
@@ -58,6 +58,10 @@ const BarChartStatsSection = styled(Section)`
   height: 300px;
 `;
 
+const DonutChartStatsSection = styled(Section)`
+  max-height: 300px;
+`;
+
 const CountrySelectWrapper = styled.div`
   width: 100%;
   max-width: 12rem;
@@ -66,7 +70,6 @@ const CountrySelectWrapper = styled.div`
 const CountryOverviewWidget = () => {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const [formattedCountries, setFormattedCountries] = useState(null);
   const [formattedCountry, setFormattedCountry] = useState(null);
 
   const {
@@ -80,20 +83,9 @@ const CountryOverviewWidget = () => {
     data: countryData,
     error: countryError
   } = useQuery(
-    selectedCountry && [`country`, { countryCode: selectedCountry.code }],
+    selectedCountry && [`country`, { countryCode: selectedCountry.iso2 }],
     getCountryDetails
   );
-
-  // Update formattedCountryList
-  useEffect(() => {
-    if (countriesData) {
-      const newFormattedCountries = formatCountriesObject({
-        countries: countriesData
-      });
-
-      setFormattedCountries(newFormattedCountries);
-    }
-  }, [countriesData]);
 
   // Update formattedCountry
   useEffect(() => {
@@ -107,8 +99,8 @@ const CountryOverviewWidget = () => {
   }, [countryData]);
 
   const handleCountryChange = (_, country) => {
-    const oldSelecetedCountryCode = get(selectedCountry, "code");
-    const newSelectedCountryCode = get(country, "code");
+    const oldSelecetedCountryCode = get(selectedCountry, "iso2");
+    const newSelectedCountryCode = get(country, "iso2");
 
     // Do not update the selectedCountry if the same country is currently selected
     if (
@@ -133,14 +125,15 @@ const CountryOverviewWidget = () => {
         </Typography>
         <CountrySelectWrapper>
           <Autocomplete
+            loading={isLoadingCountries}
             value={selectedCountry}
             onChange={handleCountryChange}
-            options={formattedCountries}
+            options={get(countriesData, "countries") || []}
             getOptionSelected={(option) =>
-              option.code === get(selectedCountry, "code")
+              option.iso2 === get(selectedCountry, "iso2")
             }
             getOptionLabel={(option) => option.name}
-            renderInput={(params) => <TextField {...params} label="country" />}
+            renderInput={(params) => <TextField {...params} label="Country" />}
           />
         </CountrySelectWrapper>
       </HeaderSection>
@@ -150,13 +143,22 @@ const CountryOverviewWidget = () => {
         xPadding={false}
         yPadding={false}
       >
-        {formattedCountry && <CountryStatsBarChart stats={formattedCountry} />}
         {isLoadingCountry && <p>Loading...</p>}
         {countryError && <p>Something went wrong</p>}
+        {formattedCountry && <CountryStatsBarChart stats={formattedCountry} />}
       </BarChartStatsSection>
-      <Section gridColumn="5 / last-line" gridRow="2 / last-line">
-        donut chart
-      </Section>
+      <DonutChartStatsSection
+        gridColumn="5 / last-line"
+        gridRow="2 / last-line"
+        xPadding={false}
+        yPadding={false}
+      >
+        {isLoadingCountry && <p>Loading...</p>}
+        {countryError && <p>Something went wrong</p>}
+        {formattedCountry && (
+          <CountryStatsDonutChart stats={formattedCountry} />
+        )}
+      </DonutChartStatsSection>
     </Wrapper>
   );
 };

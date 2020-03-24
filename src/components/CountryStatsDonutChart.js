@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ResponsiveBar } from "@nivo/bar";
+import React, { useState, useEffect } from "react";
+import { ResponsivePie } from "@nivo/pie";
 import get from "lodash/get";
 
 const defaultColors = {
@@ -8,10 +8,9 @@ const defaultColors = {
   deaths: "red"
 };
 
-const CountryStatsBarChart = ({ stats, colors = defaultColors }) => {
+const CountryStatsDonutChart = ({ stats, colors = defaultColors }) => {
   const [data, setData] = useState([]);
 
-  // Update stats
   useEffect(() => {
     const confirmed = get(stats, "confirmed");
     const recovered = get(stats, "recovered");
@@ -21,7 +20,7 @@ const CountryStatsBarChart = ({ stats, colors = defaultColors }) => {
 
     if (confirmed) {
       newData.push({
-        order: 1,
+        id: 1,
         label: "confirmed",
         value: confirmed
       });
@@ -29,7 +28,7 @@ const CountryStatsBarChart = ({ stats, colors = defaultColors }) => {
 
     if (recovered) {
       newData.push({
-        order: 2,
+        id: 2,
         label: "recovered",
         value: recovered
       });
@@ -37,7 +36,7 @@ const CountryStatsBarChart = ({ stats, colors = defaultColors }) => {
 
     if (deaths) {
       newData.push({
-        order: 3,
+        id: 3,
         label: "deaths",
         value: deaths
       });
@@ -47,28 +46,15 @@ const CountryStatsBarChart = ({ stats, colors = defaultColors }) => {
   }, [stats]);
 
   return (
-    <ResponsiveBar
+    <ResponsivePie
       data={data}
-      indexBy="label"
-      margin={{
-        top: 20,
-        left: 48,
-        bottom: 32
-      }}
-      axisBottom={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0
-      }}
-      axisLeft={{
-        tickSize: 5,
-        tickPadding: 5,
-        tickRotation: 0
-      }}
-      enableLabel={false}
-      colors={(stat) => colors[stat.data.label]}
+      margin={{ top: 24, right: 40, bottom: 24, left: 40 }}
+      height={300}
+      colors={(stat) => colors[stat.label]}
+      enableRadialLabels={false}
+      enableSlicesLabels={false}
     />
   );
 };
 
-export { CountryStatsBarChart };
+export { CountryStatsDonutChart };

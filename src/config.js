@@ -1,4 +1,5 @@
 export default {
   isProduction: process.env.NODE_ENV === "production",
-  apiBaseUrl: process.env.REACT_APP_API_BASE_URL
+  covid19ApiBaseUrl: process.env.REACT_APP_COVID19_API_BASE_URL,
+  locationApiBaseUrl: process.env.REACT_APP_LOCATION_API_BASE_URL
 };
