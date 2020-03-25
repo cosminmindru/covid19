@@ -10,18 +10,36 @@ import { ReactComponent as BacteriaIcon } from "../../assets/icons/bacteria.svg"
 const Wrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  grid-template-rows: repeat(auto-fill, 1fr);
+  grid-auto-rows: max-content;
   grid-gap: 2rem;
   width: 100%;
-  max-width: ${props => props.theme.sizes.containerMaxWidth};
+  max-width: ${(props) => props.theme.sizes.containerMaxWidth};
   height: 100%;
   padding: 2rem;
 `;
 
 const Section = styled.section`
-  grid-column: ${props => props.gridColumn};
-  grid-row: ${props => props.gridRow};
-  align-self: ${props => props.alignSelf || "center"};
+  align-self: stretch;
+`;
+
+const GlobalOverviewSection = styled(Section)`
+  grid-column: 1 / last-line;
+  grid-row: 1 / 3;
+`;
+
+const CountryOverviewSection = styled(Section)`
+  grid-column: 1 / 10;
+  grid-row: 3 / 8;
+`;
+
+const GlobalDeathRateSection = styled(Section)`
+  grid-column: 10 / last-line;
+  grid-row: 3 / 8;
+`;
+
+const CountriesSection = styled(Section)`
+  grid-column: 1 / 8;
+  grid-row: 8 / 12;
 `;
 
 const meta = {
@@ -33,22 +51,18 @@ const HomePage = () => {
     <MainLayout meta={meta}>
       {/* <BacteriaIcon /> */}
       <Wrapper>
-        <Section gridColumn="1 / last-line" gridRow="1 / 3" alignSelf="stretch">
+        <GlobalOverviewSection>
           <GlobalOverviewWidget />
-        </Section>
-        <Section gridColumn="1 / 10" gridRow="3 / 4" alignSelf="stretch">
+        </GlobalOverviewSection>
+        <CountryOverviewSection>
           <CountryOverviewWidget />
-        </Section>
-        <Section
-          gridColumn="10 / last-line"
-          gridRow="3 / 4"
-          alignSelf="stretch"
-        >
+        </CountryOverviewSection>
+        <GlobalDeathRateSection>
           <DeathRateWidget />
-        </Section>
-        <Section gridColumn="1 / 8" gridRow="4 / 5" alignSelf="stretch">
+        </GlobalDeathRateSection>
+        <CountriesSection>
           <CountriesTableWidget />
-        </Section>
+        </CountriesSection>
       </Wrapper>
     </MainLayout>
   );
