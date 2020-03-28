@@ -18,7 +18,7 @@ const Content = styled.main`
   width: 100%;
   max-width: ${(props) => props.theme.sizes.containerMaxWidth};
   min-height: 100vh;
-  padding: 2rem
+  padding: 2rem;
 `;
 
 const MainLayout = ({ children, meta, hasNavbar, hasFooter }) => {
