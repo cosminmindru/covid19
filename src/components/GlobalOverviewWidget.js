@@ -24,7 +24,7 @@ const Content = styled(WidgetContent)`
   }
 `;
 
-const Item = styled.li`
+const Stat = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -60,30 +60,30 @@ const GlobalOverviewWidget = () => {
             <Typography variant="h5">Global cases</Typography>
           </WidgetHeader>
           <Content>
-            <Item>
+            <Stat>
               <Typography variant="h6" gutterBottom>
                 Confirmed
               </Typography>
               <Typography variant="h4">
                 {formatNumber({ value: data.confirmed.value })}
               </Typography>
-            </Item>
-            <Item>
+            </Stat>
+            <Stat>
               <Typography variant="h6" gutterBottom>
                 Recovered
               </Typography>
               <Typography variant="h4">
                 {formatNumber({ value: data.recovered.value })}
               </Typography>
-            </Item>
-            <Item>
+            </Stat>
+            <Stat>
               <Typography variant="h6" gutterBottom>
                 Deaths
               </Typography>
               <Typography variant="h4">
                 {formatNumber({ value: data.deaths.value })}
               </Typography>
-            </Item>
+            </Stat>
           </Content>
         </Widget>
       )}

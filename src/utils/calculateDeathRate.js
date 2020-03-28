@@ -7,7 +7,7 @@
  */
 const calculateDeathRate = ({ confirmedCases, deaths }) => {
   const deathRate = (deaths / confirmedCases) * 100;
-  const formattedDeathRate = parseInt(deathRate);
+  const formattedDeathRate = `${parseInt(deathRate)}%`;
 
   return formattedDeathRate;
 };
