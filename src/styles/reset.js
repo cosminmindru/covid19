@@ -1,8 +1,11 @@
 import { css } from "styled-components/macro";
 
 const cssReset = css`
-  /* Modern CSS Reset */
-  /* https://dev.to/hankchizljaw/a-modern-css-reset-6p3 */
+  /* 
+   *  A Modern CSS Reset
+   *
+   *  https://dev.to/hankchizljaw/a-modern-css-reset-6p3
+   */
 
   /* Box sizing rules */
   *,
@@ -12,8 +15,8 @@ const cssReset = css`
   }
 
   /* Remove default padding */
-  ul[class],
-  ol[class] {
+  ul,
+  ol {
     padding: 0;
   }
 
@@ -24,8 +27,8 @@ const cssReset = css`
   h3,
   h4,
   p,
-  ul[class],
-  ol[class],
+  ul,
+  ol,
   li,
   figure,
   figcaption,
@@ -44,13 +47,13 @@ const cssReset = css`
   }
 
   /* Remove list styles on ul, ol elements with a class attribute */
-  ul[class],
-  ol[class] {
+  ul,
+  ol {
     list-style: none;
   }
 
   /* A elements that don't have a class get default styles */
-  a:not([class]) {
+  a:not() {
     text-decoration-skip-ink: auto;
   }
 
@@ -58,11 +61,6 @@ const cssReset = css`
   img {
     max-width: 100%;
     display: block;
-  }
-
-  /* Natural flow and rhythm in articles by default */
-  article > * + * {
-    margin-top: 1em;
   }
 
   /* Inherit fonts for inputs and buttons */
