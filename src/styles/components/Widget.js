@@ -3,7 +3,7 @@ import styled from "styled-components/macro";
 export const Widget = styled.article`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [header] 1fr [content] auto;
+  grid-template-rows: [header] 4rem [content] auto;
   border-width: 1px;
   border-style: solid;
   border-color: ${(props) => props.theme.colors.grey};
@@ -13,7 +13,10 @@ export const Widget = styled.article`
 
 export const WidgetHeader = styled.header`
   grid-row: header;
-  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 1.5rem;
   border-bottom: 1px solid ${(props) => props.theme.colors.grey};
 `;
 

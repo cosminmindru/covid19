@@ -10,7 +10,7 @@ import { useQuery } from "react-query";
 import { getOverview } from "../libs/covid19";
 import { formatNumber } from "../utils/formatNumber";
 
-const List = styled.ul`
+const Content = styled(WidgetContent)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
@@ -57,36 +57,34 @@ const GlobalOverviewWidget = () => {
       {data && (
         <Widget>
           <WidgetHeader>
-            <Typography variant="h5">GLOBAL CASES</Typography>
+            <Typography variant="h5">Global cases</Typography>
           </WidgetHeader>
-          <WidgetContent>
-            <List>
-              <Item>
-                <Typography variant="h6" gutterBottom>
-                  Confirmed
-                </Typography>
-                <Typography variant="h4">
-                  {formatNumber({ value: data.confirmed.value })}
-                </Typography>
-              </Item>
-              <Item>
-                <Typography variant="h6" gutterBottom>
-                  Recovered
-                </Typography>
-                <Typography variant="h4">
-                  {formatNumber({ value: data.recovered.value })}
-                </Typography>
-              </Item>
-              <Item>
-                <Typography variant="h6" gutterBottom>
-                  Deaths
-                </Typography>
-                <Typography variant="h4">
-                  {formatNumber({ value: data.deaths.value })}
-                </Typography>
-              </Item>
-            </List>
-          </WidgetContent>
+          <Content>
+            <Item>
+              <Typography variant="h6" gutterBottom>
+                Confirmed
+              </Typography>
+              <Typography variant="h4">
+                {formatNumber({ value: data.confirmed.value })}
+              </Typography>
+            </Item>
+            <Item>
+              <Typography variant="h6" gutterBottom>
+                Recovered
+              </Typography>
+              <Typography variant="h4">
+                {formatNumber({ value: data.recovered.value })}
+              </Typography>
+            </Item>
+            <Item>
+              <Typography variant="h6" gutterBottom>
+                Deaths
+              </Typography>
+              <Typography variant="h4">
+                {formatNumber({ value: data.deaths.value })}
+              </Typography>
+            </Item>
+          </Content>
         </Widget>
       )}
     </>
