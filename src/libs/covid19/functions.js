@@ -1,4 +1,5 @@
 import { client } from "./index";
+import dayjs from "dayjs";
 
 /**
  * Gets an overview of COVID-19
@@ -161,6 +162,26 @@ const getDetailedCountries = async () => {
   }
 };
 
+const getGlobalDetailsForPeriod = async () => {
+  try {
+    let e = 0;
+    let m = 7;
+    let days = []
+
+    while (e < m) {
+      const day = dayjs().subtract(e, 'day').toString();
+      days.push(day);
+      e++
+    };
+
+    console.log(days);
+
+    return Promise.resolve()
+  } catch (error) {
+    
+  }
+}
+
 export {
   getOverview,
   getConfirmedCases,
@@ -172,5 +193,6 @@ export {
   getDailySummary,
   getCountries,
   getCountryDetails,
-  getDetailedCountries
+  getDetailedCountries,
+  getGlobalDetailsForPeriod
 };

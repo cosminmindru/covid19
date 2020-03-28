@@ -12,35 +12,27 @@ const CountryStatsDonutChart = ({ stats, colors = defaultColors }) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    const confirmed = get(stats, "confirmed");
-    const recovered = get(stats, "recovered");
-    const deaths = get(stats, "deaths");
+    const confirmed = get(stats, "confirmed") || 0;
+    const recovered = get(stats, "recovered") || 0;
+    const deaths = get(stats, "deaths") || 0;
 
-    const newData = [];
-
-    if (confirmed) {
-      newData.push({
+    const newData = [
+      {
         id: 1,
         label: "confirmed",
         value: confirmed
-      });
-    }
-
-    if (recovered) {
-      newData.push({
+      },
+      {
         id: 2,
         label: "recovered",
         value: recovered
-      });
-    }
-
-    if (deaths) {
-      newData.push({
+      },
+      {
         id: 3,
         label: "deaths",
         value: deaths
-      });
-    }
+      },
+    ];
 
     setData(newData);
   }, [stats]);

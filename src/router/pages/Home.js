@@ -6,6 +6,7 @@ import { CountryOverviewWidget } from "../../containers/CountryOverviewWidget";
 import { DeathRateWidget } from "../../containers/DeathRateWidget";
 import { CountriesTableWidget } from "../../containers/CountriesTableWidget";
 import { ReactComponent as BacteriaIcon } from "../../assets/icons/bacteria.svg";
+import { GlobalEvolutionWidget } from "../../containers/GlobalEvolutionWidget";
 
 const Wrapper = styled.div`
   display: grid;
@@ -42,6 +43,11 @@ const CountriesSection = styled(Section)`
   grid-row: 8 / 12;
 `;
 
+const GlobalEvolutionSection = styled(Section)`
+  grid-column: 1 / last-line;
+  grid-row: 12 / 16;
+`;
+
 const meta = {
   title: "Home"
 };
@@ -63,6 +69,9 @@ const HomePage = () => {
         <CountriesSection>
           <CountriesTableWidget />
         </CountriesSection>
+        <GlobalEvolutionSection>
+          <GlobalEvolutionWidget />
+        </GlobalEvolutionSection>
       </Wrapper>
     </MainLayout>
   );
