@@ -1,26 +1,30 @@
 import React from "react";
 import styled from "styled-components/macro";
 import Typography from "@material-ui/core/Typography";
-import Widget from "../styles/components/Widget";
+import {
+  Widget,
+  WidgetHeader,
+  WidgetContent
+} from "../styles/components/Widget";
 import { useQuery } from "react-query";
 import { getOverview } from "../libs/covid19";
 import { formatNumber } from "../utils/formatNumber";
 
-const Wrapper = styled(Widget)`
+const List = styled.ul`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   width: 100%;
-  padding: 0 1.25rem;
+  padding: 0 1.5rem;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
     grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
-    padding: 1.25rem 0;
+    padding: 1.5rem 0;
   }
 `;
 
-const Item = styled.div`
+const Item = styled.li`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -51,32 +55,39 @@ const GlobalOverviewWidget = () => {
     <>
       {isLoading && <p>loading...</p>}
       {data && (
-        <Wrapper>
-          <Item>
-            <Typography variant="h6" gutterBottom>
-              Confirmed
-            </Typography>
-            <Typography variant="h4">
-              {formatNumber({ value: data.confirmed.value })}
-            </Typography>
-          </Item>
-          <Item>
-            <Typography variant="h6" gutterBottom>
-              Recovered
-            </Typography>
-            <Typography variant="h4">
-              {formatNumber({ value: data.recovered.value })}
-            </Typography>
-          </Item>
-          <Item>
-            <Typography variant="h6" gutterBottom>
-              Deaths
-            </Typography>
-            <Typography variant="h4">
-              {formatNumber({ value: data.deaths.value })}
-            </Typography>
-          </Item>
-        </Wrapper>
+        <Widget>
+          <WidgetHeader>
+            <Typography variant="h5">GLOBAL CASES</Typography>
+          </WidgetHeader>
+          <WidgetContent>
+            <List>
+              <Item>
+                <Typography variant="h6" gutterBottom>
+                  Confirmed
+                </Typography>
+                <Typography variant="h4">
+                  {formatNumber({ value: data.confirmed.value })}
+                </Typography>
+              </Item>
+              <Item>
+                <Typography variant="h6" gutterBottom>
+                  Recovered
+                </Typography>
+                <Typography variant="h4">
+                  {formatNumber({ value: data.recovered.value })}
+                </Typography>
+              </Item>
+              <Item>
+                <Typography variant="h6" gutterBottom>
+                  Deaths
+                </Typography>
+                <Typography variant="h4">
+                  {formatNumber({ value: data.deaths.value })}
+                </Typography>
+              </Item>
+            </List>
+          </WidgetContent>
+        </Widget>
       )}
     </>
   );

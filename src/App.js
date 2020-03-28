@@ -9,6 +9,8 @@ import { Router } from "./router";
 import { GlobalStyles, theme } from "./styles";
 import { store } from "./state";
 
+import "normalize.css";
+
 const queryConfig = {
   refetchAllOnWindowFocus: false
 };
