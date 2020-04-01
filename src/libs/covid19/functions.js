@@ -125,10 +125,16 @@ const getCountries = async (_, { includeIcon = true, iconSize = 64 }) => {
 
     // Include the icon
     if (includeIcon && countries) {
-      return countries.map((country) => ({
-        ...country,
-        icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`
-      }));
+      return countries.map((country) => {
+        if (country.iso2) {
+          return {
+            ...country,
+            icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`
+          };
+        }
+
+        return country;
+      });
     }
 
     return countries;

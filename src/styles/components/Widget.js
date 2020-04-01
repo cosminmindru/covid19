@@ -14,6 +14,7 @@ const Widget = styled.article`
   background-color: ${(props) => props.theme.colors.white};
   box-shadow: 0 0.15rem 0.15rem
     ${(props) => transparentize(0.9, props.theme.colors.black)};
+  overflow: hidden;
 `;
 
 const WidgetHeader = styled.header`

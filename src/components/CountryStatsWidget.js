@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import Typography from "@material-ui/core/Typography";
 import List from "@material-ui/core/List";
@@ -54,10 +54,16 @@ const CountryList = styled(List)`
   overflow-y: auto;
 `;
 
-const CountryStatsWidget = () => {
-  const countries = useQuery(["countries", {}], getCountries);
+const FakeMap = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #aaa;
+`;
 
-  console.log(countries);
+const CountryStatsWidget = () => {
+  const [selectedCountry, setSelectedCountry] = useState(null);
+
+  const countries = useQuery(["countries", {}], getCountries);
 
   return (
     <Widget>
@@ -71,15 +77,39 @@ const CountryStatsWidget = () => {
           <CountrySearchWrapper>search input</CountrySearchWrapper>
           <CountryList>
             {countries.data &&
-              countries.data.map((country) => (
-                <ListItem button>
-                  <ListItemAvatar>lol</ListItemAvatar>
+              countries.data.map((country, index) => (
+                <ListItem
+                  key={country.iso2 || index}
+                  button
+                  onClick={() => setSelectedCountry(country)}
+                  style={{
+                    backgroundColor:
+                      selectedCountry &&
+                      selectedCountry.name.toLowerCase() ===
+                        country.name.toLowerCase()
+                        ? "red"
+                        : "transparent"
+                  }}
+                >
+                  <ListItemAvatar>
+                    {country.icon ? (
+                      <img
+                        src={country.icon}
+                        alt={country.name}
+                        style={{ width: 24, height: 24 }}
+                      />
+                    ) : (
+                      <span />
+                    )}
+                  </ListItemAvatar>
                   <ListItemText primary={country.name} />
                 </ListItem>
               ))}
           </CountryList>
         </CountrySelectSection>
-        <MapSection>map</MapSection>
+        <MapSection>
+          <FakeMap />
+        </MapSection>
       </Content>
     </Widget>
   );
