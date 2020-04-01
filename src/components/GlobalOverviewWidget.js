@@ -57,7 +57,7 @@ const GlobalOverviewWidget = () => {
       {data && (
         <Widget>
           <WidgetHeader>
-            <Typography variant="h5">Global cases</Typography>
+            <Typography variant="h6" style={{ fontWeight: "bold" }}>Global cases</Typography>
           </WidgetHeader>
           <Content>
             <Stat>

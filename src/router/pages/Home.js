@@ -3,23 +3,26 @@ import styled from "styled-components/macro";
 import { MainLayout } from "../layouts/Main";
 import { GlobalOverviewWidget } from "../../components/GlobalOverviewWidget";
 import { GlobalInfectionRatesWidget } from "../../components/GlobalInfectionRatesWidget";
+import { TimeSinceOutbreakWidget } from "../../components/TimeSinceOutbreakWidget";
 
 const PageWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: min-content;
+  grid-template-rows: minmax(min-content, max-content);
   grid-template-areas:
     "global-overview"
-    "global-infections";
-  grid-gap: 2rem;
+    "global-infections"
+    "outbreak-timer";
+  grid-gap: 1rem;
+  align-content: start;
   width: 100%;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: 2fr 1fr;
     grid-template-areas:
-      "global-overview global-overview global-overview"
-      "global-infections global-infections .";
-    flex-direction: row;
+      "global-overview global-overview"
+      "global-infections outbreak-timer";
+    grid-gap: 2rem;
   }
 `;
 
@@ -29,6 +32,10 @@ const GlobalOverviewWrapper = styled.div`
 
 const GlobalInfectionRatesWrapper = styled.div`
   grid-area: global-infections;
+`;
+
+const TimeSinceOutbreakWrapper = styled.div`
+  grid-area: outbreak-timer;
 `;
 
 const meta = {
@@ -45,6 +52,9 @@ const HomePage = () => {
         <GlobalInfectionRatesWrapper>
           <GlobalInfectionRatesWidget />
         </GlobalInfectionRatesWrapper>
+        <TimeSinceOutbreakWrapper>
+          <TimeSinceOutbreakWidget />
+        </TimeSinceOutbreakWrapper>
       </PageWrapper>
     </MainLayout>
   );
