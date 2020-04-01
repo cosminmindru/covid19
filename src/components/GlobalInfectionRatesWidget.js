@@ -55,7 +55,7 @@ const GlobalInfectionRatesWidget = () => {
   return (
     <Widget>
       <WidgetHeader>
-        <Typography variant="h5">Global infection rates</Typography>
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>Global infection rates</Typography>
       </WidgetHeader>
       <Content>
         {isLoading && <p>Loading...</p>}

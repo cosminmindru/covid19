@@ -5,6 +5,8 @@ const Widget = styled.article`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: [header] 4rem [content] auto;
+  width: 100%;
+  height: 100%;
   border-width: 1px;
   border-style: solid;
   border-color: ${(props) => props.theme.colors.grey};
