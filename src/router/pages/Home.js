@@ -4,6 +4,7 @@ import { MainLayout } from "../layouts/Main";
 import { GlobalOverviewWidget } from "../../components/GlobalOverviewWidget";
 import { GlobalInfectionRatesWidget } from "../../components/GlobalInfectionRatesWidget";
 import { TimeSinceOutbreakWidget } from "../../components/TimeSinceOutbreakWidget";
+import { CountryStatsWidget } from "../../components/CountryStatsWidget";
 
 const PageWrapper = styled.div`
   display: grid;
@@ -12,7 +13,8 @@ const PageWrapper = styled.div`
   grid-template-areas:
     "global-overview"
     "global-infections"
-    "outbreak-timer";
+    "outbreak-timer"
+    "country-stats";
   grid-gap: 1rem;
   align-content: start;
   width: 100%;
@@ -21,7 +23,8 @@ const PageWrapper = styled.div`
     grid-template-columns: 2fr 1fr;
     grid-template-areas:
       "global-overview global-overview"
-      "global-infections outbreak-timer";
+      "global-infections outbreak-timer"
+      "country-stats country-stats";
     grid-gap: 2rem;
   }
 `;
@@ -36,6 +39,10 @@ const GlobalInfectionRatesWrapper = styled.div`
 
 const TimeSinceOutbreakWrapper = styled.div`
   grid-area: outbreak-timer;
+`;
+
+const CountryStatsWrapper = styled.div`
+  grid-area: country-stats;
 `;
 
 const meta = {
@@ -55,6 +62,9 @@ const HomePage = () => {
         <TimeSinceOutbreakWrapper>
           <TimeSinceOutbreakWidget />
         </TimeSinceOutbreakWrapper>
+        <CountryStatsWrapper>
+          <CountryStatsWidget />
+        </CountryStatsWrapper>
       </PageWrapper>
     </MainLayout>
   );

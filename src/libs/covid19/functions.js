@@ -1,5 +1,6 @@
-import { client } from "./index";
 import dayjs from "dayjs";
+import get from "lodash/get";
+import { client } from "./index";
 
 /**
  * Gets an overview of COVID-19
@@ -113,12 +114,24 @@ const getDailySummary = async () => {
 
 /**
  * Gets a list of all countries
+ *
+ * @param {boolean} [includeIcon=true]
+ * @param {number} [iconSize=64]
  */
-const getCountries = async () => {
+const getCountries = async (_, { includeIcon = true, iconSize = 64 }) => {
   try {
     const response = await client.get("/countries");
+    const countries = get(response, "data.countries");
 
-    return response.data;
+    // Include the icon
+    if (includeIcon && countries) {
+      return countries.map((country) => ({
+        ...country,
+        icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`
+      }));
+    }
+
+    return countries;
   } catch (error) {
     throw error;
   }
@@ -166,21 +179,19 @@ const getGlobalDetailsForPeriod = async () => {
   try {
     let e = 0;
     let m = 7;
-    let days = []
+    let days = [];
 
     while (e < m) {
-      const day = dayjs().subtract(e, 'day').toString();
+      const day = dayjs().subtract(e, "day").toString();
       days.push(day);
-      e++
-    };
+      e++;
+    }
 
     console.log(days);
 
-    return Promise.resolve()
-  } catch (error) {
-    
-  }
-}
+    return Promise.resolve();
+  } catch (error) {}
+};
 
 export {
   getOverview,
