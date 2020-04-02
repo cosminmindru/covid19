@@ -35,7 +35,7 @@ const CountryListSection = styled.section`
   grid-area: country;
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 40px auto;
+  grid-template-rows: min-content auto;
   grid-template-areas:
     "search"
     "list";
@@ -161,6 +161,8 @@ function CountryStatsWidget() {
   const handleCountrySearchChange = (event) =>
     setSearchQuery(event.target.value);
 
+  const handleCountrySearchClear = () => setSearchQuery('')
+
   return (
     <Widget>
       <WidgetHeader>
@@ -174,6 +176,7 @@ function CountryStatsWidget() {
             <CountrySearch
               value={searchQuery}
               onChange={handleCountrySearchChange}
+              onClear={handleCountrySearchClear}
             />
           </CountrySearchWrapper>
           <CountryListWrapper>

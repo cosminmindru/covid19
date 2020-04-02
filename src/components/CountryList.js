@@ -32,7 +32,7 @@ function CountryList({
   };
 
   return (
-    <AutoSizer style={{ gridArea: "list" }}>
+    <AutoSizer style={{ gridArea: "list", padding: '0.25rem 0' }}>
       {({ width, height }) => {
         return (
           <FixedSizeList
@@ -41,7 +41,7 @@ function CountryList({
             itemSize={56}
             itemCount={countries.length}
             innerElementType={({ style, ...props }) => (
-              <List disablePadding style={{ ...style }} {...props} />
+              <List style={{ ...style }} {...props} />
             )}
           >
             {({ index, style }) => {
@@ -69,7 +69,14 @@ function CountryList({
                         <span />
                       )}
                     </ListItemAvatar>
-                    <ListItemText primary={country.name} />
+                    <ListItemText
+                      style={{
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        overflow: "hidden"
+                      }}
+                      primary={country.name}
+                    />
                   </ListItem>
                 </CountryListItemWrapper>
               );
