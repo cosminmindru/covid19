@@ -118,7 +118,7 @@ const getDailySummary = async () => {
  * @param {boolean} [includeIcon=true]
  * @param {number} [iconSize=64]
  */
-const getCountries = async (_, { includeIcon = true, iconSize = 64 }) => {
+const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
   try {
     const response = await client.get("/countries");
     const countries = get(response, "data.countries");

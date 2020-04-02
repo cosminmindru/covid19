@@ -1,72 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
+
 import styled from "styled-components/macro";
-import Typography from "@material-ui/core/Typography";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import get from "lodash/get";
+import { transparentize } from "polished";
 import { useQuery } from "react-query";
+
+import { getCountries, getCountryDetails } from "../libs/covid19";
+import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
   WidgetContent
 } from "../styles/components/Widget";
-import { getCountries, getCountryDetails } from "../libs/covid19";
 import { formatNumber } from "../utils/formatNumber";
-import { transparentize } from "polished";
-import get from "lodash/get";
+import { CountryList } from "./CountryList";
+import { CountrySearch } from "./CountrySearch";
 
 const Content = styled(WidgetContent)`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [country-select] 80px [map] auto;
+  grid-template-rows: 80px auto;
   grid-template-areas:
-    "country-select"
+    "country"
     "map";
 
   @media ${(props) => props.theme.breakpoints.desktop} {
-    grid-template-columns: [country-select] 320px [map] auto;
+    grid-template-columns: 320px auto;
     grid-template-rows: 480px;
-    grid-template-areas: "country-select map";
+    grid-template-areas: "country map";
   }
 `;
 
-const CountrySelectSection = styled.section`
-  grid-area: country-select;
+const CountryListSection = styled.section`
+  grid-area: country;
   display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px auto;
+  grid-template-areas:
+    "search"
+    "list";
+`;
 
-  @media ${(props) => props.theme.breakpoints.desktop} {
-    grid-template-columns: 1fr;
-    grid-template-rows: [country-search] 40px [country-list] auto;
-    grid-template-areas: "country-select map";
-  }
+const CountrySearchWrapper = styled.section`
+  grid-area: search;
+`;
+
+const CountryListWrapper = styled.section`
+  grid-area: list;
 `;
 
 const MapSection = styled.section`
   grid-area: map;
   position: relative;
-`;
-
-const CountrySearchWrapper = styled.div`
-  grid-area: country-search;
-`;
-
-const CountryList = styled(List)`
-  && {
-    grid-area: country-list;
-    overflow-y: auto;
-    padding: 0;
-  }
-`;
-
-const CountryListItem = styled.li`
-  padding: 0.5rem;
-`;
-
-const Country = styled(ListItem)`
-  && {
-    border-radius: 0.5rem;
-  }
 `;
 
 const FakeMap = styled.div`
@@ -140,28 +125,41 @@ const CountryStat = styled.article`
   }
 `;
 
-const CountryStatsWidget = () => {
+function CountryStatsWidget() {
+  const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
-  const countries = useQuery(["countries", {}], getCountries);
+  const { data: countriesData, status: countriesStatus } = useQuery(
+    ["countries", {}],
+    getCountries
+  );
+
   const country = useQuery(
-    selectedCountry && [
-      `${selectedCountry.iso2}`,
+    () => [
+      ["country", selectedCountry.iso2],
       { countryCode: selectedCountry.iso2 }
     ],
     getCountryDetails
   );
 
-  const isCountrySelected = (country) => {
-    const selectedCountryCode = get(selectedCountry, "iso2");
-    const countryCode = get(country, "iso2");
+  // Update filtered countries
+  const filteredCountries = useMemo(() => {
+    if (countriesStatus === "success" && countriesData) {
+      const normalizedSearchQuery = searchQuery.toLowerCase().trim();
+      const newFilteredCountries = countriesData.filter((country) => {
+        const normalizedCountryName = country.name.toLowerCase().trim();
 
-    if (selectedCountryCode && countryCode) {
-      return selectedCountryCode === countryCode;
+        return normalizedCountryName.includes(normalizedSearchQuery);
+      });
+
+      return newFilteredCountries;
     }
+  }, [searchQuery, countriesData, countriesStatus]);
 
-    return false;
-  };
+  const handleCountrySelect = (country) => setSelectedCountry(country);
+
+  const handleCountrySearchChange = (event) =>
+    setSearchQuery(event.target.value);
 
   return (
     <Widget>
@@ -171,67 +169,59 @@ const CountryStatsWidget = () => {
         </Typography>
       </WidgetHeader>
       <Content>
-        <CountrySelectSection>
-          <CountrySearchWrapper>search input</CountrySearchWrapper>
-          <CountryList>
-            {countries.data &&
-              countries.data.map((country, index) => (
-                <CountryListItem>
-                  <Country
-                    key={country.iso2 || index}
-                    button
-                    selected={isCountrySelected(country)}
-                    onClick={() => setSelectedCountry(country)}
-                  >
-                    <ListItemAvatar>
-                      {country.icon ? (
-                        <img
-                          src={country.icon}
-                          alt={country.name}
-                          style={{ width: 24, height: 24 }}
-                        />
-                      ) : (
-                        <span />
-                      )}
-                    </ListItemAvatar>
-                    <ListItemText primary={country.name} />
-                  </Country>
-                </CountryListItem>
-              ))}
-          </CountryList>
-        </CountrySelectSection>
+        <CountryListSection>
+          <CountrySearchWrapper>
+            <CountrySearch
+              value={searchQuery}
+              onChange={handleCountrySearchChange}
+            />
+          </CountrySearchWrapper>
+          <CountryListWrapper>
+            <CountryList
+              countries={filteredCountries}
+              selectedCountry={selectedCountry}
+              onCountrySelect={handleCountrySelect}
+            />
+          </CountryListWrapper>
+        </CountryListSection>
         <MapSection>
           <FakeMap />
-          <CountryStatsOverlay>
-            <CountryStat>
-              <Typography variant="h6" gutterBottom>
-                Confirmed
-              </Typography>
-              <Typography variant="h5">
-                {formatNumber({ value: get(country, "data.confirmed.value") })}
-              </Typography>
-            </CountryStat>
-            <CountryStat>
-              <Typography variant="h6" gutterBottom>
-                Recovered
-              </Typography>
-              <Typography variant="h5">
-                {formatNumber({ value: get(country, "data.recovered.value") })}
-              </Typography>
-            </CountryStat>
-            <CountryStat>
-              <Typography variant="h6" gutterBottom>
-                Deaths
-              </Typography>
-              <Typography variant="h5">
-                {formatNumber({ value: get(country, "data.deaths.value") })}
-              </Typography>
-            </CountryStat>
-          </CountryStatsOverlay>
+          {selectedCountry && (
+            <CountryStatsOverlay>
+              <CountryStat>
+                <Typography variant="h6" gutterBottom>
+                  Confirmed
+                </Typography>
+                <Typography variant="h5">
+                  {formatNumber({
+                    value: get(country, "data.confirmed.value")
+                  })}
+                </Typography>
+              </CountryStat>
+              <CountryStat>
+                <Typography variant="h6" gutterBottom>
+                  Recovered
+                </Typography>
+                <Typography variant="h5">
+                  {formatNumber({
+                    value: get(country, "data.recovered.value")
+                  })}
+                </Typography>
+              </CountryStat>
+              <CountryStat>
+                <Typography variant="h6" gutterBottom>
+                  Deaths
+                </Typography>
+                <Typography variant="h5">
+                  {formatNumber({ value: get(country, "data.deaths.value") })}
+                </Typography>
+              </CountryStat>
+            </CountryStatsOverlay>
+          )}
         </MapSection>
       </Content>
     </Widget>
   );
-};
+}
 
 export { CountryStatsWidget };
