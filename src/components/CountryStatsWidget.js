@@ -52,8 +52,21 @@ const CountrySearchWrapper = styled.div`
 `;
 
 const CountryList = styled(List)`
-  grid-area: country-list;
-  overflow-y: auto;
+  && {
+    grid-area: country-list;
+    overflow-y: auto;
+    padding: 0;
+  }
+`;
+
+const CountryListItem = styled.li`
+  padding: 0.5rem;
+`;
+
+const Country = styled(ListItem)`
+  && {
+    border-radius: 0.5rem;
+  }
 `;
 
 const FakeMap = styled.div`
@@ -139,6 +152,17 @@ const CountryStatsWidget = () => {
     getCountryDetails
   );
 
+  const isCountrySelected = (country) => {
+    const selectedCountryCode = get(selectedCountry, "iso2");
+    const countryCode = get(country, "iso2");
+
+    if (selectedCountryCode && countryCode) {
+      return selectedCountryCode === countryCode;
+    }
+
+    return false;
+  };
+
   return (
     <Widget>
       <WidgetHeader>
@@ -152,32 +176,27 @@ const CountryStatsWidget = () => {
           <CountryList>
             {countries.data &&
               countries.data.map((country, index) => (
-                <ListItem
-                  key={country.iso2 || index}
-                  button
-                  onClick={() => setSelectedCountry(country)}
-                  style={{
-                    backgroundColor:
-                      selectedCountry &&
-                      selectedCountry.name.toLowerCase() ===
-                        country.name.toLowerCase()
-                        ? "red"
-                        : "transparent"
-                  }}
-                >
-                  <ListItemAvatar>
-                    {country.icon ? (
-                      <img
-                        src={country.icon}
-                        alt={country.name}
-                        style={{ width: 24, height: 24 }}
-                      />
-                    ) : (
-                      <span />
-                    )}
-                  </ListItemAvatar>
-                  <ListItemText primary={country.name} />
-                </ListItem>
+                <CountryListItem>
+                  <Country
+                    key={country.iso2 || index}
+                    button
+                    selected={isCountrySelected(country)}
+                    onClick={() => setSelectedCountry(country)}
+                  >
+                    <ListItemAvatar>
+                      {country.icon ? (
+                        <img
+                          src={country.icon}
+                          alt={country.name}
+                          style={{ width: 24, height: 24 }}
+                        />
+                      ) : (
+                        <span />
+                      )}
+                    </ListItemAvatar>
+                    <ListItemText primary={country.name} />
+                  </Country>
+                </CountryListItem>
               ))}
           </CountryList>
         </CountrySelectSection>
