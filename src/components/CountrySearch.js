@@ -1,5 +1,7 @@
-import React, { useMemo, useRef } from "react";
+import React from "react";
+import isEmpty from "validator/lib/isEmpty";
 import styled from "styled-components/macro";
+
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
@@ -11,7 +13,15 @@ const Wrapper = styled(FormControl)`
   && {
     width: 100%;
     height: 100%;
-    padding: 1rem;
+    padding: 0.5rem;
+  }
+`;
+
+const SearchInput = styled(Input)`
+  && {
+    padding: 0.5rem 0 0.5rem 1rem;
+    border-radius: 1rem;
+    background-color: ${(props) => props.theme.colors.offWhite};
   }
 `;
 
@@ -21,37 +31,16 @@ const CountrySearch = ({
   onChange = () => {},
   onClear = () => {}
 }) => {
-  const inputRef = useRef();
-
-  const isIconDisabled = useMemo(() => {
-    if (!value.trim()) return true;
-
-    return false;
-  }, [value]);
-
-  const handleIconClick = () => {
-    if (isIconDisabled && inputRef.current) {
-      inputRef.current.focus();
-
-      return;
-    }
-
-    if (!isIconDisabled) {
-      onClear();
-    }
-  };
-
   return (
     <Wrapper>
-      <Input
+      <SearchInput
         disableUnderline
-        ref={inputRef}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton disabled={isIconDisabled} onClick={handleIconClick}>
+            <IconButton disabled={isEmpty(value)} onClick={onClear}>
               {value.trim() ? <ClearIcon /> : <SearchIcon />}
             </IconButton>
           </InputAdornment>

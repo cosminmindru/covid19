@@ -1,7 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 
 import styled from "styled-components/macro";
 import get from "lodash/get";
+import mapboxgl from "mapbox-gl";
 import { transparentize } from "polished";
 import { useQuery } from "react-query";
 
@@ -15,6 +16,9 @@ import {
 import { formatNumber } from "../utils/formatNumber";
 import { CountryList } from "./CountryList";
 import { CountrySearch } from "./CountrySearch";
+
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiY29zbWluZGV2IiwiYSI6ImNrOGpwYjd6bjA3dnMzbXNtMHhhZGZ4cjAifQ.yrFksvXFCPazrwoNUj5txw";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -129,6 +133,8 @@ function CountryStatsWidget() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
+  const mapRef = useRef();
+
   const { data: countriesData, status: countriesStatus } = useQuery(
     ["countries", {}],
     getCountries
@@ -142,7 +148,18 @@ function CountryStatsWidget() {
     getCountryDetails
   );
 
-  // Update filtered countries
+  useEffect(() => {
+    const map = new mapboxgl.Map({
+      container: mapRef.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [5, 34],
+      zoom: 2
+    });
+    map.on("click", (e) => {
+      console.log(e);
+    });
+  }, []);
+
   const filteredCountries = useMemo(() => {
     if (countriesStatus === "success" && countriesData) {
       const normalizedSearchQuery = searchQuery.toLowerCase().trim();
@@ -161,7 +178,7 @@ function CountryStatsWidget() {
   const handleCountrySearchChange = (event) =>
     setSearchQuery(event.target.value);
 
-  const handleCountrySearchClear = () => setSearchQuery('')
+  const handleCountrySearchClear = () => setSearchQuery("");
 
   return (
     <Widget>
@@ -188,7 +205,7 @@ function CountryStatsWidget() {
           </CountryListWrapper>
         </CountryListSection>
         <MapSection>
-          <FakeMap />
+          <div ref={mapRef} />
           {selectedCountry && (
             <CountryStatsOverlay>
               <CountryStat>
