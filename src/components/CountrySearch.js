@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo, useRef } from "react";
 import styled from "styled-components/macro";
 import FormControl from "@material-ui/core/FormControl";
 import Input from "@material-ui/core/Input";
@@ -18,19 +18,40 @@ const Wrapper = styled(FormControl)`
 const CountrySearch = ({
   value = "",
   placeholder = "Search country",
-  onChange,
-  onClear
+  onChange = () => {},
+  onClear = () => {}
 }) => {
+  const inputRef = useRef();
+
+  const isIconDisabled = useMemo(() => {
+    if (!value.trim()) return true;
+
+    return false;
+  }, [value]);
+
+  const handleIconClick = () => {
+    if (isIconDisabled && inputRef.current) {
+      inputRef.current.focus();
+
+      return;
+    }
+
+    if (!isIconDisabled) {
+      onClear();
+    }
+  };
+
   return (
     <Wrapper>
       <Input
         disableUnderline
+        ref={inputRef}
         value={value}
         placeholder={placeholder}
         onChange={onChange}
         endAdornment={
           <InputAdornment position="end">
-            <IconButton disabled={!value.trim()} onClick={onClear}>
+            <IconButton disabled={isIconDisabled} onClick={handleIconClick}>
               {value.trim() ? <ClearIcon /> : <SearchIcon />}
             </IconButton>
           </InputAdornment>

@@ -150,6 +150,10 @@ const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
  */
 const getCountryDetails = async (_, { countryCode }) => {
   try {
+    if (!countryCode) {
+      throw new Error("countryCode is required");
+    }
+
     const response = await client.get(`/countries/${countryCode}`);
 
     return response.data;
