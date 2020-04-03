@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { MainLayout } from "../layouts/Main";
-import { GlobalOverviewWidget } from "../../components/GlobalOverviewWidget";
-import { GlobalInfectionRatesWidget } from "../../components/GlobalInfectionRatesWidget";
-import { TimeSinceOutbreakWidget } from "../../components/TimeSinceOutbreakWidget";
-import { CountryStatsWidget } from "../../components/CountryStatsWidget";
+import { GlobalOverviewWidget } from "../../containers/GlobalOverviewWidget";
+import { GlobalInfectionRatesWidget } from "../../containers/GlobalInfectionRatesWidget";
+import { TimeSinceOutbreakWidget } from "../../containers/TimeSinceOutbreakWidget";
+import { CountryStatsWidget } from "../../containers/CountryStatsWidget";
 
 const PageWrapper = styled.div`
   display: grid;

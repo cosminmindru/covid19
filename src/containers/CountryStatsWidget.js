@@ -5,6 +5,9 @@ import get from "lodash/get";
 import mapboxgl from "mapbox-gl";
 import { transparentize } from "polished";
 import { useQuery } from "react-query";
+import { useTheme } from "@material-ui/core/styles";
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { screenSizes } from "../styles";
 
 import { getCountries, getCountryDetails } from "../libs/covid19";
 import Typography from "@material-ui/core/Typography";
@@ -14,8 +17,8 @@ import {
   WidgetContent
 } from "../styles/components/Widget";
 import { formatNumber } from "../utils/formatNumber";
-import { CountryList } from "./CountryList";
-import { CountrySearch } from "./CountrySearch";
+import { CountryList } from "../components/CountryList";
+import { CountrySearch } from "../components/CountrySearch";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiY29zbWluZGV2IiwiYSI6ImNrOGpwYjd6bjA3dnMzbXNtMHhhZGZ4cjAifQ.yrFksvXFCPazrwoNUj5txw";
@@ -53,9 +56,10 @@ const CountryListWrapper = styled.section`
   grid-area: list;
 `;
 
-const MapSection = styled.section`
+const WorldMapSection = styled.section`
   grid-area: map;
   position: relative;
+  overflow: hidden;
 `;
 
 const FakeMap = styled.div`
@@ -133,7 +137,12 @@ function CountryStatsWidget() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
+  const theme = useTheme();
   const mapRef = useRef();
+
+  const isDesktop = useMediaQuery(
+    theme.breakpoints.up(screenSizes.desktopWidth)
+  );
 
   const { data: countriesData, status: countriesStatus } = useQuery(
     ["countries", {}],
@@ -152,11 +161,17 @@ function CountryStatsWidget() {
     const map = new mapboxgl.Map({
       container: mapRef.current,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [5, 34],
-      zoom: 2
+      center: [0, 0],
+      zoom: 1
     });
     map.on("click", (e) => {
       console.log(e);
+    });
+    map.on("load", function () {
+      map.resize();
+    });
+    document.addEventListener("resize", () => {
+      map.resize();
     });
   }, []);
 
@@ -189,23 +204,27 @@ function CountryStatsWidget() {
       </WidgetHeader>
       <Content>
         <CountryListSection>
-          <CountrySearchWrapper>
-            <CountrySearch
-              value={searchQuery}
-              onChange={handleCountrySearchChange}
-              onClear={handleCountrySearchClear}
-            />
-          </CountrySearchWrapper>
-          <CountryListWrapper>
-            <CountryList
-              countries={filteredCountries}
-              selectedCountry={selectedCountry}
-              onCountrySelect={handleCountrySelect}
-            />
-          </CountryListWrapper>
+          {isDesktop ? (
+            <>
+              <CountrySearchWrapper>
+                <CountrySearch
+                  value={searchQuery}
+                  onChange={handleCountrySearchChange}
+                  onClear={handleCountrySearchClear}
+                />
+              </CountrySearchWrapper>
+              <CountryListWrapper>
+                <CountryList
+                  countries={filteredCountries}
+                  selectedCountry={selectedCountry}
+                  onCountrySelect={handleCountrySelect}
+                />
+              </CountryListWrapper>
+            </>
+          ) : null}
         </CountryListSection>
-        <MapSection>
-          <div ref={mapRef} />
+        <WorldMapSection>
+          <div style={{ width: "100%", height: "100%" }} ref={mapRef} />
           {selectedCountry && (
             <CountryStatsOverlay>
               <CountryStat>
@@ -238,7 +257,7 @@ function CountryStatsWidget() {
               </CountryStat>
             </CountryStatsOverlay>
           )}
-        </MapSection>
+        </WorldMapSection>
       </Content>
     </Widget>
   );
