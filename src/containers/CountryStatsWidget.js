@@ -1,27 +1,25 @@
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useRef } from "react";
 
 import styled from "styled-components/macro";
 import get from "lodash/get";
-import mapboxgl from "mapbox-gl";
 import { transparentize } from "polished";
 import { useQuery } from "react-query";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../styles";
+import { useMap } from "../hooks/useMap";
 
 import { getCountries, getCountryDetails } from "../libs/covid19";
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
-  WidgetContent
+  WidgetContent,
 } from "../styles/components/Widget";
 import { formatNumber } from "../utils/formatNumber";
 import { CountryList } from "../components/CountryList";
 import { CountrySearch } from "../components/CountrySearch";
-
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiY29zbWluZGV2IiwiYSI6ImNrOGpwYjd6bjA3dnMzbXNtMHhhZGZ4cjAifQ.yrFksvXFCPazrwoNUj5txw";
+import { CountryAutocomplete } from "../components/CountryAutocomplete";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -60,31 +58,6 @@ const WorldMapSection = styled.section`
   grid-area: map;
   position: relative;
   overflow: hidden;
-`;
-
-const FakeMap = styled.div`
-  position: relative;
-  width: 100%;
-  height: 80%;
-  background-color: #eee;
-  background-image: url("https://i.picsum.photos/id/237/1200/600.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
-
-  &:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 4rem;
-    background: linear-gradient(
-      0deg,
-      rgba(255, 255, 255, 1) 0%,
-      rgba(255, 255, 255, 0.7) 50%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  }
 `;
 
 const CountryStatsOverlay = styled.section`
@@ -140,6 +113,8 @@ function CountryStatsWidget() {
   const theme = useTheme();
   const mapRef = useRef();
 
+  const { map } = useMap(mapRef.current);
+
   const isDesktop = useMediaQuery(
     theme.breakpoints.up(screenSizes.desktopWidth)
   );
@@ -152,28 +127,10 @@ function CountryStatsWidget() {
   const country = useQuery(
     () => [
       ["country", selectedCountry.iso2],
-      { countryCode: selectedCountry.iso2 }
+      { countryCode: selectedCountry.iso2 },
     ],
     getCountryDetails
   );
-
-  useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: mapRef.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [0, 0],
-      zoom: 1
-    });
-    map.on("click", (e) => {
-      console.log(e);
-    });
-    map.on("load", function () {
-      map.resize();
-    });
-    document.addEventListener("resize", () => {
-      map.resize();
-    });
-  }, []);
 
   const filteredCountries = useMemo(() => {
     if (countriesStatus === "success" && countriesData) {
@@ -221,7 +178,13 @@ function CountryStatsWidget() {
                 />
               </CountryListWrapper>
             </>
-          ) : null}
+          ) : (
+            <CountryAutocomplete
+              countries={countriesData || []}
+              selectedCountry={selectedCountry}
+              onCountrySelect={handleCountrySelect}
+            />
+          )}
         </CountryListSection>
         <WorldMapSection>
           <div style={{ width: "100%", height: "100%" }} ref={mapRef} />
@@ -233,7 +196,7 @@ function CountryStatsWidget() {
                 </Typography>
                 <Typography variant="h5">
                   {formatNumber({
-                    value: get(country, "data.confirmed.value")
+                    value: get(country, "data.confirmed.value"),
                   })}
                 </Typography>
               </CountryStat>
@@ -243,7 +206,7 @@ function CountryStatsWidget() {
                 </Typography>
                 <Typography variant="h5">
                   {formatNumber({
-                    value: get(country, "data.recovered.value")
+                    value: get(country, "data.recovered.value"),
                   })}
                 </Typography>
               </CountryStat>

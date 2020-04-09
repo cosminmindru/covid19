@@ -17,7 +17,7 @@ dayjs.extend(dayjsRelativeTime);
 
 // React query config
 const queryConfig = {
-  refetchAllOnWindowFocus: false
+  refetchAllOnWindowFocus: false,
 };
 
 const App = () => (

@@ -1,15 +1,17 @@
 import React from "react";
+import get from "lodash/get";
 import styled from "styled-components/macro";
-import Typography from "@material-ui/core/Typography";
-import {
-  Widget,
-  WidgetHeader,
-  WidgetContent
-} from "../styles/components/Widget";
 import { useQuery } from "react-query";
 import { getOverview } from "../libs/covid19";
 import { calculateDeathRate } from "../utils/calculateDeathRate";
 import { calculateRecoveryRate } from "../utils/calculateRecoveryRate";
+
+import Typography from "@material-ui/core/Typography";
+import {
+  Widget,
+  WidgetHeader,
+  WidgetContent,
+} from "../styles/components/Widget";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -55,7 +57,9 @@ const GlobalInfectionRatesWidget = () => {
   return (
     <Widget>
       <WidgetHeader>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>Global infection rates</Typography>
+        <Typography variant="h6" style={{ fontWeight: "bold" }}>
+          Global infection rates
+        </Typography>
       </WidgetHeader>
       <Content>
         {isLoading && <p>Loading...</p>}
@@ -67,9 +71,9 @@ const GlobalInfectionRatesWidget = () => {
               </Typography>
               <Typography variant="h4">
                 {calculateRecoveryRate({
-                  confirmedCases: data.confirmed.value,
-                  recovered: data.recovered.value,
-                  deaths: data.deaths.value,
+                  confirmedCases: get(data, "confirmed.value"),
+                  recovered: get(data, "recovered.value"),
+                  deaths: get(data, "deaths.value"),
                 })}
               </Typography>
             </Stat>
@@ -79,8 +83,8 @@ const GlobalInfectionRatesWidget = () => {
               </Typography>
               <Typography variant="h4">
                 {calculateDeathRate({
-                  confirmedCases: data.confirmed.value,
-                  deaths: data.deaths.value
+                  confirmedCases: get(data, "confirmed.value"),
+                  deaths: get(data, "deaths.value"),
                 })}
               </Typography>
             </Stat>

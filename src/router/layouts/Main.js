@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components/macro";
+import ReactGA from "react-ga";
+import { useLocation } from "react-router-dom";
+import config from "../../config";
+
 import { Meta } from "../../components/Meta";
 
 const Wrapper = styled.div`
@@ -27,6 +31,16 @@ const Content = styled.main`
 `;
 
 const MainLayout = ({ children, meta }) => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    ReactGA.initialize(config.gaTrackingId, {
+      debug: !config.isProduction,
+    });
+
+    ReactGA.pageview(pathname);
+  }, [pathname]);
+
   return (
     <Wrapper>
       <Meta {...meta} />
