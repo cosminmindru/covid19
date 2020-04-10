@@ -100,21 +100,30 @@ const CountryStat = styled.article`
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding: 1.5rem 0;
+  padding: 0 1rem;
   margin: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${(props) => props.theme.colors.grey};
+    border-right: 1px solid ${(props) => props.theme.colors.grey};
   }
+`;
 
-  @media ${(props) => props.theme.breakpoints.tablet} {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
-    padding: 0 1.5rem;
+const CountryStatHeading = styled(Typography)`
+  && {
+    font-size: 1rem;
 
-    &:not(:last-child) {
-      border-right: 1px solid ${(props) => props.theme.colors.grey};
-      border-bottom: 0;
+    @media ${(props) => props.theme.breakpoints.desktop} {
+      font-size: 1.25rem;
+    }
+  }
+`;
+
+const CountryStatNumber = styled(Typography)`
+  && {
+    font-size: 1.25rem;
+
+    @media ${(props) => props.theme.breakpoints.desktop} {
+      font-size: 1.5rem;
     }
   }
 `;
@@ -225,32 +234,32 @@ function CountryStatsWidget() {
           {selectedCountry && (
             <CountryStatsOverlay>
               <CountryStat>
-                <Typography variant="h6" gutterBottom>
+                <CountryStatHeading variant="h6" gutterBottom>
                   Confirmed
-                </Typography>
-                <Typography variant="h5">
+                </CountryStatHeading>
+                <CountryStatNumber variant="h5">
                   {formatNumber({
                     value: get(country, "data.confirmed.value"),
                   })}
-                </Typography>
+                </CountryStatNumber>
               </CountryStat>
               <CountryStat>
-                <Typography variant="h6" gutterBottom>
+                <CountryStatHeading variant="h6" gutterBottom>
                   Recovered
-                </Typography>
-                <Typography variant="h5">
+                </CountryStatHeading>
+                <CountryStatNumber variant="h5">
                   {formatNumber({
                     value: get(country, "data.recovered.value"),
                   })}
-                </Typography>
+                </CountryStatNumber>
               </CountryStat>
               <CountryStat>
-                <Typography variant="h6" gutterBottom>
+                <CountryStatHeading variant="h6" gutterBottom>
                   Deaths
-                </Typography>
-                <Typography variant="h5">
+                </CountryStatHeading>
+                <CountryStatNumber variant="h5">
                   {formatNumber({ value: get(country, "data.deaths.value") })}
-                </Typography>
+                </CountryStatNumber>
               </CountryStat>
             </CountryStatsOverlay>
           )}
