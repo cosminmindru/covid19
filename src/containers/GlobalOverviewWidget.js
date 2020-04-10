@@ -1,15 +1,16 @@
 import React from "react";
+import get from "lodash/get";
 import styled from "styled-components/macro";
+import { useQuery } from "react-query";
+import { getOverview } from "../libs/covid19";
+import { formatNumber } from "../utils/formatNumber";
+
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
-  WidgetContent
+  WidgetContent,
 } from "../styles/components/Widget";
-import { useQuery } from "react-query";
-import { getOverview } from "../libs/covid19";
-import { calculateDeathRate } from "../utils/calculateDeathRate";
-import { calculateRecoveryRate } from "../utils/calculateRecoveryRate";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -19,7 +20,7 @@ const Content = styled(WidgetContent)`
   padding: 0 1.5rem;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     grid-template-rows: 1fr;
     padding: 1.5rem 0;
   }
@@ -49,46 +50,49 @@ const Stat = styled.div`
   }
 `;
 
-const GlobalInfectionRatesWidget = () => {
+const GlobalOverviewWidget = () => {
   const { isLoading, data } = useQuery("globalOverview", getOverview);
 
   return (
-    <Widget>
-      <WidgetHeader>
-        <Typography variant="h5">Global infection rates</Typography>
-      </WidgetHeader>
-      <Content>
-        {isLoading && <p>Loading...</p>}
-        {data && (
-          <>
+    <>
+      {isLoading && <p>loading...</p>}
+      {data && (
+        <Widget>
+          <WidgetHeader>
+            <Typography variant="h6" style={{ fontWeight: "bold" }}>
+              Global cases
+            </Typography>
+          </WidgetHeader>
+          <Content>
             <Stat>
               <Typography variant="h6" gutterBottom>
-                Recovery rate
+                Confirmed
               </Typography>
               <Typography variant="h4">
-                {calculateRecoveryRate({
-                  confirmedCases: data.confirmed.value,
-                  recovered: data.recovered.value,
-                  deaths: data.deaths.value,
-                })}
+                {formatNumber({ value: get(data, "confirmed.value") })}
               </Typography>
             </Stat>
             <Stat>
               <Typography variant="h6" gutterBottom>
-                Death rate
+                Recovered
               </Typography>
               <Typography variant="h4">
-                {calculateDeathRate({
-                  confirmedCases: data.confirmed.value,
-                  deaths: data.deaths.value
-                })}
+                {formatNumber({ value: get(data, "recovered.value") })}
               </Typography>
             </Stat>
-          </>
-        )}
-      </Content>
-    </Widget>
+            <Stat>
+              <Typography variant="h6" gutterBottom>
+                Deaths
+              </Typography>
+              <Typography variant="h4">
+                {formatNumber({ value: get(data, "deaths.value") })}
+              </Typography>
+            </Stat>
+          </Content>
+        </Widget>
+      )}
+    </>
   );
 };
 
-export { GlobalInfectionRatesWidget };
+export { GlobalOverviewWidget };

@@ -1,13 +1,13 @@
 const screenSizes = {
-  phoneWidth: "340px",
-  tabletWidth: "768px",
-  desktopWidth: "960px"
+  phoneWidth: 340,
+  tabletWidth: 768,
+  desktopWidth: 960
 };
 
 const breakpoints = {
-  phone: `(min-width: ${screenSizes.phoneWidth})`,
-  tablet: `(min-width: ${screenSizes.tabletWidth})`,
-  desktop: `(min-width: ${screenSizes.desktopWidth})`
+  phone: `(min-width: ${screenSizes.phoneWidth}px)`,
+  tablet: `(min-width: ${screenSizes.tabletWidth}px)`,
+  desktop: `(min-width: ${screenSizes.desktopWidth}px)`
 };
 
 export { screenSizes, breakpoints };

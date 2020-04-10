@@ -5,6 +5,8 @@ const Widget = styled.article`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: [header] 4rem [content] auto;
+  width: 100%;
+  height: 100%;
   border-width: 1px;
   border-style: solid;
   border-color: ${(props) => props.theme.colors.grey};
@@ -12,6 +14,7 @@ const Widget = styled.article`
   background-color: ${(props) => props.theme.colors.white};
   box-shadow: 0 0.15rem 0.15rem
     ${(props) => transparentize(0.9, props.theme.colors.black)};
+  overflow: hidden;
 `;
 
 const WidgetHeader = styled.header`
