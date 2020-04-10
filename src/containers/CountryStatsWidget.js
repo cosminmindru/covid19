@@ -24,26 +24,47 @@ import { CountryAutocomplete } from "../components/CountryAutocomplete";
 const Content = styled(WidgetContent)`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 80px auto;
-  grid-template-areas:
-    "country"
-    "map";
+  grid-template-rows: 80px minmax(min-content, 480px);
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-template-columns: 320px auto;
-    grid-template-rows: 480px;
+    grid-template-rows: minmax(min-content, 480px);
     grid-template-areas: "country map";
   }
 `;
 
-const CountryListSection = styled.section`
-  grid-area: country;
-  display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: min-content auto;
-  grid-template-areas:
-    "search"
-    "list";
+const CountrySelectSection = styled.section`
+  z-index: 2;
+  grid-column: 1 / last-line;
+  grid-row: 1 / 2;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-area: country;
+    grid-column: initial;
+    grid-row: initial;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: min-content auto;
+    grid-template-areas:
+      "search"
+      "list";
+  }
+`;
+
+const WorldMapSection = styled.section`
+  position: relative;
+  overflow: hidden;
+  grid-row: 1 / last-line;
+  grid-column: 1 / last-line;
+  height: 100%;
+  max-height: 560px;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-area: map;
+    grid-column: initial;
+    grid-row: initial;
+    max-height: 480px;
+  }
 `;
 
 const CountrySearchWrapper = styled.section`
@@ -54,32 +75,24 @@ const CountryListWrapper = styled.section`
   grid-area: list;
 `;
 
-const WorldMapSection = styled.section`
-  grid-area: map;
-  position: relative;
-  overflow: hidden;
+const CountryAutocompleteWrapper = styled.div`
+  padding: 1rem 1rem 0;
 `;
 
 const CountryStatsOverlay = styled.section`
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr;
-  grid-template-rows: auto;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  padding: 1rem 0;
   position: absolute;
   bottom: 1rem;
   left: 1rem;
   right: 1rem;
-  padding: 0 1rem;
   border-radius: 0.5rem;
   background-color: ${(props) => props.theme.colors.white};
   box-shadow: 0 0.15rem 0.15rem
     ${(props) => transparentize(0.9, props.theme.colors.black)};
-
-  @media ${(props) => props.theme.breakpoints.tablet} {
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: 1fr;
-    padding: 1rem 0;
-  }
 `;
 
 const CountryStat = styled.article`
@@ -145,10 +158,30 @@ function CountryStatsWidget() {
     }
   }, [searchQuery, countriesData, countriesStatus]);
 
-  const handleCountrySelect = (country) => setSelectedCountry(country);
+  const handleCountrySelect = (country) => {
+    const prevSelectedCountryName = get(selectedCountry, "name");
+    const newSelectedCountryName = get(country, "name");
 
-  const handleCountrySearchChange = (event) =>
-    setSearchQuery(event.target.value);
+    console.log(prevSelectedCountryName);
+    console.log(newSelectedCountryName);
+
+    // Deselect country if same is reselected
+    if (prevSelectedCountryName === newSelectedCountryName) {
+      setSelectedCountry(null);
+
+      return;
+    }
+
+    setSelectedCountry(country);
+  };
+
+  const handleCountrySearchChange = (event) => {
+    const newSearchQuery = get(event, "target.value");
+
+    if (newSearchQuery !== null) {
+      setSearchQuery(event.target.value);
+    }
+  };
 
   const handleCountrySearchClear = () => setSearchQuery("");
 
@@ -160,7 +193,7 @@ function CountryStatsWidget() {
         </Typography>
       </WidgetHeader>
       <Content>
-        <CountryListSection>
+        <CountrySelectSection>
           {isDesktop ? (
             <>
               <CountrySearchWrapper>
@@ -179,13 +212,14 @@ function CountryStatsWidget() {
               </CountryListWrapper>
             </>
           ) : (
-            <CountryAutocomplete
-              countries={countriesData || []}
-              selectedCountry={selectedCountry}
-              onCountrySelect={handleCountrySelect}
-            />
+            <CountryAutocompleteWrapper>
+              <CountryAutocomplete
+                countries={countriesData}
+                onCountrySelect={handleCountrySelect}
+              />
+            </CountryAutocompleteWrapper>
           )}
-        </CountryListSection>
+        </CountrySelectSection>
         <WorldMapSection>
           <div style={{ width: "100%", height: "100%" }} ref={mapRef} />
           {selectedCountry && (

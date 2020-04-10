@@ -15,10 +15,16 @@ const CountryListItemWrapper = styled.li`
   padding: 0.25rem 0.5rem;
 `;
 
+const CountryIcon = styled.img`
+  height: 2rem;
+  border-radius: 1rem;
+  object-fit: cover;
+`
+
 function CountryList({
   countries = [],
   selectedCountry = null,
-  onCountrySelect
+  onCountrySelect,
 }) {
   const isCountrySelected = (country) => {
     const selectedCountryCode = get(selectedCountry, "iso2");
@@ -32,7 +38,7 @@ function CountryList({
   };
 
   return (
-    <AutoSizer style={{ gridArea: "list", padding: '0.25rem 0' }}>
+    <AutoSizer style={{ gridArea: "list", padding: "0.25rem 0" }}>
       {({ width, height }) => {
         return (
           <FixedSizeList
@@ -60,10 +66,9 @@ function CountryList({
                   >
                     <ListItemAvatar>
                       {country.icon ? (
-                        <img
+                        <CountryIcon
                           src={country.icon}
                           alt={country.name}
-                          style={{ width: 24, height: 24 }}
                         />
                       ) : (
                         <span />
@@ -73,7 +78,7 @@ function CountryList({
                       style={{
                         whiteSpace: "nowrap",
                         textOverflow: "ellipsis",
-                        overflow: "hidden"
+                        overflow: "hidden",
                       }}
                       primary={country.name}
                     />

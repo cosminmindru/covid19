@@ -121,19 +121,20 @@ const getDailySummary = async () => {
 const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
   try {
     const response = await client.get("/countries");
-    const countries = get(response, "data.countries");
+    let countries = get(response, "data.countries");
 
-    // Include the icon
+    // Filter invalid countries
+    countries = countries.filter((country) => country.name && country.iso2);
+
+    // Add icon to countries
     if (includeIcon && countries) {
-      return countries.map((country) => {
+      countries = countries.map((country) => {
         if (country.iso2) {
           return {
             ...country,
-            icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`
+            icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`,
           };
         }
-
-        return country;
       });
     }
 
@@ -215,5 +216,5 @@ export {
   getCountries,
   getCountryDetails,
   getDetailedCountries,
-  getGlobalDetailsForPeriod
+  getGlobalDetailsForPeriod,
 };
