@@ -1,14 +1,16 @@
 import React from "react";
+import get from "lodash/get";
 import styled from "styled-components/macro";
+import { useQuery } from "react-query";
+import { getOverview } from "../libs/covid19";
+import { formatNumber } from "../utils/formatNumber";
+
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
-  WidgetContent
+  WidgetContent,
 } from "../styles/components/Widget";
-import { useQuery } from "react-query";
-import { getOverview } from "../libs/covid19";
-import { formatNumber } from "../utils/formatNumber";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -57,7 +59,9 @@ const GlobalOverviewWidget = () => {
       {data && (
         <Widget>
           <WidgetHeader>
-            <Typography variant="h6" style={{ fontWeight: "bold" }}>Global cases</Typography>
+            <Typography variant="h6" style={{ fontWeight: "bold" }}>
+              Global cases
+            </Typography>
           </WidgetHeader>
           <Content>
             <Stat>
@@ -65,7 +69,7 @@ const GlobalOverviewWidget = () => {
                 Confirmed
               </Typography>
               <Typography variant="h4">
-                {formatNumber({ value: data.confirmed.value })}
+                {formatNumber({ value: get(data, "confirmed.value") })}
               </Typography>
             </Stat>
             <Stat>
@@ -73,7 +77,7 @@ const GlobalOverviewWidget = () => {
                 Recovered
               </Typography>
               <Typography variant="h4">
-                {formatNumber({ value: data.recovered.value })}
+                {formatNumber({ value: get(data, "recovered.value") })}
               </Typography>
             </Stat>
             <Stat>
@@ -81,7 +85,7 @@ const GlobalOverviewWidget = () => {
                 Deaths
               </Typography>
               <Typography variant="h4">
-                {formatNumber({ value: data.deaths.value })}
+                {formatNumber({ value: get(data, "deaths.value") })}
               </Typography>
             </Stat>
           </Content>

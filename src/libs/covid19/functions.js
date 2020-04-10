@@ -1,5 +1,6 @@
-import { client } from "./index";
 import dayjs from "dayjs";
+import get from "lodash/get";
+import { client } from "./index";
 
 /**
  * Gets an overview of COVID-19
@@ -113,12 +114,31 @@ const getDailySummary = async () => {
 
 /**
  * Gets a list of all countries
+ *
+ * @param {boolean} [includeIcon=true]
+ * @param {number} [iconSize=64]
  */
-const getCountries = async () => {
+const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
   try {
     const response = await client.get("/countries");
+    let countries = get(response, "data.countries");
 
-    return response.data;
+    // Filter invalid countries
+    countries = countries.filter((country) => country.name && country.iso2);
+
+    // Add icon to countries
+    if (includeIcon && countries) {
+      countries = countries.map((country) => {
+        if (country.iso2) {
+          return {
+            ...country,
+            icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`,
+          };
+        }
+      });
+    }
+
+    return countries;
   } catch (error) {
     throw error;
   }
@@ -131,6 +151,10 @@ const getCountries = async () => {
  */
 const getCountryDetails = async (_, { countryCode }) => {
   try {
+    if (!countryCode) {
+      throw new Error("countryCode is required");
+    }
+
     const response = await client.get(`/countries/${countryCode}`);
 
     return response.data;
@@ -166,21 +190,19 @@ const getGlobalDetailsForPeriod = async () => {
   try {
     let e = 0;
     let m = 7;
-    let days = []
+    let days = [];
 
     while (e < m) {
-      const day = dayjs().subtract(e, 'day').toString();
+      const day = dayjs().subtract(e, "day").toString();
       days.push(day);
-      e++
-    };
+      e++;
+    }
 
     console.log(days);
 
-    return Promise.resolve()
-  } catch (error) {
-    
-  }
-}
+    return Promise.resolve();
+  } catch (error) {}
+};
 
 export {
   getOverview,
@@ -194,5 +216,5 @@ export {
   getCountries,
   getCountryDetails,
   getDetailedCountries,
-  getGlobalDetailsForPeriod
+  getGlobalDetailsForPeriod,
 };
