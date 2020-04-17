@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import get from "lodash/get";
 import { client } from "./index";
 
+// TODO: Remove once API has been migrated to https://corona.lmao.ninja/
+import axios from "axios";
+
 /**
  * Gets an overview of COVID-19
  */
@@ -11,6 +14,7 @@ const getOverview = async () => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -24,6 +28,7 @@ const getConfirmedCases = async () => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -39,6 +44,7 @@ const getConfirmedCasesForCountry = async ({ countryCode }) => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -52,6 +58,7 @@ const getRecoveredCases = async () => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -67,6 +74,7 @@ const getRecoveredCasesForCountry = async ({ countryCode }) => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -80,6 +88,7 @@ const getDeathCases = async () => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -95,6 +104,7 @@ const getDeathCasesForCountry = async ({ countryCode }) => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -108,6 +118,7 @@ const getDailySummary = async () => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -140,6 +151,7 @@ const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
 
     return countries;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -159,29 +171,27 @@ const getCountryDetails = async (_, { countryCode }) => {
 
     return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
 
 /**
  * Gets a list of all countries with details
+ *
+ * @param {string} key - React Query key
+ * @param {object} params
+ * @param {('cases'|'todayCases'|'deaths'|'todayDeaths'|'recovered'|'active'|'critical'|'casesPerOneMillion'|'deathsPerOneMillion')} [params.sortBy] - return the data sorted by different parameters (eg. cases, todayCases, etc.)
  */
-const getDetailedCountries = async () => {
+const getDetailedCountries = async (key, { sortBy }) => {
   try {
-    const countries = await getCountries();
+    const response = await axios.get("https://corona.lmao.ninja/v2/countries", {
+      sort: sortBy,
+    });
 
-    const countriesWithDetails = [];
-
-    for await (const country of Object.values(countries.countries)) {
-      const detailedCountry = await getCountryDetails({ countryCode: country });
-
-      countriesWithDetails.push(detailedCountry);
-    }
-
-    console.log(countriesWithDetails);
-
-    return countriesWithDetails.data;
+    return response.data;
   } catch (error) {
+    console.error(error);
     throw error;
   }
 };
@@ -201,7 +211,9 @@ const getGlobalDetailsForPeriod = async () => {
     console.log(days);
 
     return Promise.resolve();
-  } catch (error) {}
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 export {

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo } from "react";
 
 import styled from "styled-components/macro";
 import get from "lodash/get";
@@ -7,7 +7,6 @@ import { useQuery } from "react-query";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../styles";
-import { useMap } from "../hooks/useMap";
 
 import { getCountries, getCountryDetails } from "../libs/covid19";
 import Typography from "@material-ui/core/Typography";
@@ -20,6 +19,7 @@ import { formatNumber } from "../utils/formatNumber";
 import { CountryList } from "../components/CountryList";
 import { CountrySearch } from "../components/CountrySearch";
 import { CountryAutocomplete } from "../components/CountryAutocomplete";
+import { WorldMap } from "../components/Map";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -34,7 +34,7 @@ const Content = styled(WidgetContent)`
 `;
 
 const CountrySelectSection = styled.section`
-  z-index: 2;
+  z-index: 5;
   grid-column: 1 / last-line;
   grid-row: 1 / 2;
 
@@ -80,7 +80,7 @@ const CountryAutocompleteWrapper = styled.div`
 `;
 
 const CountryStatsOverlay = styled.section`
-  z-index: 1;
+  z-index: 5;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: 1fr;
@@ -133,9 +133,6 @@ function CountryStatsWidget() {
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const theme = useTheme();
-  const mapRef = useRef();
-
-  const { map } = useMap(mapRef.current);
 
   const isDesktop = useMediaQuery(
     theme.breakpoints.up(screenSizes.desktopWidth)
@@ -198,7 +195,7 @@ function CountryStatsWidget() {
     <Widget>
       <WidgetHeader>
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Countries
+          Individual country cases
         </Typography>
       </WidgetHeader>
       <Content>
@@ -230,7 +227,7 @@ function CountryStatsWidget() {
           )}
         </CountrySelectSection>
         <WorldMapSection>
-          <div style={{ width: "100%", height: "100%" }} ref={mapRef} />
+          <WorldMap />
           {selectedCountry && (
             <CountryStatsOverlay>
               <CountryStat>

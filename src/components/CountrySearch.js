@@ -28,8 +28,8 @@ const SearchInput = styled(Input)`
 const CountrySearch = ({
   value = "",
   placeholder = "Search country",
-  onChange = () => {},
-  onClear = () => {}
+  onChange,
+  onClear
 }) => {
   return (
     <Wrapper>
