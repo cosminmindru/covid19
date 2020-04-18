@@ -13,6 +13,8 @@ import { useQuery } from "react-query";
 import { getDetailedCountries } from "../libs/covid19";
 import { formatCountriesToGeoJson } from "../utils/formatCountriesToGeoJson";
 
+import worldCountriesGeoJson from "../assets/world_countries.geo.json";
+
 import "leaflet/dist/leaflet.css";
 import config from "../config";
 
@@ -38,18 +40,28 @@ const Wrapper = styled.div`
   }
 `;
 
-const WorldMap = ({}) => {
+const COLOR_RANGES = {
+  500000: "#00ff00",
+  100000: "#00ff00",
+  50000: "#00ff00",
+  10000: "#00ff00",
+  1000: "#00ff00",
+  100: "#00ff00",
+};
+
+const WorldMap = ({ selectedCountry = null }) => {
   const [position, setPosition] = useState([7, 2]);
   const [zoom, setZoom] = useState(3);
 
   const mapRef = useRef();
+  const geoJsonRef = useRef();
 
-  const [countriesGeoJson, setCountriesGeoJson] = useState(null);
-  const [countriesGeoJsonLayers, setCountriesGeoJsonLayers] = useState(null);
+  const [geoJson, setGeoJson] = useState(null);
+  const [maxBounds, setMaxBounds] = useState(null);
 
   // Detailed countries query
   const { status: countriesQueryStatus, data: countriesQueryData } = useQuery(
-    ["detailed-countries", {}],
+    ["detailed-countries", { sortBy: "cases" }],
     getDetailedCountries
   );
 
@@ -58,12 +70,60 @@ const WorldMap = ({}) => {
     console.log("puta madre");
     if (!mapRef.current || !countriesQueryData) return;
 
-    const newCountriesGeoJson = formatCountriesToGeoJson({
-      countries: countriesQueryData,
-    });
+    const countriesGeoJson = {
+      ...worldCountriesGeoJson,
+      features: worldCountriesGeoJson.features
+        .map(({ type, properties, geometry }) => {
+          const countryData = countriesQueryData.find(
+            (country) => country.countryInfo.iso3 === properties.iso_a3
+          );
 
-    setCountriesGeoJson(newCountriesGeoJson);
+          if (countryData) {
+            return {
+              type,
+              properties: {
+                ...properties,
+                covid19: countryData,
+              },
+              geometry,
+            };
+          }
+
+          return null;
+        })
+        .filter((country) => country),
+    };
+    const newGeoJson = Leaflet.geoJSON(countriesGeoJson);
+
+    const newMaxBounds = newGeoJson.getBounds();
+
+    setGeoJson(countriesGeoJson);
+    setMaxBounds(newMaxBounds);
   }, [mapRef, countriesQueryData]);
+
+  useEffect(() => {
+    if (mapRef && !selectedCountry && maxBounds) {
+      mapRef.current.leafletElement.fitBounds(maxBounds);
+    }
+
+    if (mapRef && selectedCountry && geoJson) {
+      const country = geoJson.features.find(({ properties }) => {
+        return properties.iso_a3 === selectedCountry.iso3;
+      });
+
+      if (country) {
+        console.log(country);
+        const countryGeoJson = Leaflet.geoJSON({
+          type: "FeatureCollection",
+          features: [country],
+        });
+
+        const bounds = countryGeoJson.getBounds();
+
+        mapRef.current.leafletElement.fitBounds(bounds);
+      }
+    }
+  }, [mapRef, selectedCountry, geoJson, maxBounds]);
 
   const tileLayerUrl = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
 
@@ -75,6 +135,8 @@ const WorldMap = ({}) => {
           zoom={zoom}
           ref={mapRef}
           zoomControl={false}
+          minZoom={2}
+          maxBounds={maxBounds}
         >
           <TileLayer
             // url={tileLayerUrl}
@@ -82,17 +144,21 @@ const WorldMap = ({}) => {
             attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             tileSize={512}
             zoomOffset={-1}
+            noWrap={true}
           />
-          {countriesQueryData.map((country) => (
-            <Marker
-              position={[country.countryInfo.lat, country.countryInfo.long]}
-              onclick={(e) => console.log(country)}
-            >
-              <Popup>
-                {country.country} - {country.cases}
-              </Popup>
-            </Marker>
-          ))}
+          <GeoJSON
+            ref={geoJsonRef}
+            data={geoJson}
+            onclick={({ sourceTarget }) => {
+              mapRef.current.leafletElement.fitBounds(sourceTarget._bounds);
+            }}
+            onEachFeature={(feature, layer) => {
+              console.groupCollapsed("onEachFeature");
+              console.log(feature);
+              console.log(layer);
+              console.groupEnd();
+            }}
+          />
         </LeafletMap>
       )}
     </Wrapper>

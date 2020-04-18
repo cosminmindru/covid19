@@ -186,7 +186,9 @@ const getCountryDetails = async (_, { countryCode }) => {
 const getDetailedCountries = async (key, { sortBy }) => {
   try {
     const response = await axios.get("https://corona.lmao.ninja/v2/countries", {
-      sort: sortBy,
+      params: {
+        sort: sortBy,
+      },
     });
 
     return response.data;

@@ -227,7 +227,7 @@ function CountryStatsWidget() {
           )}
         </CountrySelectSection>
         <WorldMapSection>
-          <WorldMap />
+          <WorldMap selectedCountry={selectedCountry} />
           {selectedCountry && (
             <CountryStatsOverlay>
               <CountryStat>
