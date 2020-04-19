@@ -10,8 +10,7 @@ import {
 } from "react-leaflet";
 import { default as Leaflet, latLng } from "leaflet";
 import { useQuery } from "react-query";
-import { getDetailedCountries } from "../libs/covid19";
-import { formatCountriesToGeoJson } from "../utils/formatCountriesToGeoJson";
+import { getCountries } from "../libs/novelCovid/functions/countries";
 
 import worldCountriesGeoJson from "../assets/world_countries.geo.json";
 
@@ -40,6 +39,14 @@ const Wrapper = styled.div`
   }
 `;
 
+const BeepBoop = () => {
+  return (
+    <div>
+      <h1>Hello bro</h1>
+    </div>
+  );
+};
+
 const COLOR_RANGES = {
   500000: "#00ff00",
   100000: "#00ff00",
@@ -49,20 +56,20 @@ const COLOR_RANGES = {
   100: "#00ff00",
 };
 
-const WorldMap = ({ selectedCountry = null }) => {
+const WorldMap = ({ selectedCountry = null, onCountryClick = () => {} }) => {
   const [position, setPosition] = useState([7, 2]);
   const [zoom, setZoom] = useState(3);
-
-  const mapRef = useRef();
-  const geoJsonRef = useRef();
 
   const [geoJson, setGeoJson] = useState(null);
   const [maxBounds, setMaxBounds] = useState(null);
 
+  const mapRef = useRef();
+  const geoJsonRef = useRef();
+
   // Detailed countries query
   const { status: countriesQueryStatus, data: countriesQueryData } = useQuery(
     ["detailed-countries", { sortBy: "cases" }],
-    getDetailedCountries
+    getCountries
   );
 
   // Map effect
@@ -74,9 +81,11 @@ const WorldMap = ({ selectedCountry = null }) => {
       ...worldCountriesGeoJson,
       features: worldCountriesGeoJson.features
         .map(({ type, properties, geometry }) => {
-          const countryData = countriesQueryData.find(
-            (country) => country.countryInfo.iso3 === properties.iso_a3
-          );
+          const countryData = countriesQueryData.find((country) => {
+            if (!country) return false;
+
+            return country.countryInfo.iso3 === properties.iso_a3;
+          });
 
           if (countryData) {
             return {
@@ -108,11 +117,13 @@ const WorldMap = ({ selectedCountry = null }) => {
 
     if (mapRef && selectedCountry && geoJson) {
       const country = geoJson.features.find(({ properties }) => {
-        return properties.iso_a3 === selectedCountry.iso3;
+        return (
+          properties.covid19.countryInfo.iso3 ===
+          selectedCountry.countryInfo.iso3
+        );
       });
 
       if (country) {
-        console.log(country);
         const countryGeoJson = Leaflet.geoJSON({
           type: "FeatureCollection",
           features: [country],
@@ -136,7 +147,8 @@ const WorldMap = ({ selectedCountry = null }) => {
           ref={mapRef}
           zoomControl={false}
           minZoom={2}
-          maxBounds={maxBounds}
+          // maxBounds={maxBounds}
+          worldCopyJump
         >
           <TileLayer
             // url={tileLayerUrl}
@@ -144,13 +156,30 @@ const WorldMap = ({ selectedCountry = null }) => {
             attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             tileSize={512}
             zoomOffset={-1}
-            noWrap={true}
           />
+          {selectedCountry && (
+            // Get Selected country data
+            // Render popup with position and data of the selectedCountry
+            <Popup
+              position={[
+                selectedCountry.countryInfo.lat,
+                selectedCountry.countryInfo.long,
+              ]}
+              autoClose={false}
+              closeButton={false}
+              closeOnClick={false}
+              closeOnEscapeKey={false}
+            >
+              <h1>{selectedCountry.country}</h1>
+            </Popup>
+          )}
           <GeoJSON
             ref={geoJsonRef}
             data={geoJson}
-            onclick={({ sourceTarget }) => {
-              mapRef.current.leafletElement.fitBounds(sourceTarget._bounds);
+            onclick={({ layer }) => {
+              const country = layer.feature.properties.covid19;
+
+              onCountryClick(country);
             }}
             onEachFeature={(feature, layer) => {
               console.groupCollapsed("onEachFeature");

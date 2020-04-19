@@ -161,7 +161,7 @@ const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
  *
  * @param {string} countryCode
  */
-const getCountryDetails = async (_, { countryCode }) => {
+const getCountryDetails = async (_, { countryCode } = {}) => {
   try {
     if (!countryCode) {
       throw new Error("countryCode is required");
@@ -183,7 +183,7 @@ const getCountryDetails = async (_, { countryCode }) => {
  * @param {object} params
  * @param {('cases'|'todayCases'|'deaths'|'todayDeaths'|'recovered'|'active'|'critical'|'casesPerOneMillion'|'deathsPerOneMillion')} [params.sortBy] - return the data sorted by different parameters (eg. cases, todayCases, etc.)
  */
-const getDetailedCountries = async (key, { sortBy }) => {
+const getDetailedCountries = async (key, { sortBy } = {}) => {
   try {
     const response = await axios.get("https://corona.lmao.ninja/v2/countries", {
       params: {

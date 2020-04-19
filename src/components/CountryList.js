@@ -19,7 +19,7 @@ const CountryIcon = styled.img`
   height: 2rem;
   border-radius: 1rem;
   object-fit: cover;
-`
+`;
 
 function CountryList({
   countries = [],
@@ -27,8 +27,8 @@ function CountryList({
   onCountrySelect,
 }) {
   const isCountrySelected = (country) => {
-    const selectedCountryCode = get(selectedCountry, "iso2");
-    const countryCode = get(country, "iso2");
+    const selectedCountryCode = get(selectedCountry, "countryInfo.iso2");
+    const countryCode = get(country, "countryInfo.iso2");
 
     if (selectedCountryCode && countryCode) {
       return selectedCountryCode === countryCode;
@@ -55,7 +55,7 @@ function CountryList({
 
               return (
                 <CountryListItemWrapper
-                  key={kebabCase(country.name)}
+                  key={kebabCase(country.country)}
                   style={style}
                 >
                   <ListItem
@@ -66,10 +66,7 @@ function CountryList({
                   >
                     <ListItemAvatar>
                       {country.icon ? (
-                        <CountryIcon
-                          src={country.icon}
-                          alt={country.name}
-                        />
+                        <CountryIcon src={country.icon} alt={country.country} />
                       ) : (
                         <span />
                       )}
@@ -80,7 +77,7 @@ function CountryList({
                         textOverflow: "ellipsis",
                         overflow: "hidden",
                       }}
-                      primary={country.name}
+                      primary={country.country}
                     />
                   </ListItem>
                 </CountryListItemWrapper>

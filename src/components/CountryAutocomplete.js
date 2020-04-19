@@ -30,7 +30,7 @@ const CountryAutocomplete = ({
     <Wrapper>
       <Autocomplete
         options={countries}
-        getOptionLabel={(country) => country.name}
+        getOptionLabel={(country) => country.country}
         onChange={handleChange}
         blurOnSelect
         renderInput={(props) => {
