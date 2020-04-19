@@ -134,7 +134,7 @@ function CountryStatsWidget() {
     <Widget>
       <WidgetHeader>
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Individual country cases
+          Global case distribution by country
         </Typography>
       </WidgetHeader>
       <Content>

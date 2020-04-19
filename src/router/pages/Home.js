@@ -15,7 +15,7 @@ const PageWrapper = styled.div`
     "global-infections"
     "outbreak-timer"
     "country-stats";
-  grid-gap: 1rem;
+  gap: 1rem;
   align-content: start;
   width: 100%;
 
@@ -25,7 +25,7 @@ const PageWrapper = styled.div`
       "global-overview global-overview"
       "global-infections outbreak-timer"
       "country-stats country-stats";
-    grid-gap: 2rem;
+    gap: 2rem;
   }
 `;
 

@@ -10,7 +10,6 @@ const Widget = styled.article`
   border-width: 1px;
   border-style: solid;
   border-color: ${(props) => props.theme.colors.grey};
-  border-radius: 0.5rem;
   background-color: ${(props) => props.theme.colors.white};
   box-shadow: 0 0.15rem 0.15rem
     ${(props) => transparentize(0.9, props.theme.colors.black)};

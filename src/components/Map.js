@@ -8,14 +8,16 @@ import {
   FeatureGroup,
   Marker,
 } from "react-leaflet";
-import { default as Leaflet, latLng } from "leaflet";
+import Leaflet from "leaflet";
 import { useQuery } from "react-query";
 import { getCountries } from "../libs/novelCovid/functions/countries";
+import { formatNumber } from "../utils/formatNumber";
 
 import worldCountriesGeoJson from "../assets/world_countries.geo.json";
 
 import "leaflet/dist/leaflet.css";
 import config from "../config";
+import { MapCountryPopup } from "./MapCountryPopup";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -37,24 +39,17 @@ const Wrapper = styled.div`
   & .leaflet-marker-icon {
     background-color: red;
   }
+
+  & .leaflet-popup-content,
+  & .leaflet-popup-content p {
+    margin: initial;
+    padding: initial;
+  }
+
+  & .leaflet-popup-content-wrapper {
+    border-radius: 0;
+  }
 `;
-
-const BeepBoop = () => {
-  return (
-    <div>
-      <h1>Hello bro</h1>
-    </div>
-  );
-};
-
-const COLOR_RANGES = {
-  500000: "#00ff00",
-  100000: "#00ff00",
-  50000: "#00ff00",
-  10000: "#00ff00",
-  1000: "#00ff00",
-  100: "#00ff00",
-};
 
 const WorldMap = ({ selectedCountry = null, onCountryClick = () => {} }) => {
   const [position, setPosition] = useState([7, 2]);
@@ -158,9 +153,8 @@ const WorldMap = ({ selectedCountry = null, onCountryClick = () => {} }) => {
             zoomOffset={-1}
           />
           {selectedCountry && (
-            // Get Selected country data
-            // Render popup with position and data of the selectedCountry
             <Popup
+              // TODO: Fix position by getting the center of the polygon instead
               position={[
                 selectedCountry.countryInfo.lat,
                 selectedCountry.countryInfo.long,
@@ -169,8 +163,17 @@ const WorldMap = ({ selectedCountry = null, onCountryClick = () => {} }) => {
               closeButton={false}
               closeOnClick={false}
               closeOnEscapeKey={false}
+              autoPan={false}
             >
-              <h1>{selectedCountry.country}</h1>
+              <MapCountryPopup
+                name={selectedCountry.country}
+                icon={selectedCountry.icon}
+                lastUpdated={selectedCountry.updated}
+                confirmedCount={selectedCountry.cases}
+                activeCount={selectedCountry.active}
+                recoveredCount={selectedCountry.recovered}
+                deathCount={selectedCountry.deaths}
+              />
             </Popup>
           )}
           <GeoJSON
@@ -186,6 +189,18 @@ const WorldMap = ({ selectedCountry = null, onCountryClick = () => {} }) => {
               console.log(feature);
               console.log(layer);
               console.groupEnd();
+            }}
+            style={(feature) => {
+              const randomColor = Math.floor(Math.random() * 16777215).toString(
+                16
+              );
+
+              return {
+                fillColor: `#${randomColor}`,
+                fillOpacity: 0.7,
+                color: `#${randomColor}`,
+                opacity: 0.5,
+              };
             }}
           />
         </LeafletMap>
