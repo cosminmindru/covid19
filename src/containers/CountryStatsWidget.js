@@ -18,11 +18,12 @@ import { CountryList } from "../components/CountryList";
 import { CountrySearch } from "../components/CountrySearch";
 import { CountryAutocomplete } from "../components/CountryAutocomplete";
 import { WorldCountryMap } from "../components/WorldCountryMap";
+import worldCountriesGeoJSON from "../assets/world_countries.geo.json";
 
 const Content = styled(WidgetContent)`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 80px minmax(min-content, 480px);
+  grid-template-rows: min-content minmax(min-content, 480px);
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-template-columns: 320px auto;
@@ -34,7 +35,7 @@ const Content = styled(WidgetContent)`
 const CountrySelectSection = styled.section`
   z-index: 5;
   grid-column: 1 / last-line;
-  grid-row: 1 / 2;
+  grid-row: span 1;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-area: country;
@@ -52,7 +53,7 @@ const CountrySelectSection = styled.section`
 const WorldMapSection = styled.section`
   position: relative;
   overflow: hidden;
-  grid-row: 1 / last-line;
+  grid-row: 2 / last-line;
   grid-column: 1 / last-line;
   height: 100%;
   max-height: 560px;
@@ -92,31 +93,42 @@ function CountryStatsWidget() {
     getCountries
   );
 
-  const filteredCountries = useMemo(() => {
-    if (countriesStatus === "success" && countriesData) {
-      const normalizedSearchQuery = searchQuery.toLowerCase().trim();
-      const newFilteredCountries = countriesData.filter((country) => {
-        if (!country) debugger;
-        const normalizedCountryName = country.country.toLowerCase().trim();
+  const countries = useMemo(() => {
+    if (countriesData && countriesData.length) {
+      return countriesData.filter((country) => {
+        const {
+          countryInfo: { iso3: countryIso3 },
+        } = country;
 
-        return normalizedCountryName.includes(normalizedSearchQuery);
+        const countryFeature = worldCountriesGeoJSON.features.find(
+          (feature) => {
+            const {
+              properties: { iso_a3: featureIso3 },
+            } = feature;
+
+            return featureIso3 === countryIso3;
+          }
+        );
+
+        return !!countryFeature;
       });
-
-      return newFilteredCountries;
     }
-  }, [searchQuery, countriesData, countriesStatus]);
+
+    return [];
+  }, [countriesData]);
+
+  const filteredCountries = useMemo(() => {
+    const normalizedSearchQuery = searchQuery.toLowerCase().trim();
+    const newFilteredCountries = countries.filter((country) => {
+      const normalizedCountryName = country.country.toLowerCase().trim();
+
+      return normalizedCountryName.includes(normalizedSearchQuery);
+    });
+
+    return newFilteredCountries;
+  }, [searchQuery, countries]);
 
   const handleCountrySelect = (country) => {
-    const prevSelectedCountryCode = get(selectedCountry, "countryInfo.iso3");
-    const newSelectedCountryCode = get(country, "countryInfo.iso3");
-
-    // Deselect country if same is reselected
-    // if (prevSelectedCountryCode === newSelectedCountryCode) {
-    //   setSelectedCountry(null);
-
-    //   return;
-    // }
-
     setSelectedCountry(country);
   };
 
@@ -134,7 +146,7 @@ function CountryStatsWidget() {
     <Widget>
       <WidgetHeader>
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Global case distribution by country
+          Country case distribution
         </Typography>
       </WidgetHeader>
       <Content>
@@ -157,17 +169,15 @@ function CountryStatsWidget() {
               </CountryListWrapper>
             </>
           ) : (
-            <CountryAutocompleteWrapper>
-              <CountryAutocomplete
-                countries={countriesData}
-                onCountrySelect={handleCountrySelect}
-              />
-            </CountryAutocompleteWrapper>
+            <CountryAutocomplete
+              countries={countries}
+              onCountrySelect={handleCountrySelect}
+            />
           )}
         </CountrySelectSection>
         <WorldMapSection>
           <WorldCountryMap
-            countries={countriesData}
+            countries={countries}
             activeCountry={selectedCountry}
             onCountryClick={handleCountrySelect}
           />

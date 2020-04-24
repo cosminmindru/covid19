@@ -11,14 +11,31 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
 
-const CountryListItemWrapper = styled.li`
+const SCountryListItem = styled.li`
   padding: 0.25rem 0.5rem;
 `;
 
-const CountryIcon = styled.img`
+const SCountryIcon = styled.img`
   height: 2rem;
   border-radius: 1rem;
   object-fit: cover;
+`;
+
+const SCountry = styled(ListItem)`
+  && {
+    border-radius: ${(props) => props.theme.sizes.borderRadius};
+  }
+
+  &&:hover {
+    background-color: ${(props) => props.theme.colors.accents2};
+    color: ${(props) => props.theme.colors.foreground};
+  }
+
+  &&.Mui-selected,
+  &&.Mui-selected:hover {
+    background-color: ${(props) => props.theme.colors.primary};
+    color: ${(props) => props.theme.colors.background};
+  }
 `;
 
 function CountryList({
@@ -27,8 +44,8 @@ function CountryList({
   onCountrySelect,
 }) {
   const isCountrySelected = (country) => {
-    const selectedCountryCode = get(selectedCountry, "countryInfo.iso2");
-    const countryCode = get(country, "countryInfo.iso2");
+    const selectedCountryCode = get(selectedCountry, "countryInfo.iso3");
+    const countryCode = get(country, "countryInfo.iso3");
 
     if (selectedCountryCode && countryCode) {
       return selectedCountryCode === countryCode;
@@ -54,19 +71,21 @@ function CountryList({
               const country = countries[index];
 
               return (
-                <CountryListItemWrapper
+                <SCountryListItem
                   key={kebabCase(country.country)}
                   style={style}
                 >
-                  <ListItem
+                  <SCountry
                     button
                     selected={isCountrySelected(country)}
                     onClick={() => onCountrySelect(country)}
-                    style={{ borderRadius: "0.5rem" }}
                   >
                     <ListItemAvatar>
                       {country.icon ? (
-                        <CountryIcon src={country.icon} alt={country.country} />
+                        <SCountryIcon
+                          src={country.icon}
+                          alt={country.country}
+                        />
                       ) : (
                         <span />
                       )}
@@ -79,8 +98,8 @@ function CountryList({
                       }}
                       primary={country.country}
                     />
-                  </ListItem>
-                </CountryListItemWrapper>
+                  </SCountry>
+                </SCountryListItem>
               );
             }}
           </FixedSizeList>

@@ -198,26 +198,6 @@ const getDetailedCountries = async (key, { sortBy } = {}) => {
   }
 };
 
-const getGlobalDetailsForPeriod = async () => {
-  try {
-    let e = 0;
-    let m = 7;
-    let days = [];
-
-    while (e < m) {
-      const day = dayjs().subtract(e, "day").toString();
-      days.push(day);
-      e++;
-    }
-
-    console.log(days);
-
-    return Promise.resolve();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 export {
   getOverview,
   getConfirmedCases,
@@ -230,5 +210,4 @@ export {
   getCountries,
   getCountryDetails,
   getDetailedCountries,
-  getGlobalDetailsForPeriod,
 };

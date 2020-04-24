@@ -10,54 +10,72 @@ const SMapCountryPopup = styled.article`
   grid-template-columns: repeat(2, minmax(100px, min-content));
   grid-template-rows: 1fr repeat(auto, 1.5fr);
   gap: 0.5rem;
+  width: 100%;
+  max-width: 600px;
   padding: 0.5rem;
+  background-color: ${(props) => props.theme.colors.background};
+  border-radius: ${(props) => props.theme.sizes.borderRadius};
 `;
 
-const HeaderSection = styled.div`
+const Header = styled.div`
   display: flex;
-  justify-content: ${(props) => (props.alignRight ? "flex-end" : "flex-start")};
   align-items: center;
+  grid-column: span 2;
 `;
 
-const CountryFlag = styled.img`
-  height: 1.25rem;
-  margin-right: 0.25rem;
+const CountryIcon = styled.img`
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  border-radius: 1rem;
 `;
 
-const CountryName = styled.p``;
+const CountryName = styled.p`
+  font-size: 1rem;
+  font-weight: 600;
+  color: ${(props) => props.theme.colors.foreground};
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;
 
-const HeaderLastUpdated = styled.p``;
-
-const Separator = styled.hr`
+const Separator = styled.div`
   grid-column: span 2;
   width: calc(100% + 1rem);
+  height: 2px;
   margin-left: -0.5rem;
+  background-color: ${(props) => props.theme.colors.accents2};
 `;
 
-const Stat = styled.div``;
+const Stat = styled.div`
+  color: ${(props) => props.theme.colors.foreground};
+`;
 
 const StatTitle = styled.p`
   margin: 0;
   padding: 0;
+  font-size: 1rem;
+  color: inherit;
 `;
 
 const StatValue = styled.p`
   margin: 0;
   padding: 0;
+  color: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
 `;
 
 const MapCountryPopup = ({
   name,
-  lastUpdated,
-  lastUpdatedFormat = "D MMM YYYY",
+  icon,
   confirmedCount,
   activeCount,
   recoveredCount,
   deathCount,
-  countryInfo: { lat, long, flag },
+  countryInfo: { lat, long },
 }) => {
   const position = [lat, long];
-  const formattedLastUpdated = dayjs(lastUpdated).format(lastUpdatedFormat);
 
   return (
     <LeafletPopup
@@ -69,40 +87,27 @@ const MapCountryPopup = ({
       autoPan={false}
     >
       <SMapCountryPopup>
-        <HeaderSection>
-          {flag && <CountryFlag src={flag} alt={name} />}
+        <Header>
+          {icon && <CountryIcon src={icon} alt={name} />}
           <CountryName>{name}</CountryName>
-        </HeaderSection>
-        <HeaderSection alignRight>
-          {formattedLastUpdated && (
-            <HeaderLastUpdated>{formattedLastUpdated}</HeaderLastUpdated>
-          )}
-        </HeaderSection>
+        </Header>
         <Separator />
-        {confirmedCount && (
-          <Stat>
-            <StatTitle>Confirmed</StatTitle>
-            <StatValue>{formatNumber({ value: confirmedCount })}</StatValue>
-          </Stat>
-        )}
-        {activeCount && (
-          <Stat>
-            <StatTitle>Active</StatTitle>
-            <StatValue>{formatNumber({ value: activeCount })}</StatValue>
-          </Stat>
-        )}
-        {recoveredCount && (
-          <Stat>
-            <StatTitle>Recovered</StatTitle>
-            <StatValue>{formatNumber({ value: recoveredCount })}</StatValue>
-          </Stat>
-        )}
-        {deathCount && (
-          <Stat>
-            <StatTitle>Deaths</StatTitle>
-            <StatValue>{formatNumber({ value: deathCount })}</StatValue>
-          </Stat>
-        )}
+        <Stat>
+          <StatTitle>Confirmed</StatTitle>
+          <StatValue>{formatNumber({ value: confirmedCount })}</StatValue>
+        </Stat>
+        <Stat>
+          <StatTitle>Active</StatTitle>
+          <StatValue>{formatNumber({ value: activeCount })}</StatValue>
+        </Stat>
+        <Stat>
+          <StatTitle>Recovered</StatTitle>
+          <StatValue>{formatNumber({ value: recoveredCount })}</StatValue>
+        </Stat>
+        <Stat>
+          <StatTitle>Deaths</StatTitle>
+          <StatValue>{formatNumber({ value: deathCount })}</StatValue>
+        </Stat>
       </SMapCountryPopup>
     </LeafletPopup>
   );

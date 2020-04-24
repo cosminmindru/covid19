@@ -36,7 +36,9 @@ const SWorldCountryMap = styled.div`
   }
 
   & .leaflet-popup-content-wrapper {
+    padding: 0;
     border-radius: 0;
+    background-color: transparent;
   }
 `;
 
@@ -146,8 +148,8 @@ const WorldCountryMap = ({
         worldCopyJump
       >
         <TileLayer
-          // url={tileLayerUrl}
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={tileLayerUrl}
+          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           tileSize={512}
           zoomOffset={-1}
