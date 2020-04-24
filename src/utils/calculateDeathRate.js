@@ -1,8 +1,9 @@
 /**
  * Calculates and formats the death rate
  *
- * @param {number} confirmedCases
- * @param {number} deaths
+ * @param {object} params
+ * @param {number} params.confirmedCases
+ * @param {number} params.deaths
  * @returns {number}
  */
 const calculateDeathRate = ({ confirmedCases, deaths }) => {

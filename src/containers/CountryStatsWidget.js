@@ -17,7 +17,7 @@ import {
 import { CountryList } from "../components/CountryList";
 import { CountrySearch } from "../components/CountrySearch";
 import { CountryAutocomplete } from "../components/CountryAutocomplete";
-import { WorldMap } from "../components/Map";
+import { WorldCountryMap } from "../components/WorldCountryMap";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -166,8 +166,9 @@ function CountryStatsWidget() {
           )}
         </CountrySelectSection>
         <WorldMapSection>
-          <WorldMap
-            selectedCountry={selectedCountry}
+          <WorldCountryMap
+            countries={countriesData}
+            activeCountry={selectedCountry}
             onCountryClick={handleCountrySelect}
           />
         </WorldMapSection>

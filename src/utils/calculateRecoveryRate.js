@@ -1,8 +1,9 @@
 /**
  * Calculates and formats the recovery rate
  *
- * @param {number} recovered
- * @param {number} deaths
+ * @param {object} params
+ * @param {number} params.recovered
+ * @param {number} params.deaths
  * @returns {number}
  */
 const calculateRecoveryRate = ({ recovered, deaths }) => {

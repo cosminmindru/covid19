@@ -1,9 +1,10 @@
 import React from "react";
 import styled from "styled-components/macro";
 import dayjs from "dayjs";
+import { Popup as LeafletPopup } from "react-leaflet";
 import { formatNumber } from "../utils/formatNumber";
 
-const Wrapper = styled.article`
+const SMapCountryPopup = styled.article`
   position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(100px, min-content));
@@ -14,17 +15,18 @@ const Wrapper = styled.article`
 
 const HeaderSection = styled.div`
   display: flex;
-  justify-content: ${(props) => props.alignRight ? 'flex-end' : 'flex-start'};
+  justify-content: ${(props) => (props.alignRight ? "flex-end" : "flex-start")};
   align-items: center;
 `;
 
-const HeaderIcon = styled.img`
-  width: 1.5rem;
-  height: 1.5rem;
+const CountryFlag = styled.img`
+  height: 1.25rem;
   margin-right: 0.25rem;
 `;
 
-const HeaderTitle = styled.p``;
+const CountryName = styled.p``;
+
+const HeaderLastUpdated = styled.p``;
 
 const Separator = styled.hr`
   grid-column: span 2;
@@ -46,49 +48,63 @@ const StatValue = styled.p`
 
 const MapCountryPopup = ({
   name,
-  icon,
   lastUpdated,
+  lastUpdatedFormat = "D MMM YYYY",
   confirmedCount,
   activeCount,
   recoveredCount,
   deathCount,
+  countryInfo: { lat, long, flag },
 }) => {
+  const position = [lat, long];
+  const formattedLastUpdated = dayjs(lastUpdated).format(lastUpdatedFormat);
+
   return (
-    <Wrapper>
-      <HeaderSection>
-        {icon && <HeaderIcon src={icon} alt={name} />}
-        <HeaderTitle>{name}</HeaderTitle>
-      </HeaderSection>
-      <HeaderSection alignRight>
-        {/* TODO: Abstract away from here */}
-        {dayjs(lastUpdated).format("D MMM YYYY")}
-      </HeaderSection>
-      <Separator />
-      {confirmedCount && (
-        <Stat>
-          <StatTitle>Confirmed</StatTitle>
-          <StatValue>{formatNumber({ value: confirmedCount })}</StatValue>
-        </Stat>
-      )}
-      {activeCount && (
-        <Stat>
-          <StatTitle>Active</StatTitle>
-          <StatValue>{formatNumber({ value: activeCount })}</StatValue>
-        </Stat>
-      )}
-      {recoveredCount && (
-        <Stat>
-          <StatTitle>Recovered</StatTitle>
-          <StatValue>{formatNumber({ value: recoveredCount })}</StatValue>
-        </Stat>
-      )}
-      {deathCount && (
-        <Stat>
-          <StatTitle>Deaths</StatTitle>
-          <StatValue>{formatNumber({ value: deathCount })}</StatValue>
-        </Stat>
-      )}
-    </Wrapper>
+    <LeafletPopup
+      position={position}
+      autoClose={false}
+      closeButton={false}
+      closeOnClick={false}
+      closeOnEscapeKey={false}
+      autoPan={false}
+    >
+      <SMapCountryPopup>
+        <HeaderSection>
+          {flag && <CountryFlag src={flag} alt={name} />}
+          <CountryName>{name}</CountryName>
+        </HeaderSection>
+        <HeaderSection alignRight>
+          {formattedLastUpdated && (
+            <HeaderLastUpdated>{formattedLastUpdated}</HeaderLastUpdated>
+          )}
+        </HeaderSection>
+        <Separator />
+        {confirmedCount && (
+          <Stat>
+            <StatTitle>Confirmed</StatTitle>
+            <StatValue>{formatNumber({ value: confirmedCount })}</StatValue>
+          </Stat>
+        )}
+        {activeCount && (
+          <Stat>
+            <StatTitle>Active</StatTitle>
+            <StatValue>{formatNumber({ value: activeCount })}</StatValue>
+          </Stat>
+        )}
+        {recoveredCount && (
+          <Stat>
+            <StatTitle>Recovered</StatTitle>
+            <StatValue>{formatNumber({ value: recoveredCount })}</StatValue>
+          </Stat>
+        )}
+        {deathCount && (
+          <Stat>
+            <StatTitle>Deaths</StatTitle>
+            <StatValue>{formatNumber({ value: deathCount })}</StatValue>
+          </Stat>
+        )}
+      </SMapCountryPopup>
+    </LeafletPopup>
   );
 };
 
