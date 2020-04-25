@@ -1,5 +1,5 @@
 import { createMuiTheme } from "@material-ui/core/styles";
-import { breakpoints, screenSizes } from "./breakpoints";
+import { breakpoints } from "./breakpoints";
 import { colors } from "./colors";
 import { sizes } from "./sizes";
 
@@ -7,7 +7,7 @@ import { sizes } from "./sizes";
 const scTheme = {
   colors,
   breakpoints,
-  sizes
+  sizes,
 };
 
 // Material-UI theme
