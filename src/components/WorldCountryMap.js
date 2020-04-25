@@ -50,6 +50,8 @@ const WorldCountryMap = ({
   const [geoJSON, setGeoJson] = useState(null);
   const [maxBounds, setMaxBounds] = useState(null);
 
+  const [hoveredCountry, setHoveredCountry] = useState(null);
+
   const mapRef = useRef();
   const center = [7, 2];
   const zoom = 3;
@@ -143,7 +145,6 @@ const WorldCountryMap = ({
         ref={mapRef}
         center={center}
         zoom={zoom}
-        zoomControl={false}
         minZoom={minZoom}
         worldCopyJump
       >
@@ -170,16 +171,29 @@ const WorldCountryMap = ({
           <GeoJSON
             data={geoJSON}
             onclick={handleGeoJSONClick}
+            onmouseover={(event) => {
+              setHoveredCountry(event.layer.feature.properties);
+            }}
+            onmouseout={() => {
+              setHoveredCountry(null);
+            }}
             style={(feature) => {
-              const randomColor = Math.floor(Math.random() * 16777215).toString(
-                16
-              );
+              const isHovered =
+                hoveredCountry &&
+                feature.properties.countryInfo.iso3 ===
+                  hoveredCountry.countryInfo.iso3;
+
+              if (isHovered) {
+                return {
+                  fillColor: "transparent",
+                  color: "blue",
+                  opacity: 0.6,
+                };
+              }
 
               return {
-                fillColor: `#${randomColor}`,
-                fillOpacity: 0.7,
-                color: `#${randomColor}`,
-                opacity: 0.5,
+                fillColor: feature.properties.color,
+                color: "transparent",
               };
             }}
           />
