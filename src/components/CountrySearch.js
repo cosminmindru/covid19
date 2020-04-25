@@ -13,23 +13,21 @@ const Wrapper = styled(FormControl)`
   && {
     width: 100%;
     height: 100%;
-    padding: 0.5rem;
   }
 `;
 
 const SearchInput = styled(Input)`
   && {
     padding: 0.5rem 0 0.5rem 1rem;
-    border-radius: 1rem;
-    background-color: ${(props) => props.theme.colors.offWhite};
+    background-color: ${(props) => props.theme.colors.accents1};
   }
 `;
 
 const CountrySearch = ({
   value = "",
   placeholder = "Search country",
-  onChange = () => {},
-  onClear = () => {}
+  onChange,
+  onClear
 }) => {
   return (
     <Wrapper>

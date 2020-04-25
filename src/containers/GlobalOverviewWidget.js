@@ -60,7 +60,7 @@ const GlobalOverviewWidget = () => {
         <Widget>
           <WidgetHeader>
             <Typography variant="h6" style={{ fontWeight: "bold" }}>
-              Global cases
+              Global case overview
             </Typography>
           </WidgetHeader>
           <Content>

@@ -3,8 +3,7 @@ import axios from "axios";
 import appConfig from "../../config";
 
 const client = axios.create({
-  baseURL: appConfig.locationApiBaseUrl
+  baseURL: appConfig.novelCovidApiBaseUrl,
 });
 
 export { client };
-export * from "./functions";

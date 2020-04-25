@@ -58,7 +58,7 @@ const GlobalInfectionRatesWidget = () => {
     <Widget>
       <WidgetHeader>
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Global infection rates
+          Global case distribution
         </Typography>
       </WidgetHeader>
       <Content>

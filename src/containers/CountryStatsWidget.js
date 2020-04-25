@@ -1,30 +1,29 @@
-import React, { useState, useMemo, useRef } from "react";
+import React, { useState, useMemo } from "react";
 
 import styled from "styled-components/macro";
 import get from "lodash/get";
-import { transparentize } from "polished";
 import { useQuery } from "react-query";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../styles";
-import { useMap } from "../hooks/useMap";
 
-import { getCountries, getCountryDetails } from "../libs/covid19";
+import { getCountries } from "../libs/novelCovid/functions/countries";
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
   WidgetContent,
 } from "../styles/components/Widget";
-import { formatNumber } from "../utils/formatNumber";
 import { CountryList } from "../components/CountryList";
 import { CountrySearch } from "../components/CountrySearch";
 import { CountryAutocomplete } from "../components/CountryAutocomplete";
+import { WorldCountryMap } from "../components/WorldCountryMap";
+import worldCountriesGeoJSON from "../assets/world_countries.geo.json";
 
 const Content = styled(WidgetContent)`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: 80px minmax(min-content, 480px);
+  grid-template-rows: min-content minmax(min-content, 480px);
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-template-columns: 320px auto;
@@ -34,9 +33,9 @@ const Content = styled(WidgetContent)`
 `;
 
 const CountrySelectSection = styled.section`
-  z-index: 2;
+  z-index: 5;
   grid-column: 1 / last-line;
-  grid-row: 1 / 2;
+  grid-row: span 1;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-area: country;
@@ -54,7 +53,7 @@ const CountrySelectSection = styled.section`
 const WorldMapSection = styled.section`
   position: relative;
   overflow: hidden;
-  grid-row: 1 / last-line;
+  grid-row: 2 / last-line;
   grid-column: 1 / last-line;
   height: 100%;
   max-height: 560px;
@@ -79,108 +78,57 @@ const CountryAutocompleteWrapper = styled.div`
   padding: 1rem 1rem 0;
 `;
 
-const CountryStatsOverlay = styled.section`
-  z-index: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr;
-  padding: 1rem 0;
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  right: 1rem;
-  border-radius: 0.5rem;
-  background-color: ${(props) => props.theme.colors.white};
-  box-shadow: 0 0.15rem 0.15rem
-    ${(props) => transparentize(0.9, props.theme.colors.black)};
-`;
-
-const CountryStat = styled.article`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 0 1rem;
-  margin: 0;
-
-  &:not(:last-child) {
-    border-right: 1px solid ${(props) => props.theme.colors.grey};
-  }
-`;
-
-const CountryStatHeading = styled(Typography)`
-  && {
-    font-size: 1rem;
-
-    @media ${(props) => props.theme.breakpoints.desktop} {
-      font-size: 1.25rem;
-    }
-  }
-`;
-
-const CountryStatNumber = styled(Typography)`
-  && {
-    font-size: 1.25rem;
-
-    @media ${(props) => props.theme.breakpoints.desktop} {
-      font-size: 1.5rem;
-    }
-  }
-`;
-
 function CountryStatsWidget() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
   const theme = useTheme();
-  const mapRef = useRef();
-
-  const { map } = useMap(mapRef.current);
 
   const isDesktop = useMediaQuery(
     theme.breakpoints.up(screenSizes.desktopWidth)
   );
 
   const { data: countriesData, status: countriesStatus } = useQuery(
-    ["countries", {}],
+    "countries",
     getCountries
   );
 
-  const country = useQuery(
-    () => [
-      ["country", selectedCountry.iso2],
-      { countryCode: selectedCountry.iso2 },
-    ],
-    getCountryDetails
-  );
+  const countries = useMemo(() => {
+    if (countriesData && countriesData.length) {
+      return countriesData.filter((country) => {
+        const {
+          countryInfo: { iso3: countryIso3 },
+        } = country;
+
+        const countryFeature = worldCountriesGeoJSON.features.find(
+          (feature) => {
+            const {
+              properties: { iso_a3: featureIso3 },
+            } = feature;
+
+            return featureIso3 === countryIso3;
+          }
+        );
+
+        return !!countryFeature;
+      });
+    }
+
+    return [];
+  }, [countriesData]);
 
   const filteredCountries = useMemo(() => {
-    if (countriesStatus === "success" && countriesData) {
-      const normalizedSearchQuery = searchQuery.toLowerCase().trim();
-      const newFilteredCountries = countriesData.filter((country) => {
-        const normalizedCountryName = country.name.toLowerCase().trim();
+    const normalizedSearchQuery = searchQuery.toLowerCase().trim();
+    const newFilteredCountries = countries.filter((country) => {
+      const normalizedCountryName = country.country.toLowerCase().trim();
 
-        return normalizedCountryName.includes(normalizedSearchQuery);
-      });
+      return normalizedCountryName.includes(normalizedSearchQuery);
+    });
 
-      return newFilteredCountries;
-    }
-  }, [searchQuery, countriesData, countriesStatus]);
+    return newFilteredCountries;
+  }, [searchQuery, countries]);
 
   const handleCountrySelect = (country) => {
-    const prevSelectedCountryName = get(selectedCountry, "name");
-    const newSelectedCountryName = get(country, "name");
-
-    console.log(prevSelectedCountryName);
-    console.log(newSelectedCountryName);
-
-    // Deselect country if same is reselected
-    if (prevSelectedCountryName === newSelectedCountryName) {
-      setSelectedCountry(null);
-
-      return;
-    }
-
     setSelectedCountry(country);
   };
 
@@ -198,7 +146,7 @@ function CountryStatsWidget() {
     <Widget>
       <WidgetHeader>
         <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Countries
+          Country case distribution
         </Typography>
       </WidgetHeader>
       <Content>
@@ -221,48 +169,18 @@ function CountryStatsWidget() {
               </CountryListWrapper>
             </>
           ) : (
-            <CountryAutocompleteWrapper>
-              <CountryAutocomplete
-                countries={countriesData}
-                onCountrySelect={handleCountrySelect}
-              />
-            </CountryAutocompleteWrapper>
+            <CountryAutocomplete
+              countries={countries}
+              onCountrySelect={handleCountrySelect}
+            />
           )}
         </CountrySelectSection>
         <WorldMapSection>
-          <div style={{ width: "100%", height: "100%" }} ref={mapRef} />
-          {selectedCountry && (
-            <CountryStatsOverlay>
-              <CountryStat>
-                <CountryStatHeading variant="h6" gutterBottom>
-                  Confirmed
-                </CountryStatHeading>
-                <CountryStatNumber variant="h5">
-                  {formatNumber({
-                    value: get(country, "data.confirmed.value"),
-                  })}
-                </CountryStatNumber>
-              </CountryStat>
-              <CountryStat>
-                <CountryStatHeading variant="h6" gutterBottom>
-                  Recovered
-                </CountryStatHeading>
-                <CountryStatNumber variant="h5">
-                  {formatNumber({
-                    value: get(country, "data.recovered.value"),
-                  })}
-                </CountryStatNumber>
-              </CountryStat>
-              <CountryStat>
-                <CountryStatHeading variant="h6" gutterBottom>
-                  Deaths
-                </CountryStatHeading>
-                <CountryStatNumber variant="h5">
-                  {formatNumber({ value: get(country, "data.deaths.value") })}
-                </CountryStatNumber>
-              </CountryStat>
-            </CountryStatsOverlay>
-          )}
+          <WorldCountryMap
+            countries={countries}
+            activeCountry={selectedCountry}
+            onCountryClick={handleCountrySelect}
+          />
         </WorldMapSection>
       </Content>
     </Widget>
