@@ -56,7 +56,10 @@ const WorldCountryMap = ({
   const center = [7, 2];
   const zoom = 3;
   const minZoom = 2;
-  const tileLayerUrl = `https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const tileStyles = {
+    light: "ck9fq7g4c3pc61imtck7dfzve",
+  };
+  const tileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles["light"]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
 
   const handleGeoJSONClick = (event) => {
     const {
