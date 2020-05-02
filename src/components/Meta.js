@@ -13,4 +13,4 @@ const Meta = ({ title, description = "COVID-19 Status" }) => {
   );
 };
 
-export { Meta };
+export default Meta;

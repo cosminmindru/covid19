@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import styled from "styled-components/macro";
 import Leaflet from "leaflet";
 import { Map, GeoJSON, TileLayer } from "react-leaflet";
-import { createWorldCountriesGeoJSON } from "../utils/createWorldCountriesGeoJSON";
-import config from "../config";
-import { MapCountryPopup } from "../components/MapCountryPopup";
+import { createWorldCountriesGeoJSON } from "../../../utils/createWorldCountriesGeoJSON";
+import config from "../../../config";
+import MapCountryPopup from "./MapCountryPopup";
 
 import "leaflet/dist/leaflet.css";
 
@@ -59,7 +59,7 @@ const WorldCountryMap = ({
   const tileStyles = {
     light: "ck9fq7g4c3pc61imtck7dfzve",
   };
-  const tileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles["light"]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const tileLayerUrl = `https://api.mapbox.com/design/v1/cosmindev/${tileStyles["light"]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
 
   const handleGeoJSONClick = (event) => {
     const {
@@ -152,8 +152,8 @@ const WorldCountryMap = ({
         worldCopyJump
       >
         <TileLayer
-          url={tileLayerUrl}
-          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          // url={tileLayerUrl}
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           tileSize={512}
           zoomOffset={-1}
@@ -206,4 +206,4 @@ const WorldCountryMap = ({
   );
 };
 
-export { WorldCountryMap };
+export default WorldCountryMap;

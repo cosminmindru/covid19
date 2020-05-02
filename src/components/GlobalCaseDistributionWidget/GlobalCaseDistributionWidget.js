@@ -2,16 +2,16 @@ import React from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
-import { getOverview } from "../libs/covid19";
-import { calculateDeathRate } from "../utils/calculateDeathRate";
-import { calculateRecoveryRate } from "../utils/calculateRecoveryRate";
+import { getOverview } from "../../libs/covid19";
+import { calculateDeathRate } from "../../utils/calculateDeathRate";
+import { calculateRecoveryRate } from "../../utils/calculateRecoveryRate";
 
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
   WidgetContent,
-} from "../styles/components/Widget";
+} from "../../design/components/Widget";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -51,7 +51,7 @@ const Stat = styled.div`
   }
 `;
 
-const GlobalInfectionRatesWidget = () => {
+const GlobalCaseDistributonWidget = () => {
   const { isLoading, data } = useQuery("globalOverview", getOverview);
 
   return (
@@ -95,4 +95,4 @@ const GlobalInfectionRatesWidget = () => {
   );
 };
 
-export { GlobalInfectionRatesWidget };
+export default GlobalCaseDistributonWidget;

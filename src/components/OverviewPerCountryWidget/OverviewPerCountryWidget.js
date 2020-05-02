@@ -5,20 +5,20 @@ import get from "lodash/get";
 import { useQuery } from "react-query";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { screenSizes } from "../styles";
+import { screenSizes } from "../../design/theme/breakpoints";
 
-import { getCountries } from "../libs/novelCovid/functions/countries";
+import { getCountries } from "../../libs/novelCovid/functions/countries";
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
   WidgetContent,
-} from "../styles/components/Widget";
-import { CountryList } from "../components/CountryList";
-import { CountrySearch } from "../components/CountrySearch";
-import { CountryAutocomplete } from "../components/CountryAutocomplete";
-import { WorldCountryMap } from "../components/WorldCountryMap";
-import worldCountriesGeoJSON from "../assets/world_countries.geo.json";
+} from "../../design/components/Widget";
+import CountryList from "./components/CountryList";
+import CountrySearch from "./components/CountrySearch";
+import CountryAutocomplete from "./components/CountryAutocomplete";
+import WorldCountryMap from "./components/WorldCountryMap";
+import worldCountriesGeoJSON from "../../assets/world_countries.geo.json";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -78,7 +78,7 @@ const CountryAutocompleteWrapper = styled.div`
   padding: 1rem 1rem 0;
 `;
 
-function CountryStatsWidget() {
+function OverviewPerCountryWidget() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -187,4 +187,4 @@ function CountryStatsWidget() {
   );
 }
 
-export { CountryStatsWidget };
+export default OverviewPerCountryWidget;

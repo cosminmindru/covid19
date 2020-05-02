@@ -1,4 +1,3 @@
-import dayjs from "dayjs";
 import get from "lodash/get";
 import { client } from "./index";
 

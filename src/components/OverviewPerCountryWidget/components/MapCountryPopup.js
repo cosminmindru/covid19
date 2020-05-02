@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
-import dayjs from "dayjs";
 import { Popup as LeafletPopup } from "react-leaflet";
-import { formatNumber } from "../utils/formatNumber";
+import { formatNumber } from "../../../utils/formatNumber";
 
 const SMapCountryPopup = styled.article`
   position: relative;
@@ -113,4 +112,4 @@ const MapCountryPopup = ({
   );
 };
 
-export { MapCountryPopup };
+export default MapCountryPopup;

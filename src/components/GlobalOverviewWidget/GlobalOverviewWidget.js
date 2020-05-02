@@ -2,15 +2,15 @@ import React from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
-import { getOverview } from "../libs/covid19";
-import { formatNumber } from "../utils/formatNumber";
+import { getOverview } from "../../libs/covid19";
+import { formatNumber } from "../../utils/formatNumber";
 
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
   WidgetContent,
-} from "../styles/components/Widget";
+} from "../../design/components/Widget";
 
 const Content = styled(WidgetContent)`
   display: grid;
@@ -95,4 +95,4 @@ const GlobalOverviewWidget = () => {
   );
 };
 
-export { GlobalOverviewWidget };
+export default GlobalOverviewWidget;

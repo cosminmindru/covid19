@@ -109,4 +109,4 @@ function CountryList({
   );
 }
 
-export { CountryList };
+export default CountryList;

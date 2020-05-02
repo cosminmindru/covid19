@@ -1,5 +1,5 @@
 import { createGlobalStyle } from "styled-components/macro";
-import { cssReset } from "./reset";
+import cssReset from "./cssReset";
 
 const GlobalStyles = createGlobalStyle`
   ${cssReset}
@@ -23,4 +23,4 @@ const GlobalStyles = createGlobalStyle`
   }
 `;
 
-export { GlobalStyles };
+export default GlobalStyles;
