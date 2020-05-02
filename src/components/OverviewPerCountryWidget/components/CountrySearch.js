@@ -48,4 +48,4 @@ const CountrySearch = ({
   );
 };
 
-export { CountrySearch };
+export default CountrySearch;

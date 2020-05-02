@@ -4,7 +4,7 @@ import ReactGA from "react-ga";
 import { useLocation } from "react-router-dom";
 import config from "../../config";
 
-import { Meta } from "../../components/Meta";
+import Meta from "../../components/Meta";
 
 const Wrapper = styled.div`
   display: flex;
@@ -49,4 +49,4 @@ const MainLayout = ({ children, meta }) => {
   );
 };
 
-export { MainLayout };
+export default MainLayout;

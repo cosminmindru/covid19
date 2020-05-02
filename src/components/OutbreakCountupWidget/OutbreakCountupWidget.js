@@ -3,10 +3,10 @@ import Typography from "@material-ui/core/Typography";
 import {
   Widget,
   WidgetHeader,
-  WidgetContent
-} from "../styles/components/Widget";
+  WidgetContent,
+} from "../../design/components/Widget";
 
-const TimeSinceOutbreakWidget = () => {
+const OutbreakCountupWidget = () => {
   return (
     <Widget>
       <WidgetHeader>
@@ -19,4 +19,4 @@ const TimeSinceOutbreakWidget = () => {
   );
 };
 
-export { TimeSinceOutbreakWidget };
+export default OutbreakCountupWidget;

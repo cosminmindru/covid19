@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { MainLayout } from "../layouts/Main";
-import { GlobalOverviewWidget } from "../../containers/GlobalOverviewWidget";
-import { GlobalInfectionRatesWidget } from "../../containers/GlobalInfectionRatesWidget";
-import { TimeSinceOutbreakWidget } from "../../containers/TimeSinceOutbreakWidget";
-import { CountryStatsWidget } from "../../containers/CountryStatsWidget";
+import MainLayout from "../layouts/Main";
+import GlobalOverviewWidget from "../../components/GlobalOverviewWidget";
+import GlobalCaseDistributionWidget from "../../components/GlobalCaseDistributionWidget";
+import OutbreakCountupWidget from "../../components/OutbreakCountupWidget";
+import OverviewPerCountryWidget from "../../components/OverviewPerCountryWidget";
 
 const PageWrapper = styled.div`
   display: grid;
@@ -12,9 +12,9 @@ const PageWrapper = styled.div`
   grid-template-rows: minmax(min-content, max-content);
   grid-template-areas:
     "global-overview"
-    "global-infections"
+    "global-case-distributon"
     "outbreak-timer"
-    "country-stats";
+    "overview-per-country";
   gap: 1rem;
   align-content: start;
   width: 100%;
@@ -23,8 +23,8 @@ const PageWrapper = styled.div`
     grid-template-columns: 2fr 1fr;
     grid-template-areas:
       "global-overview global-overview"
-      "global-infections outbreak-timer"
-      "country-stats country-stats";
+      "global-case-distributon outbreak-timer"
+      "overview-per-country overview-per-country";
     gap: 2rem;
   }
 `;
@@ -33,20 +33,20 @@ const GlobalOverviewWrapper = styled.div`
   grid-area: global-overview;
 `;
 
-const GlobalInfectionRatesWrapper = styled.div`
-  grid-area: global-infections;
+const GlobalCaseDistributionWrapper = styled.div`
+  grid-area: global-case-distributon;
 `;
 
-const TimeSinceOutbreakWrapper = styled.div`
+const OutbreakCountupWrapper = styled.div`
   grid-area: outbreak-timer;
 `;
 
-const CountryStatsWrapper = styled.div`
-  grid-area: country-stats;
+const OverviewPerCountryWrapper = styled.div`
+  grid-area: overview-per-country;
 `;
 
 const meta = {
-  title: "Home"
+  title: "Home",
 };
 
 const HomePage = () => {
@@ -56,18 +56,18 @@ const HomePage = () => {
         <GlobalOverviewWrapper>
           <GlobalOverviewWidget />
         </GlobalOverviewWrapper>
-        <GlobalInfectionRatesWrapper>
-          <GlobalInfectionRatesWidget />
-        </GlobalInfectionRatesWrapper>
-        <TimeSinceOutbreakWrapper>
-          <TimeSinceOutbreakWidget />
-        </TimeSinceOutbreakWrapper>
-        <CountryStatsWrapper>
-          <CountryStatsWidget />
-        </CountryStatsWrapper>
+        <GlobalCaseDistributionWrapper>
+          <GlobalCaseDistributionWidget />
+        </GlobalCaseDistributionWrapper>
+        <OutbreakCountupWrapper>
+          <OutbreakCountupWidget />
+        </OutbreakCountupWrapper>
+        <OverviewPerCountryWrapper>
+          <OverviewPerCountryWidget />
+        </OverviewPerCountryWrapper>
       </PageWrapper>
     </MainLayout>
   );
 };
 
-export { HomePage };
+export default HomePage;

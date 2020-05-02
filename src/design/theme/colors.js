@@ -20,4 +20,4 @@ const colors = {
   primary: "#3949ab",
 };
 
-export { colors };
+export default colors;

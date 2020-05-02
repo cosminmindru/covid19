@@ -4,4 +4,4 @@ const ErrorLayout = ({ children }) => {
   return <div>{children}</div>;
 };
 
-export { ErrorLayout };
+export default ErrorLayout;

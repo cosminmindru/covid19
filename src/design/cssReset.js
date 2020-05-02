@@ -82,4 +82,4 @@ const cssReset = css`
   }
 `;
 
-export { cssReset };
+export default cssReset;

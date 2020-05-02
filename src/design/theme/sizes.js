@@ -3,4 +3,4 @@ const sizes = {
   borderRadius: "0.25rem",
 };
 
-export { sizes };
+export default sizes;

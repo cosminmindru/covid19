@@ -1,16 +1,13 @@
 import React from "react";
-import { Provider as StoreProvider } from "react-redux";
-import { ThemeProvider as SCThemeProvider } from "styled-components/macro";
-import { ThemeProvider as MUIThemeProvider } from "@material-ui/core/styles";
+import { ThemeProvider } from "styled-components/macro";
 import { ReactQueryConfigProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query-devtools";
 import dayjs from "dayjs";
-import { default as dayjsRelativeTime } from "dayjs/plugin/relativeTime";
-
-import { Router } from "./router";
-import { GlobalStyles, scTheme, muiTheme } from "./styles";
-import { store } from "./state";
+import dayjsRelativeTime from "dayjs/plugin/relativeTime";
+import Router from "./router";
+import theme from "./design/theme/theme";
+import GlobalStyles from "./design/globalStyles";
 
 // Dayjs plugins
 dayjs.extend(dayjsRelativeTime);
@@ -21,19 +18,15 @@ const queryConfig = {
 };
 
 const App = () => (
-  <StoreProvider store={store}>
-    <SCThemeProvider theme={scTheme}>
-      <MUIThemeProvider theme={muiTheme}>
-        <ReactQueryConfigProvider config={queryConfig}>
-          <GlobalStyles />
-          <BrowserRouter>
-            <Router />
-          </BrowserRouter>
-          <ReactQueryDevtools />
-        </ReactQueryConfigProvider>
-      </MUIThemeProvider>
-    </SCThemeProvider>
-  </StoreProvider>
+  <ThemeProvider theme={theme}>
+    <ReactQueryConfigProvider config={queryConfig}>
+      <GlobalStyles />
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+      <ReactQueryDevtools />
+    </ReactQueryConfigProvider>
+  </ThemeProvider>
 );
 
 export default App;

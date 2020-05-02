@@ -54,4 +54,4 @@ const CountryAutocomplete = ({
   );
 };
 
-export { CountryAutocomplete };
+export default CountryAutocomplete;
