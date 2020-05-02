@@ -3,44 +3,6 @@ import get from "lodash/get";
 import appConfig from "../../../config";
 
 /**
- * Get data for a specific country
- *
- * @param {string} key - React Query key
- * @param {object} params
- * @param {string} params.countryCode - ISO2 or ISO3 country code
- * @param {boolean} [params.includeIcon=true] - Whether to include the country icons or not
- * @param {boolean} [params.iconSize=64] - Country icon size
- *
- * @returns {Promise}
- */
-const getCountry = async (
-  key,
-  { countryCode, includeIcon = true, iconSize = 64 }
-) => {
-  try {
-    const response = await client.get(`/countries/${countryCode}`);
-    let country = get(response, "data");
-
-    // Add icon to country
-    if (includeIcon && country) {
-      const countryCode = get(country, "countryInfo.iso3");
-
-      if (countryCode) {
-        country = {
-          ...country,
-          icon: `${appConfig.countryFlagsApiBaseUrl}/${countryCode}/${iconSize}`,
-        };
-      }
-    }
-
-    return country;
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-};
-
-/**
  * Gets a list of all countries with data
  *
  * @param {string} key - React Query key
@@ -49,7 +11,7 @@ const getCountry = async (
  * @param {boolean} [params.includeIcon=true] - Whether to include the country icons or not
  * @param {boolean} [params.iconSize=64] - Country icon size
  *
- * @returns {Promise}
+ * @returns {Promise<object[]|Error>}
  */
 const getCountries = async (
   key,
@@ -86,4 +48,4 @@ const getCountries = async (
   }
 };
 
-export { getCountry, getCountries };
+export default getCountries;

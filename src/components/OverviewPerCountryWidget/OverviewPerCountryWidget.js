@@ -7,7 +7,7 @@ import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../../design/theme/breakpoints";
 
-import { getCountries } from "../../libs/novelCovid/functions/countries";
+import getCountries from "../../libs/novelCovid/functions/get-countries";
 import Typography from "@material-ui/core/Typography";
 import {
   Widget,
