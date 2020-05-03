@@ -1,26 +1,19 @@
 import React, { useState, useMemo } from "react";
-
 import styled from "styled-components/macro";
 import get from "lodash/get";
 import { useQuery } from "react-query";
 import { useTheme } from "@material-ui/core/styles";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../../design/theme/breakpoints";
-
 import getCountries from "../../libs/novelCovid/functions/get-countries";
-import Typography from "@material-ui/core/Typography";
-import {
-  Widget,
-  WidgetHeader,
-  WidgetContent,
-} from "../../design/components/Widget";
+import Widget from "../../design/components/Widget";
 import CountryList from "./components/CountryList";
 import CountrySearch from "./components/CountrySearch";
 import CountryAutocomplete from "./components/CountryAutocomplete";
 import WorldCountryMap from "./components/WorldCountryMap";
 import worldCountriesGeoJSON from "../../assets/world_countries.geo.json";
 
-const Content = styled(WidgetContent)`
+const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: min-content minmax(min-content, 480px);
@@ -74,11 +67,7 @@ const CountryListWrapper = styled.section`
   grid-area: list;
 `;
 
-const CountryAutocompleteWrapper = styled.div`
-  padding: 1rem 1rem 0;
-`;
-
-function OverviewPerCountryWidget() {
+const OverviewPerCountryWidget = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -88,10 +77,7 @@ function OverviewPerCountryWidget() {
     theme.breakpoints.up(screenSizes.desktopWidth)
   );
 
-  const { data: countriesData, status: countriesStatus } = useQuery(
-    "countries",
-    getCountries
-  );
+  const { data: countriesData } = useQuery("countries", getCountries);
 
   const countries = useMemo(() => {
     if (countriesData && countriesData.length) {
@@ -144,12 +130,10 @@ function OverviewPerCountryWidget() {
 
   return (
     <Widget>
-      <WidgetHeader>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Country case distribution
-        </Typography>
-      </WidgetHeader>
-      <Content>
+      <Widget.Header>
+        <Widget.Title>Overview per country</Widget.Title>
+      </Widget.Header>
+      <SWidgetContent>
         <CountrySelectSection>
           {isDesktop ? (
             <>
@@ -182,9 +166,9 @@ function OverviewPerCountryWidget() {
             onCountryClick={handleCountrySelect}
           />
         </WorldMapSection>
-      </Content>
+      </SWidgetContent>
     </Widget>
   );
-}
+};
 
 export default OverviewPerCountryWidget;

@@ -4,14 +4,22 @@
  * @param {object} params
  * @param {number} params.recovered
  * @param {number} params.deaths
- * @returns {number}
+ * @param {boolean} [params.returnFormatted=false]
+ * @returns {string|number}
  */
-const calculateRecoveryRate = ({ recovered, deaths }) => {
+const calculateRecoveryRate = ({
+  recovered,
+  deaths,
+  returnFormatted = false,
+}) => {
   const finishedCases = deaths + recovered;
-  const recoveryRate = (recovered / finishedCases) * 100;
-  const formattedRecoveryRate = `${parseInt(recoveryRate)}%`;
+  const recoveryRate = parseInt((recovered / finishedCases) * 100);
 
-  return formattedRecoveryRate;
+  if (returnFormatted) {
+    return `${recoveryRate}%`;
+  }
+
+  return recoveryRate;
 };
 
-export { calculateRecoveryRate };
+export default calculateRecoveryRate;

@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import { Popup as LeafletPopup } from "react-leaflet";
-import { formatNumber } from "../../../utils/formatNumber";
+import formatNumber from "../../../utils/formatNumber";
 
 const SMapCountryPopup = styled.article`
   position: relative;

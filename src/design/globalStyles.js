@@ -2,25 +2,75 @@ import { createGlobalStyle } from "styled-components/macro";
 import cssReset from "./cssReset";
 
 const GlobalStyles = createGlobalStyle`
-  ${cssReset}
-
   html {
-    font-size: 16px;
+    font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
+    font-size: ${(props) => props.theme.sizes.htmlBaseFontSize};
+    color: ${(props) => props.theme.colors.text};
+    transition-property: background color;
+    transition-delay: ${(props) => props.theme.durations.baseTransition};
+    transition-timing-function: ease-in-out;
   }
 
-  .MuiAutocomplete-popper {
-    background: red;
+  h1 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading1};
+  }
 
+  h2 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading2};
+  }
+
+  h3 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading3};
+  }
+
+  h4 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading4};
+  }
+
+  h5 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading5};
+  }
+
+  h6 {
+    margin: 0;
+    font-size: ${(props) => props.theme.sizes.fontHeading6};
+  }
+
+  /* Material-UI Autocomplete  */
+  .MuiAutocomplete-popper {
     .MuiAutocomplete-paper {
       margin: 0;
       border-radius: 0;
+      font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     }
 
-    .MuiAutocomplete-option[aria-selected="true"] {
-      background-color: ${(props) => props.theme.colors.primary};
-      color: ${(props) => props.theme.colors.background};
+    .MuiAutocomplete-listbox {
+      background-color: ${(props) => props.theme.colors.background};
     }
+
+    .MuiAutocomplete-option {
+      background-color: ${(props) => props.theme.colors.background};
+      color: ${(props) => props.theme.colors.text};
+
+      &:hover,
+      &[data-focus="true"] {
+        background-color: ${(props) => props.theme.colors.grey100};
+      }
+
+      &[aria-selected="true"] {
+        background-color: ${(props) => props.theme.colors.accentPrimary};
+        color: #fff;
+      }
+    }
+
   }
+
+  ${cssReset}
 `;
 
 export default GlobalStyles;

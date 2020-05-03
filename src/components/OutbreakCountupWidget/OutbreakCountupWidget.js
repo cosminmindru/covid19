@@ -1,20 +1,13 @@
 import React from "react";
-import Typography from "@material-ui/core/Typography";
-import {
-  Widget,
-  WidgetHeader,
-  WidgetContent,
-} from "../../design/components/Widget";
+import Widget from "../../design/components/Widget";
 
 const OutbreakCountupWidget = () => {
   return (
     <Widget>
-      <WidgetHeader>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Time since outbreak started
-        </Typography>
-      </WidgetHeader>
-      <WidgetContent>countdown</WidgetContent>
+      <Widget.Header>
+        <Widget.Title>Outbreak started</Widget.Title>
+      </Widget.Header>
+      <Widget.Content>countdown</Widget.Content>
     </Widget>
   );
 };

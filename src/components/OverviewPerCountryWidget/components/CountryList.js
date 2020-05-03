@@ -21,20 +21,35 @@ const SCountryIcon = styled.img`
   object-fit: cover;
 `;
 
-const SCountry = styled(ListItem)`
+const SListItem = styled(ListItem)`
   && {
     border-radius: ${(props) => props.theme.sizes.borderRadius};
   }
 
   &&:hover {
-    background-color: ${(props) => props.theme.colors.accents2};
+    background-color: ${(props) => props.theme.colors.grey100};
     color: ${(props) => props.theme.colors.foreground};
   }
 
   &&.Mui-selected,
   &&.Mui-selected:hover {
-    background-color: ${(props) => props.theme.colors.primary};
-    color: ${(props) => props.theme.colors.background};
+    background-color: ${(props) => props.theme.colors.accentPrimary};
+    color: ${(props) =>
+      props.theme.colorMode === "dark"
+        ? props.theme.colors.foreground
+        : props.theme.colors.background};
+  }
+`;
+
+const SListItemText = styled(ListItemText)`
+  && {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  & .MuiTypography-body1 {
+    font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
   }
 `;
 
@@ -75,7 +90,7 @@ function CountryList({
                   key={kebabCase(country.country)}
                   style={style}
                 >
-                  <SCountry
+                  <SListItem
                     button
                     selected={isCountrySelected(country)}
                     onClick={() => onCountrySelect(country)}
@@ -90,15 +105,8 @@ function CountryList({
                         <span />
                       )}
                     </ListItemAvatar>
-                    <ListItemText
-                      style={{
-                        whiteSpace: "nowrap",
-                        textOverflow: "ellipsis",
-                        overflow: "hidden",
-                      }}
-                      primary={country.country}
-                    />
-                  </SCountry>
+                    <SListItemText primary={country.country} />
+                  </SListItem>
                 </SCountryListItem>
               );
             }}

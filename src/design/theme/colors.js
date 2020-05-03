@@ -1,23 +1,41 @@
-const colors = {
-  // TODO: Refactor to allow for themeing
-  // take example from Vercel website: https://vercel.com/
-  white: "#fff",
-  offWhite: "#fafafa",
-  black: "#000000",
-  grey: "#e5e5e5",
+import grey from "@material-ui/core/colors/grey";
 
-  // UPDATED
-  foreground: "#000",
+const light = {
   background: "#fff",
-  accents1: "#fafafa",
-  accents2: "#eaeaea",
-  accents3: "#999",
-  accents4: "#888",
-  accents5: "#666",
-  accents6: "#444",
-  accents7: "#333",
-  accents8: "#111",
-  primary: "#3949ab",
+  foreground: "#000",
+  text: grey[900],
+  accentPrimary: "blue",
+  accentSecondary: "red",
+  accentTertiary: "green",
+  grey50: grey[50],
+  grey100: grey[100],
+  grey200: grey[200],
+  grey300: grey[300],
+  grey400: grey[400],
+  grey500: grey[500],
+  grey600: grey[600],
+  grey700: grey[700],
+  grey800: grey[800],
+  grey900: grey[900],
 };
 
-export default colors;
+const dark = {
+  background: "#121212",
+  foreground: "#fff",
+  text: grey[50],
+  accentPrimary: "blue",
+  accentSecondary: "red",
+  accentTertiary: "green",
+  grey50: grey[900],
+  grey100: grey[800],
+  grey200: grey[700],
+  grey300: grey[600],
+  grey400: grey[500],
+  grey500: grey[400],
+  grey600: grey[300],
+  grey700: grey[200],
+  grey800: grey[100],
+  grey900: grey[50],
+};
+
+export { light, dark };

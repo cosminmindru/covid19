@@ -6,7 +6,7 @@ import TextField from "@material-ui/core/TextField";
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
-  background-color: ${(props) => props.theme.colors.accents1};
+  background-color: ${(props) => props.theme.colors.grey100};
   border: none;
   border-radius: 0;
 
@@ -17,10 +17,17 @@ const Wrapper = styled.div`
 
   && .MuiInputBase-root {
     border-radius: 0;
+    font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
+    color: ${(props) => props.theme.colors.text};
   }
 
   && .MuiOutlinedInput-notchedOutline {
     border: none;
+  }
+
+  && .MuiAutocomplete-popupIndicator,
+  && .MuiAutocomplete-clearIndicator {
+    color: ${(props) => props.theme.colors.grey900};
   }
 `;
 

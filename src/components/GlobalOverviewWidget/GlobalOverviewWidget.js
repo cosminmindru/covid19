@@ -3,16 +3,10 @@ import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
-import { formatNumber } from "../../utils/formatNumber";
+import Widget from "../../design/components/Widget";
+import Stat from "./components/Stat";
 
-import Typography from "@material-ui/core/Typography";
-import {
-  Widget,
-  WidgetHeader,
-  WidgetContent,
-} from "../../design/components/Widget";
-
-const Content = styled(WidgetContent)`
+const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
@@ -26,16 +20,12 @@ const Content = styled(WidgetContent)`
   }
 `;
 
-const Stat = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+const StatWrapper = styled.div`
   padding: 1.5rem 0;
   margin: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${(props) => props.theme.colors.grey};
+    border-bottom: 1px solid ${(props) => props.theme.colors.grey200};
   }
 
   @media ${(props) => props.theme.breakpoints.tablet} {
@@ -44,54 +34,36 @@ const Stat = styled.div`
     padding: 0 1.5rem;
 
     &:not(:last-child) {
-      border-right: 1px solid ${(props) => props.theme.colors.grey};
+      border-right: 1px solid ${(props) => props.theme.colors.grey200};
       border-bottom: 0;
     }
   }
 `;
 
 const GlobalOverviewWidget = () => {
-  const { isLoading, data } = useQuery("globalOverview", getOverview);
+  const { data } = useQuery("globalOverview", getOverview);
 
   return (
-    <>
-      {isLoading && <p>loading...</p>}
-      {data && (
-        <Widget>
-          <WidgetHeader>
-            <Typography variant="h6" style={{ fontWeight: "bold" }}>
-              Global case overview
-            </Typography>
-          </WidgetHeader>
-          <Content>
-            <Stat>
-              <Typography variant="h6" gutterBottom>
-                Confirmed
-              </Typography>
-              <Typography variant="h4">
-                {formatNumber({ value: get(data, "confirmed.value") })}
-              </Typography>
-            </Stat>
-            <Stat>
-              <Typography variant="h6" gutterBottom>
-                Recovered
-              </Typography>
-              <Typography variant="h4">
-                {formatNumber({ value: get(data, "recovered.value") })}
-              </Typography>
-            </Stat>
-            <Stat>
-              <Typography variant="h6" gutterBottom>
-                Deaths
-              </Typography>
-              <Typography variant="h4">
-                {formatNumber({ value: get(data, "deaths.value") })}
-              </Typography>
-            </Stat>
-          </Content>
-        </Widget>
-      )}
-    </>
+    <Widget>
+      <Widget.Header>
+        <Widget.Title>Global case overview</Widget.Title>
+      </Widget.Header>
+      <SWidgetContent>
+        <StatWrapper>
+          {data && (
+            <Stat title="Confirmed" value={get(data, "confirmed.value")} />
+          )}
+        </StatWrapper>
+        <StatWrapper>
+          {data && (
+            <Stat title="Recovered" value={get(data, "recovered.value")} />
+          )}
+        </StatWrapper>
+        <StatWrapper>
+          {data && <Stat title="Deaths" value={get(data, "deaths.value")} />}
+        </StatWrapper>
+      </SWidgetContent>
+    </Widget>
   );
 };
 

@@ -17,6 +17,7 @@ const cssReset = css`
   /* Remove default padding */
   ul,
   ol {
+    list-style: none;
     padding: 0;
   }
 
