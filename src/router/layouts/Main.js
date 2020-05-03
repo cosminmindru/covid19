@@ -4,12 +4,12 @@ import ReactGA from "react-ga";
 import { useLocation } from "react-router-dom";
 import config from "../../config";
 
-import { Meta } from "../../components/Meta";
+import Meta from "../../components/Meta";
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  background-color: ${(props) => props.theme.colors.offWhite};
+  background-color: ${(props) => props.theme.colors.background};
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     flex-direction: row;
@@ -49,4 +49,4 @@ const MainLayout = ({ children, meta }) => {
   );
 };
 
-export { MainLayout };
+export default MainLayout;

@@ -1,24 +1,16 @@
-const defaultLocale = "en-GB";
-
-const defaultOptions = {};
-
 /**
  * Format numbers
  *
  * @param {number} value
- * @param {string} [locale=defaultLocale]
- * @param {object} [options=defaultOptions]
+ * @param {string} [locale='en-GB']
+ * @param {object} [options={}]
  * @returns {number}
  */
-const formatNumber = ({
-  value,
-  locale = defaultLocale,
-  options = defaultOptions
-}) => {
+const formatNumber = ({ value, locale = "en-GB", options = {} }) => {
   const numberFormatter = new Intl.NumberFormat(locale, options);
   const formattedNumber = numberFormatter.format(value);
 
   return formattedNumber;
 };
 
-export { formatNumber };
+export default formatNumber;

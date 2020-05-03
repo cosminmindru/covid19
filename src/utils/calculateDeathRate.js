@@ -4,13 +4,21 @@
  * @param {object} params
  * @param {number} params.confirmedCases
  * @param {number} params.deaths
- * @returns {number}
+ * @param {boolean} [params.returnFormatted=false]
+ * @returns {number|string}
  */
-const calculateDeathRate = ({ confirmedCases, deaths }) => {
-  const deathRate = (deaths / confirmedCases) * 100;
-  const formattedDeathRate = `${parseInt(deathRate)}%`;
+const calculateDeathRate = ({
+  confirmedCases,
+  deaths,
+  returnFormatted = false,
+}) => {
+  const deathRate = parseInt((deaths / confirmedCases) * 100);
 
-  return formattedDeathRate;
+  if (returnFormatted) {
+    return `${deathRate}%`;
+  }
+
+  return deathRate;
 };
 
-export { calculateDeathRate };
+export default calculateDeathRate;
