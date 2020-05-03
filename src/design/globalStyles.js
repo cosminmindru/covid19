@@ -43,17 +43,31 @@ const GlobalStyles = createGlobalStyle`
 
   /* Material-UI Autocomplete  */
   .MuiAutocomplete-popper {
-    background: red;
-
     .MuiAutocomplete-paper {
       margin: 0;
       border-radius: 0;
+      font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     }
 
-    .MuiAutocomplete-option[aria-selected="true"] {
-      background-color: ${(props) => props.theme.colors.accentPrimary};
-      color: #fff;
+    .MuiAutocomplete-listbox {
+      background-color: ${(props) => props.theme.colors.background};
     }
+
+    .MuiAutocomplete-option {
+      background-color: ${(props) => props.theme.colors.background};
+      color: ${(props) => props.theme.colors.text};
+
+      &:hover,
+      &[data-focus="true"] {
+        background-color: ${(props) => props.theme.colors.grey100};
+      }
+
+      &[aria-selected="true"] {
+        background-color: ${(props) => props.theme.colors.accentPrimary};
+        color: #fff;
+      }
+    }
+
   }
 
   ${cssReset}

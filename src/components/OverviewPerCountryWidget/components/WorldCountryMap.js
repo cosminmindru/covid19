@@ -1,5 +1,12 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+  useContext,
+} from "react";
 import styled from "styled-components/macro";
+import ThemeContext from "../../../context/ThemeContext";
 import Leaflet from "leaflet";
 import { Map, GeoJSON, TileLayer } from "react-leaflet";
 import { createWorldCountriesGeoJSON } from "../../../utils/createWorldCountriesGeoJSON";
@@ -40,6 +47,11 @@ const SWorldCountryMap = styled.div`
     border-radius: 0;
     background-color: transparent;
   }
+
+  & .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    background-color: ${(props) => props.theme.colors.background};
+  }
 `;
 
 const WorldCountryMap = ({
@@ -47,6 +59,8 @@ const WorldCountryMap = ({
   activeCountry = null,
   onCountryClick = () => {},
 }) => {
+  const { colorMode } = useContext(ThemeContext);
+
   const [geoJSON, setGeoJson] = useState(null);
   const [maxBounds, setMaxBounds] = useState(null);
 
@@ -58,8 +72,9 @@ const WorldCountryMap = ({
   const minZoom = 2;
   const tileStyles = {
     light: "ck9fq7g4c3pc61imtck7dfzve",
+    dark: "ck9rh021a15151iocb1jums6k",
   };
-  const tileLayerUrl = `https://api.mapbox.com/design/v1/cosmindev/${tileStyles["light"]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const tileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles[colorMode]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
 
   const handleGeoJSONClick = (event) => {
     const {
@@ -149,11 +164,12 @@ const WorldCountryMap = ({
         center={center}
         zoom={zoom}
         minZoom={minZoom}
+        zoomControl={false}
         worldCopyJump
       >
         <TileLayer
-          // url={tileLayerUrl}
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          url={tileLayerUrl}
+          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           tileSize={512}
           zoomOffset={-1}

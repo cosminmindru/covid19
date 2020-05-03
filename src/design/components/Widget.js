@@ -17,7 +17,7 @@ const Widget = styled.article`
   overflow: hidden;
 `;
 
-const WidgetHeader = styled.header`
+const Header = styled.header`
   grid-row: header;
   display: flex;
   justify-content: space-between;
@@ -30,20 +30,18 @@ const WidgetHeader = styled.header`
   }
 `;
 
-const WidgetContent = styled.main`
+const Content = styled.main`
   grid-row: content;
 `;
 
-const WidgetTitle = styled.h2`
+const Title = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
   color: ${(props) => props.theme.colors.text};
 `;
 
-Widget.Header = WidgetHeader;
-Widget.Content = WidgetContent;
-Widget.Title = WidgetTitle;
-
-export { Widget, WidgetHeader, WidgetContent };
+Widget.Header = Header;
+Widget.Content = Content;
+Widget.Title = Title;
 
 export default Widget;

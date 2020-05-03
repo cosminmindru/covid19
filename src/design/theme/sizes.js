@@ -7,7 +7,7 @@ const sizes = {
   fontHeading3: "1.6rem",
   fontHeading4: "1.4rem",
   fontHeading5: "1.2rem",
-  fontHeading6: "1rem",
+  fontHeading6: "1.05rem",
   fontBody: "1rem",
 };
 

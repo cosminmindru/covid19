@@ -1,19 +1,15 @@
-import React from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
-import { calculateDeathRate } from "../../utils/calculateDeathRate";
-import { calculateRecoveryRate } from "../../utils/calculateRecoveryRate";
+import calculateDeathRate from "../../utils/calculateDeathRate";
+import calculateRecoveryRate from "../../utils/calculateRecoveryRate";
+import Widget from "../../design/components/Widget";
+import WidgetStat from "../../design/components/WidgetStat";
+import { useCountUp } from "react-countup";
 
-import Typography from "@material-ui/core/Typography";
-import {
-  Widget,
-  WidgetHeader,
-  WidgetContent,
-} from "../../design/components/Widget";
-
-const Content = styled(WidgetContent)`
+const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
@@ -27,16 +23,12 @@ const Content = styled(WidgetContent)`
   }
 `;
 
-const Stat = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
+const StatWrapper = styled.div`
   padding: 1.5rem 0;
   margin: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${(props) => props.theme.colors.grey};
+    border-bottom: 1px solid ${(props) => props.theme.colors.grey200};
   }
 
   @media ${(props) => props.theme.breakpoints.tablet} {
@@ -45,52 +37,72 @@ const Stat = styled.div`
     padding: 0 1.5rem;
 
     &:not(:last-child) {
-      border-right: 1px solid ${(props) => props.theme.colors.grey};
+      border-right: 1px solid ${(props) => props.theme.colors.grey200};
       border-bottom: 0;
     }
   }
 `;
 
 const GlobalCaseDistributonWidget = () => {
-  const { isLoading, data } = useQuery("globalOverview", getOverview);
+  const { status, data } = useQuery("globalOverview", getOverview);
+
+  // Recovery rate
+  const rawRecoveryRate = calculateRecoveryRate({
+    confirmedCases: get(data, "confirmed.value"),
+    recovered: get(data, "recovered.value"),
+    deaths: get(data, "deaths.value"),
+  });
+  const { countUp: recoveryRate, update: updateRecoveryRate } = useCountUp({
+    startOnMount: false,
+    start: 0,
+    end: rawRecoveryRate,
+    delay: 0,
+  });
+
+  // Death rate
+  const rawDeathRate = calculateDeathRate({
+    confirmedCases: get(data, "confirmed.value"),
+    deaths: get(data, "deaths.value"),
+  });
+  const { countUp: deathRate, update: updateDeathRate } = useCountUp({
+    startOnMount: false,
+    start: 0,
+    end: rawDeathRate,
+    delay: 0,
+    useEasing: false,
+  });
+
+  // Animate the recovery & death rates
+  useEffect(() => {
+    if (status === "success") {
+      updateRecoveryRate(rawRecoveryRate);
+      updateDeathRate(rawDeathRate);
+    }
+  }, [status, rawRecoveryRate, rawDeathRate]);
 
   return (
     <Widget>
-      <WidgetHeader>
-        <Typography variant="h6" style={{ fontWeight: "bold" }}>
-          Global case distribution
-        </Typography>
-      </WidgetHeader>
-      <Content>
-        {isLoading && <p>Loading...</p>}
-        {data && (
-          <>
-            <Stat>
-              <Typography variant="h6" gutterBottom>
-                Recovery rate
-              </Typography>
-              <Typography variant="h4">
-                {calculateRecoveryRate({
-                  confirmedCases: get(data, "confirmed.value"),
-                  recovered: get(data, "recovered.value"),
-                  deaths: get(data, "deaths.value"),
-                })}
-              </Typography>
-            </Stat>
-            <Stat>
-              <Typography variant="h6" gutterBottom>
-                Death rate
-              </Typography>
-              <Typography variant="h4">
-                {calculateDeathRate({
-                  confirmedCases: get(data, "confirmed.value"),
-                  deaths: get(data, "deaths.value"),
-                })}
-              </Typography>
-            </Stat>
-          </>
+      <Widget.Header>
+        <Widget.Title>Global case distribution</Widget.Title>
+      </Widget.Header>
+      <SWidgetContent>
+        {status === "success" && (
+          <StatWrapper>
+            <WidgetStat>
+              <WidgetStat.Title>Recovery rate</WidgetStat.Title>
+              <WidgetStat.Value>{recoveryRate}%</WidgetStat.Value>
+            </WidgetStat>
+          </StatWrapper>
         )}
-      </Content>
+        {status === "success" && (
+          <StatWrapper>
+            <WidgetStat>
+              <WidgetStat.Title>Death rate</WidgetStat.Title>
+              <WidgetStat.Value>{deathRate}%</WidgetStat.Value>
+            </WidgetStat>
+          </StatWrapper>
+        )}
+      </SWidgetContent>
     </Widget>
   );
 };

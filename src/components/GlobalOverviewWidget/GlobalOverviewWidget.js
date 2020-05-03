@@ -1,11 +1,8 @@
-import React, { Suspense } from "react";
+import React from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
-import formatNumber from "../../utils/formatNumber";
-
-import Typography from "@material-ui/core/Typography";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
 
