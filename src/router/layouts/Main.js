@@ -9,7 +9,7 @@ import Meta from "../../components/Meta";
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  background-color: ${(props) => props.theme.colors.offWhite};
+  background-color: ${(props) => props.theme.colors.background};
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     flex-direction: row;

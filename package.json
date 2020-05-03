@@ -19,6 +19,7 @@
     "mapbox-gl": "^1.9.1",
     "polished": "^3.5.1",
     "react": "^16.13.0",
+    "react-countup": "^4.3.3",
     "react-dom": "^16.13.0",
     "react-ga": "^2.7.0",
     "react-helmet": "^5.2.1",

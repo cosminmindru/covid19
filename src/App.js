@@ -1,14 +1,21 @@
 import React, { useContext } from "react";
-import { ThemeProvider as SCThemeProvider } from "styled-components/macro";
+import styled, {
+  ThemeProvider as SCThemeProvider,
+} from "styled-components/macro";
 import { ReactQueryConfigProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query-devtools";
 import dayjs from "dayjs";
 import dayjsRelativeTime from "dayjs/plugin/relativeTime";
 import Router from "./router";
+import config from "./config";
 import { getTheme } from "./design/theme/theme";
 import GlobalStyles from "./design/globalStyles";
 import ThemeContext from "./context/ThemeContext";
+
+const SReactQueryDevtools = styled.div`
+  z-index: 999999;
+`;
 
 // Dayjs plugins
 dayjs.extend(dayjsRelativeTime);
@@ -25,12 +32,16 @@ const App = () => {
 
   return (
     <SCThemeProvider theme={scTheme}>
+      <GlobalStyles />
       <ReactQueryConfigProvider config={queryConfig}>
-        <GlobalStyles />
         <BrowserRouter>
           <Router />
         </BrowserRouter>
-        <ReactQueryDevtools />
+        {!config.isProduction && (
+          <SReactQueryDevtools>
+            <ReactQueryDevtools />
+          </SReactQueryDevtools>
+        )}
       </ReactQueryConfigProvider>
     </SCThemeProvider>
   );
