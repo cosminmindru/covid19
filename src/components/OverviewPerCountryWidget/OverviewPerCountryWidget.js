@@ -74,11 +74,7 @@ const CountryListWrapper = styled.section`
   grid-area: list;
 `;
 
-const CountryAutocompleteWrapper = styled.div`
-  padding: 1rem 1rem 0;
-`;
-
-function OverviewPerCountryWidget() {
+const OverviewPerCountryWidget = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
 
@@ -88,10 +84,7 @@ function OverviewPerCountryWidget() {
     theme.breakpoints.up(screenSizes.desktopWidth)
   );
 
-  const { data: countriesData, status: countriesStatus } = useQuery(
-    "countries",
-    getCountries
-  );
+  const { data: countriesData } = useQuery("countries", getCountries);
 
   const countries = useMemo(() => {
     if (countriesData && countriesData.length) {
@@ -185,6 +178,6 @@ function OverviewPerCountryWidget() {
       </Content>
     </Widget>
   );
-}
+};
 
 export default OverviewPerCountryWidget;
