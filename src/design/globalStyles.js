@@ -11,33 +11,40 @@ const GlobalStyles = createGlobalStyle`
     transition-timing-function: ease-in-out;
   }
 
-  h1 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p,
+  small,
+  strong,
+  code {
     margin: 0;
+    color: ${(props) => props.theme.colors.text};
+  }
+
+  h1 {
     font-size: ${(props) => props.theme.sizes.fontHeading1};
   }
 
   h2 {
-    margin: 0;
     font-size: ${(props) => props.theme.sizes.fontHeading2};
   }
 
   h3 {
-    margin: 0;
     font-size: ${(props) => props.theme.sizes.fontHeading3};
   }
 
   h4 {
-    margin: 0;
     font-size: ${(props) => props.theme.sizes.fontHeading4};
   }
 
   h5 {
-    margin: 0;
     font-size: ${(props) => props.theme.sizes.fontHeading5};
   }
 
   h6 {
-    margin: 0;
     font-size: ${(props) => props.theme.sizes.fontHeading6};
   }
 
