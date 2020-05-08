@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled, { useTheme } from "styled-components/macro";
+import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import formatHistoricalData from "../../utils/formatHistoricalData";
 import LineChart from "./components/LineChart";
