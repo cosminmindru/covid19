@@ -10,7 +10,7 @@ const Widget = styled.article`
   border-radius: ${(props) => props.theme.sizes.borderRadius};
   border-width: 1px;
   border-style: solid;
-  border-color: ${(props) => props.theme.colors.grey100};
+  border-color: ${(props) => transparentize(0.6, props.theme.colors.grey100)};
   background-color: ${(props) =>
     props.theme.colorMode === "dark"
       ? props.theme.colors.grey50
@@ -26,7 +26,7 @@ const Header = styled.header`
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid ${(props) => props.theme.colors.grey200};
+  border-bottom: 1px solid ${(props) => props.theme.colorMode === 'dark' ? props.theme.colors.grey100 : props.theme.colors.grey300};
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     padding: 0 1.5rem;
@@ -40,7 +40,7 @@ const Content = styled.main`
 const Title = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
-  color: ${(props) => props.theme.colors.text};
+  color: ${(props) => props.theme.text};
 `;
 
 Widget.Header = Header;
