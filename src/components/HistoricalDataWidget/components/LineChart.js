@@ -48,11 +48,6 @@ const LineChart = ({ data = [] }) => {
   };
   const tooltipLabelFormatter = (label) => dayjs(label).format("DD MMMM YYYY");
   const legendFormatter = (value) => capitalizeFirstLetter(value);
-  const legendWrapperStyle = useMemo(() => {
-    if (isDesktop) return { bottom: 0 };
-
-    return { bottom: 0 };
-  }, [isDesktop]);
 
   return (
     <ResponsiveContainer
