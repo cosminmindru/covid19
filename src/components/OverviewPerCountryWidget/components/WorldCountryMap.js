@@ -78,7 +78,10 @@ const WorldCountryMap = ({
     light: "ck9fq7g4c3pc61imtck7dfzve",
     dark: "ck9rh021a15151iocb1jums6k",
   };
-  const tileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles[colorMode]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const mapboxTileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles[colorMode]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const tileLayerUrl = config.isProduction
+    ? mapboxTileLayerUrl
+    : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
   const handleGeoJSONClick = (event) => {
     const {
@@ -173,7 +176,6 @@ const WorldCountryMap = ({
       >
         <TileLayer
           url={tileLayerUrl}
-          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           tileSize={512}
           zoomOffset={-1}

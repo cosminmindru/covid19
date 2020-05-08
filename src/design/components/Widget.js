@@ -38,10 +38,16 @@ const Header = styled.header`
 
 const Content = styled.main`
   grid-row: content;
-  padding: ${(props) => (props.withPadding ? "1rem" : 0)};
+  padding-top: ${(props) => (props.yPadding ? "1rem" : 0)};
+  padding-right: ${(props) => (props.xPadding ? "1rem" : 0)};
+  padding-bottom: ${(props) => (props.yPadding ? "1rem" : 0)};
+  padding-left: ${(props) => (props.xPadding ? "1rem" : 0)};
 
   @media ${(props) => props.theme.breakpoints.desktop} {
-    padding: ${(props) => (props.withPadding ? "1.5rem" : 0)};
+    padding-top: ${(props) => (props.yPadding ? "1.5rem" : 0)};
+    padding-right: ${(props) => (props.xPadding ? "1.5rem" : 0)};
+    padding-bottom: ${(props) => (props.yPadding ? "1.5rem" : 0)};
+    padding-left: ${(props) => (props.xPadding ? "1.5rem" : 0)};
   }
 `;
 

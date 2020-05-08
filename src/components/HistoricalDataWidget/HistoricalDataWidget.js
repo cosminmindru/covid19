@@ -21,7 +21,7 @@ const HistoricalDataWidget = () => {
 
   // Fetch global historical data
   const globalDataQuery = useQuery(
-    ["global-historical-data", { lastDays: "all" }],
+    ["global-historical-data", { lastDays: 30 }],
     getGlobalHistoricalData,
     {
       onSuccess: (data) => {
@@ -39,7 +39,7 @@ const HistoricalDataWidget = () => {
       <Widget.Header>
         <Widget.Title>Historical data</Widget.Title>
       </Widget.Header>
-      <Widget.Content>
+      <Widget.Content yPadding>
         <SLineChart>
           {globalDataQuery.status === "loading" && <p>Loading...</p>}
           {globalDataQuery.status === "error" && (
