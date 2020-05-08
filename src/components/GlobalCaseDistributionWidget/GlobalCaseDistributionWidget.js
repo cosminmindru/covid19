@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect } from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
