@@ -86,6 +86,7 @@ const GlobalCaseDistributonWidget = () => {
       updateRecoveryRate(rawRecoveryRate);
       updateDeathRate(rawDeathRate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, rawRecoveryRate, rawDeathRate]);
 
   return (

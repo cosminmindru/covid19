@@ -4,7 +4,7 @@ import { transparentize } from "polished";
 const Widget = styled.article`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: [header] minmax(4rem, min-content) [content] auto;
+  grid-template-rows: minmax(4rem, min-content) auto;
   width: 100%;
   height: 100%;
   border-radius: ${(props) => props.theme.sizes.borderRadius};
@@ -21,12 +21,15 @@ const Widget = styled.article`
 `;
 
 const Header = styled.header`
-  grid-row: header;
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0.5rem 1rem;
-  border-bottom: 1px solid ${(props) => props.theme.colorMode === 'dark' ? props.theme.colors.grey100 : props.theme.colors.grey300};
+  border-bottom: 1px solid
+    ${(props) =>
+      props.theme.colorMode === "dark"
+        ? props.theme.colors.grey100
+        : props.theme.colors.grey300};
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     padding: 0 1.5rem;
@@ -35,6 +38,11 @@ const Header = styled.header`
 
 const Content = styled.main`
   grid-row: content;
+  padding: ${(props) => (props.withPadding ? "1rem" : 0)};
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    padding: ${(props) => (props.withPadding ? "1.5rem" : 0)};
+  }
 `;
 
 const Title = styled.h2`
