@@ -1,7 +1,7 @@
 import grey from "@material-ui/core/colors/grey";
 
 const light = {
-  background: "#fff",
+  background: '#fff',
   foreground: "#000",
   text: grey[900],
   accentPrimary: "blue",
