@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components/macro";
-import { useQuery } from "react-query";
-import formatHistoricalData from "../../utils/formatHistoricalData";
 import LineChart from "./components/LineChart";
 import Widget from "../../design/components/Widget";
-import getGlobalHistoricalData from "../../libs/novelCovid/functions/get-global-historical-data";
 
-const SLineChart = styled.div`
+const SWidgetContent = styled(Widget.Content)`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(2, min-content);
+  gap: 1rem;
+`;
+
+const CountryControl = styled.div`
+  justify-self: start;
+`;
+
+const TimeframeControl = styled.div`
+  justify-self: end;
+`;
+
+const DataChart = styled.div`
+  grid-column: span 2;
+  grid-row: 2 / span 1;
   display: flex;
   width: 100%;
   height: 250px;
@@ -17,39 +31,18 @@ const SLineChart = styled.div`
 `;
 
 const HistoricalDataWidget = () => {
-  const [globalData, setGlobalData] = useState([]);
-
-  // Fetch global historical data
-  const globalDataQuery = useQuery(
-    ["global-historical-data", { lastDays: 30 }],
-    getGlobalHistoricalData,
-    {
-      onSuccess: (data) => {
-        const formattedGlobalData = formatHistoricalData({
-          data,
-        });
-
-        setGlobalData(formattedGlobalData);
-      },
-    }
-  );
-
   return (
     <Widget>
       <Widget.Header>
         <Widget.Title>Historical data</Widget.Title>
       </Widget.Header>
-      <Widget.Content yPadding>
-        <SLineChart>
-          {globalDataQuery.status === "loading" && <p>Loading...</p>}
-          {globalDataQuery.status === "error" && (
-            <p>Sorry, something went wrong :(</p>
-          )}
-          {globalDataQuery.status === "success" && (
-            <LineChart data={globalData} />
-          )}
-        </SLineChart>
-      </Widget.Content>
+      <SWidgetContent yPadding xPadding>
+        <CountryControl>country</CountryControl>
+        <TimeframeControl>timeframe</TimeframeControl>
+        <DataChart>
+          <LineChart />
+        </DataChart>
+      </SWidgetContent>
     </Widget>
   );
 };
