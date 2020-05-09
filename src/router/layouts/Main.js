@@ -10,7 +10,10 @@ import Container from "../../design/components/Container";
 const SLayout = styled.div`
   display: flex;
   flex-direction: column;
-  background-color: ${(props) => props.theme.colors.background};
+  background-color: ${(props) =>
+    props.theme.colorMode === "dark"
+      ? props.theme.colors.background
+      : props.theme.colors.grey100};
 `;
 
 const Content = styled.main`

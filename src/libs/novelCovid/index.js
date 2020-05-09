@@ -6,4 +6,4 @@ const client = axios.create({
   baseURL: appConfig.novelCovidApiBaseUrl,
 });
 
-export { client };
+export default client;

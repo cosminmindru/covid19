@@ -6,9 +6,11 @@ const GlobalStyles = createGlobalStyle`
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     font-size: ${(props) => props.theme.sizes.htmlBaseFontSize};
     color: ${(props) => props.theme.colors.text};
-    transition-property: background color;
-    transition-delay: ${(props) => props.theme.durations.baseTransition};
-    transition-timing-function: ease-in-out;
+  }
+
+  * {
+    transition: ${(props) =>
+      `background ${props.theme.durations.baseTransition}ms ease-in-out`}; // Use smoooth transition on color modes switch
   }
 
   h1,

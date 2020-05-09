@@ -6,11 +6,11 @@ import formatNumber from "../../../utils/formatNumber";
 const SMapCountryPopup = styled.article`
   position: relative;
   display: grid;
-  grid-template-columns: repeat(2, minmax(100px, min-content));
+  grid-template-columns: repeat(2, minmax(6.25rem, min-content));
   grid-template-rows: 1fr repeat(auto, 1.5fr);
   gap: 0.5rem;
   width: 100%;
-  max-width: 600px;
+  max-width: 37.5rem;
   padding: 0.5rem;
   background-color: ${(props) => props.theme.colors.background};
   border-radius: ${(props) => props.theme.sizes.borderRadius};

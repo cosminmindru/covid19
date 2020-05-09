@@ -5,44 +5,50 @@ import GlobalOverviewWidget from "../../components/GlobalOverviewWidget";
 import GlobalCaseDistributionWidget from "../../components/GlobalCaseDistributionWidget";
 import OutbreakCountupWidget from "../../components/OutbreakCountupWidget";
 import OverviewPerCountryWidget from "../../components/OverviewPerCountryWidget";
+import HistoricalDataWidget from "../../components/HistoricalDataWidget";
 
 const PageWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: minmax(min-content, max-content);
-  grid-template-areas:
-    "global-overview"
-    "global-case-distributon"
-    "outbreak-timer"
-    "overview-per-country";
   gap: 1rem;
   align-content: start;
   width: 100%;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-template-columns: 2fr 1fr;
-    grid-template-areas:
-      "global-overview global-overview"
-      "global-case-distributon outbreak-timer"
-      "overview-per-country overview-per-country";
     gap: 2rem;
   }
 `;
 
 const GlobalOverviewWrapper = styled.div`
-  grid-area: global-overview;
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-column: span 2;
+  }
 `;
 
 const GlobalCaseDistributionWrapper = styled.div`
-  grid-area: global-case-distributon;
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-column: span 1;
+  }
 `;
 
 const OutbreakCountupWrapper = styled.div`
-  grid-area: outbreak-timer;
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-column: span 1;
+  }
 `;
 
 const OverviewPerCountryWrapper = styled.div`
-  grid-area: overview-per-country;
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-column: span 2;
+  }
+`;
+
+const HistoricalDataWidgetWrapper = styled.div`
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    grid-column: span 2;
+  }
 `;
 
 const meta = {
@@ -65,6 +71,9 @@ const HomePage = () => {
         <OverviewPerCountryWrapper>
           <OverviewPerCountryWidget />
         </OverviewPerCountryWrapper>
+        <HistoricalDataWidgetWrapper>
+          <HistoricalDataWidget />
+        </HistoricalDataWidgetWrapper>
       </PageWrapper>
     </MainLayout>
   );
