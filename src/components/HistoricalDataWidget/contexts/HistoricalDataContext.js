@@ -9,27 +9,47 @@ import getCountries from "../../../libs/novelCovid/functions/get-countries";
 const HistoricalDataContext = createContext();
 
 // Initial state values
-const initialTimeframe = "all";
-const initialSelectedCountry = null;
-const initialGlobalData = [];
-const initialCountryData = [];
+const INITIAL_TIMEFRAMES = [
+  {
+    value: 7,
+    label: "Week",
+  },
+  {
+    value: 30,
+    label: "Month",
+  },
+  {
+    value: "all",
+    label: "All time",
+  },
+];
+const INITIAL_ACTIVE_TIMEFRAME = {
+  value: 30,
+  label: "Month",
+};
+const INITIAL_ACTIVE_COUNTRY = null;
+const INITIAL_GLOBAL_DATA = [];
+const INITIAL_COUNTRY_DATA = [];
 
 const HistoricalDataProvider = ({ children }) => {
-  const [timeframe, setTimeframe] = useState(initialTimeframe);
-
-  const [selectedCountry, setSelectedCountry] = useState(
-    initialSelectedCountry
+  // State
+  const [timeframes] = useState(INITIAL_TIMEFRAMES);
+  const [activeTimeframe, setActiveTimeframe] = useState(
+    INITIAL_ACTIVE_TIMEFRAME
   );
-
-  const [globalData, setGlobalData] = useState(initialGlobalData);
-  const [countryData, setCountryData] = useState(initialCountryData);
+  const [activeCountry, setActiveCountry] = useState(INITIAL_ACTIVE_COUNTRY);
+  const [globalData, setGlobalData] = useState(INITIAL_GLOBAL_DATA);
+  const [countryData, setCountryData] = useState(INITIAL_COUNTRY_DATA);
 
   // Fetch all countries available
   const { data: countries } = useQuery("countries", getCountries);
 
   // Fetch global historical data
   useQuery(
-    ["global-historical-data", { lastDays: timeframe }],
+    [
+      `global-historical-data-${get(activeTimeframe, "value")}`,
+      { lastDays: activeTimeframe.value },
+    ],
     getGlobalHistoricalData,
     {
       onSuccess: (data) => {
@@ -44,11 +64,14 @@ const HistoricalDataProvider = ({ children }) => {
 
   // Fetch historical data for the selected country
   useQuery(
-    selectedCountry && [
-      `country-${get(selectedCountry, "countryInfo.iso3")}-historical-data`,
+    activeCountry && [
+      `country-${get(activeCountry, "countryInfo.iso3")}-historical-data-${get(
+        activeTimeframe,
+        "value"
+      )}`,
       {
-        query: get(selectedCountry, "countryInfo.iso3"),
-        lastDays: timeframe,
+        query: get(activeCountry, "countryInfo.iso3"),
+        lastDays: get(activeTimeframe, "value"),
       },
     ],
     getCountryHistoricalData,
@@ -62,8 +85,9 @@ const HistoricalDataProvider = ({ children }) => {
         setCountryData(formattedCountryData);
       },
       onError: () => {
-        setSelectedCountry(initialSelectedCountry);
-        setCountryData(initialCountryData);
+        // Reset the activeCountry and countryData
+        setActiveCountry(INITIAL_ACTIVE_COUNTRY);
+        setCountryData(INITIAL_COUNTRY_DATA);
       },
     }
   );
@@ -75,24 +99,25 @@ const HistoricalDataProvider = ({ children }) => {
    * depending on whether or not a country is selected
    */
   const data = useMemo(() => {
-    if (!selectedCountry && globalData) {
-      return globalData;
-    } else if (selectedCountry) {
+    if (activeCountry && countryData) {
       return countryData;
+    } else if (globalData) {
+      return globalData;
     } else {
-      return null;
+      return [];
     }
-  }, [selectedCountry, globalData, countryData]);
+  }, [activeCountry, globalData, countryData]);
 
   return (
     <HistoricalDataContext.Provider
       value={{
-        countries,
         data,
-        timeframe,
-        selectedCountry,
-        setSelectedCountry,
-        setTimeframe,
+        countries,
+        timeframes,
+        activeCountry,
+        activeTimeframe,
+        setActiveCountry,
+        setActiveTimeframe,
       }}
     >
       {children}

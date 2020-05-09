@@ -6,7 +6,10 @@ const GlobalStyles = createGlobalStyle`
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     font-size: ${(props) => props.theme.sizes.htmlBaseFontSize};
     color: ${(props) => props.theme.colors.text};
-    transition-property: background color;
+  }
+
+  * {
+    transition-property: all;
     transition-delay: ${(props) => props.theme.durations.baseTransition};
     transition-timing-function: ease-in-out;
   }

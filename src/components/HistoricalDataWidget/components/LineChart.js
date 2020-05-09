@@ -1,17 +1,18 @@
 import React, { useMemo, useContext } from "react";
 import {
   ResponsiveContainer,
-  LineChart as ReLineChart,
+  AreaChart as ReLineChart,
   CartesianGrid,
   XAxis,
   YAxis,
   Tooltip,
   Legend,
-  Line,
+  Area,
 } from "recharts";
 import dayjs from "dayjs";
-import styled from "styled-components/macro";
+import styled, { useTheme as useSCTheme } from "styled-components/macro";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
+import * as muiColors from "@material-ui/core/colors";
 import { default as useMUITheme } from "@material-ui/core/styles/useTheme";
 import { screenSizes } from "../../../design/theme/breakpoints";
 import formatNumber from "../../../utils/formatNumber";
@@ -19,31 +20,36 @@ import capitalizeFirstLetter from "../../../utils/capitalizeFirstLetter";
 import HistoricalDataContext from "../contexts/HistoricalDataContext";
 
 const Wrapper = styled.div`
-  width: 101%; // Accomodate for 99% width of the child chart
+  width: 100%; // Accomodate for 99% width of the child chart
   height: 100%;
+
+  && .recharts-default-legend {
+    margin-right: -10%; // Make sure the legend perfectly aligned to the right
+
+    .recharts-legend-item .recharts-surface {
+      border-radius: 2px;
+    }
+  }
 `;
 
 const LineChart = () => {
   const { data } = useContext(HistoricalDataContext);
 
+  const scTheme = useSCTheme();
   const muiTheme = useMUITheme();
   const isDesktop = useMediaQuery(
     muiTheme.breakpoints.up(screenSizes.desktopWidth)
   );
 
   const lineChartMargin = useMemo(() => {
-    if (isDesktop) return { top: 40, right: 0, bottom: 0, left: 24 };
+    if (isDesktop) return { top: 40, right: 0, bottom: 0, left: -16 };
 
-    return { top: 40, right: 24, bottom: 0, left: -8 };
+    return { top: 40, right: 0, bottom: 0, left: -16 };
   }, [isDesktop]);
   const yAxisTickFormatter = (value) => {
-    // On devices smaller then desktop return compact value
-    const options = isDesktop
-      ? {}
-      : { notation: "compact", compactDisplay: "short" };
     const formattedValue = formatNumber({
       value,
-      options,
+      options: { notation: "compact", compactDisplay: "short" },
     });
 
     return formattedValue;
@@ -56,23 +62,70 @@ const LineChart = () => {
     return [formattedValue, formattedName];
   };
   const tooltipLabelFormatter = (label) => dayjs(label).format("DD MMMM YYYY");
+  const tooltipContentStyle = {
+    color: scTheme.colors.text,
+    backgroundColor: scTheme.colors.background,
+  };
   const legendFormatter = (value) => capitalizeFirstLetter(value);
   const legendWrapperStyle = useMemo(() => {
+    const defaultStyle = {
+      top: 0,
+      marginRight: "-10px", // Make legend align perfectly to the right
+    };
+
     if (isDesktop) {
-      return { top: 0 };
+      return defaultStyle;
     }
 
-    return { top: 0, width: "100%" };
+    return { ...defaultStyle, width: "100%" };
   }, [isDesktop]);
 
   return (
     <Wrapper>
       <ResponsiveContainer
-        width="99%" // Fix responsiveness issue caused by CSS Grid
-        height="100%"
+        width="100%" // Fix responsiveness issue caused by CSS Grid
+        height="99%"
       >
         <ReLineChart data={data} margin={lineChartMargin}>
           <CartesianGrid strokeDasharray="3 3" />
+          <defs>
+            <linearGradient id="colorCases" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor={muiColors.indigo[500]}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={muiColors.indigo[500]}
+                stopOpacity={0}
+              />
+            </linearGradient>
+            <linearGradient id="colorDeaths" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor={muiColors.red[500]}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={muiColors.red[500]}
+                stopOpacity={0}
+              />
+            </linearGradient>
+            <linearGradient id="colorRecovered" x1="0" y1="0" x2="0" y2="1">
+              <stop
+                offset="5%"
+                stopColor={muiColors.green[500]}
+                stopOpacity={0.8}
+              />
+              <stop
+                offset="95%"
+                stopColor={muiColors.green[500]}
+                stopOpacity={0}
+              />
+            </linearGradient>
+          </defs>
           <XAxis
             hide={!isDesktop}
             minTickGap={16}
@@ -84,14 +137,36 @@ const LineChart = () => {
           <Tooltip
             formatter={tooltipFormatter}
             labelFormatter={tooltipLabelFormatter}
+            contentStyle={tooltipContentStyle}
           />
           <Legend
+            align="right"
+            iconType="square"
+            iconSize={16}
             formatter={legendFormatter}
             wrapperStyle={legendWrapperStyle}
           />
-          <Line type="monotone" dataKey="cases" stroke="blue" />
-          <Line type="monotone" dataKey="deaths" stroke="red" />
-          <Line type="monotone" dataKey="recovered" stroke="green" />
+          <Area
+            type="monotone"
+            dataKey="cases"
+            stroke={muiColors.indigo[500]}
+            fill="url(#colorCases)"
+            fillOpacity={1}
+          />
+          <Area
+            type="monotone"
+            dataKey="deaths"
+            stroke={muiColors.red[500]}
+            fill="url(#colorDeaths)"
+            fillOpacity={1}
+          />
+          <Area
+            type="monotone"
+            dataKey="recovered"
+            stroke={muiColors.green[500]}
+            fill="url(#colorRecovered)"
+            fillOpacity={1}
+          />
         </ReLineChart>
       </ResponsiveContainer>
     </Wrapper>
