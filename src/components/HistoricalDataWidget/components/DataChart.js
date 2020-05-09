@@ -32,7 +32,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const LineChart = () => {
+const DataChart = () => {
   const { data } = useContext(HistoricalDataContext);
 
   const scTheme = useSCTheme();
@@ -173,4 +173,4 @@ const LineChart = () => {
   );
 };
 
-export default LineChart;
+export default DataChart;

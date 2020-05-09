@@ -51,7 +51,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const CountryAutocomplete = () => {
+const DatasetControl = () => {
   const { countries, activeCountry, setActiveCountry } = useContext(
     HistoricalDataContext
   );
@@ -75,4 +75,4 @@ const CountryAutocomplete = () => {
   );
 };
 
-export default CountryAutocomplete;
+export default DatasetControl;

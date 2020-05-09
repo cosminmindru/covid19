@@ -50,7 +50,7 @@ const SToggleButton = styled(ToggleButton)`
   }
 `;
 
-const TimeframePills = () => {
+const TimeframeControl = () => {
   const { timeframes, activeTimeframe, setActiveTimeframe } = useContext(
     HistoricalDataContext
   );
@@ -81,4 +81,4 @@ const TimeframePills = () => {
   );
 };
 
-export default TimeframePills;
+export default TimeframeControl;

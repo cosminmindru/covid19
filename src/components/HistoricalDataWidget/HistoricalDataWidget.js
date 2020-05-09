@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components/macro";
 import Widget from "../../design/components/Widget";
-import LineChart from "./components/LineChart";
-import CountryAutocomplete from "./components/CountryAutocomplete";
-import TimeframePills from "./components/TimeframePills";
+import DataChart from "./components/DataChart";
+import DatasetControl from "./components/DatasetControl";
+import TimeframeControl from "./components/TimeframeControl";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -17,7 +17,7 @@ const SWidgetContent = styled(Widget.Content)`
   }
 `;
 
-const CountryControl = styled.div`
+const DatasetControlWrapper = styled.div`
   grid-column: span 2;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
@@ -26,7 +26,7 @@ const CountryControl = styled.div`
   }
 `;
 
-const TimeframeControl = styled.div`
+const TimeframeControlWrapper = styled.div`
   grid-column: span 2;
   justify-self: stretch;
 
@@ -36,7 +36,7 @@ const TimeframeControl = styled.div`
   }
 `;
 
-const DataChart = styled.div`
+const DataChartWrapper = styled.div`
   grid-column: span 2;
   display: flex;
   width: 100%;
@@ -54,15 +54,15 @@ const HistoricalDataWidget = () => {
         <Widget.Title>Historical data</Widget.Title>
       </Widget.Header>
       <SWidgetContent yPadding xPadding>
-        <CountryControl>
-          <CountryAutocomplete />
-        </CountryControl>
-        <TimeframeControl>
-          <TimeframePills />
-        </TimeframeControl>
-        <DataChart>
-          <LineChart />
-        </DataChart>
+        <DatasetControlWrapper>
+          <DatasetControl />
+        </DatasetControlWrapper>
+        <TimeframeControlWrapper>
+          <TimeframeControl />
+        </TimeframeControlWrapper>
+        <DataChartWrapper>
+          <DataChart />
+        </DataChartWrapper>
       </SWidgetContent>
     </Widget>
   );
