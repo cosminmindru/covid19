@@ -1,17 +1,23 @@
 import React from "react";
 import styled from "styled-components/macro";
-import LineChart from "./components/LineChart";
 import Widget from "../../design/components/Widget";
+import LineChart from "./components/LineChart";
+import CountryAutocomplete from "./components/CountryAutocomplete";
+import TimeframePills from "./components/TimeframePills";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: repeat(2, min-content);
   gap: 1rem;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    gap: 1.5rem;
+  }
 `;
 
 const CountryControl = styled.div`
-  justify-self: start;
+  justify-self: stretch;
 `;
 
 const TimeframeControl = styled.div`
@@ -37,8 +43,12 @@ const HistoricalDataWidget = () => {
         <Widget.Title>Historical data</Widget.Title>
       </Widget.Header>
       <SWidgetContent yPadding xPadding>
-        <CountryControl>country</CountryControl>
-        <TimeframeControl>timeframe</TimeframeControl>
+        <CountryControl>
+          <CountryAutocomplete />
+        </CountryControl>
+        <TimeframeControl>
+          <TimeframePills />
+        </TimeframeControl>
         <DataChart>
           <LineChart />
         </DataChart>

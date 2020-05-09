@@ -1,4 +1,4 @@
-import { client } from "../index";
+import client from "../index";
 import get from "lodash/get";
 
 /**
