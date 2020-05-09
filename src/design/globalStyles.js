@@ -9,9 +9,8 @@ const GlobalStyles = createGlobalStyle`
   }
 
   * {
-    transition-property: all;
-    transition-delay: ${(props) => props.theme.durations.baseTransition};
-    transition-timing-function: ease-in-out;
+    transition: ${(props) =>
+      `background ${props.theme.durations.baseTransition}ms ease-in-out`}; // Use smoooth transition on color modes switch
   }
 
   h1,

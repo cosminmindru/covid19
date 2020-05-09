@@ -54,7 +54,7 @@ const Content = styled.main`
 const Title = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
-  color: ${(props) => props.theme.text};
+  color: ${(props) => props.theme.colors.text};
 `;
 
 Widget.Header = Header;
