@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect } from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
@@ -28,7 +28,11 @@ const StatWrapper = styled.div`
   margin: 0;
 
   &:not(:last-child) {
-    border-bottom: 1px solid ${(props) => props.theme.colors.grey200};
+    border-bottom: 1px solid
+      ${(props) =>
+        props.theme.colorMode === "dark"
+          ? props.theme.colors.grey100
+          : props.theme.colors.grey300};
   }
 
   @media ${(props) => props.theme.breakpoints.tablet} {
@@ -37,7 +41,11 @@ const StatWrapper = styled.div`
     padding: 0 1.5rem;
 
     &:not(:last-child) {
-      border-right: 1px solid ${(props) => props.theme.colors.grey200};
+      border-right: 1px solid
+        ${(props) =>
+          props.theme.colorMode === "dark"
+            ? props.theme.colors.grey100
+            : props.theme.colors.grey300};
       border-bottom: 0;
     }
   }
@@ -78,6 +86,7 @@ const GlobalCaseDistributonWidget = () => {
       updateRecoveryRate(rawRecoveryRate);
       updateDeathRate(rawDeathRate);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, rawRecoveryRate, rawDeathRate]);
 
   return (

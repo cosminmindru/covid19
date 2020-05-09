@@ -52,6 +52,10 @@ const SWorldCountryMap = styled.div`
   .leaflet-popup-tip {
     background-color: ${(props) => props.theme.colors.background};
   }
+
+  & .leaflet-map-pane svg {
+    z-index: 2;
+  }
 `;
 
 const WorldCountryMap = ({
@@ -74,7 +78,10 @@ const WorldCountryMap = ({
     light: "ck9fq7g4c3pc61imtck7dfzve",
     dark: "ck9rh021a15151iocb1jums6k",
   };
-  const tileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles[colorMode]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const mapboxTileLayerUrl = `https://api.mapbox.com/styles/v1/cosmindev/${tileStyles[colorMode]}/tiles/{z}/{x}/{y}?access_token=${config.mapboxAccessToken}`;
+  const tileLayerUrl = config.isProduction
+    ? mapboxTileLayerUrl
+    : "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 
   const handleGeoJSONClick = (event) => {
     const {
@@ -169,7 +176,6 @@ const WorldCountryMap = ({
       >
         <TileLayer
           url={tileLayerUrl}
-          // url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
           tileSize={512}
           zoomOffset={-1}
@@ -201,19 +207,29 @@ const WorldCountryMap = ({
                 hoveredCountry &&
                 feature.properties.countryInfo.iso3 ===
                   hoveredCountry.countryInfo.iso3;
+              const isActive =
+                activeCountry &&
+                feature.properties.countryInfo.iso3 ===
+                  activeCountry.countryInfo.iso3;
 
-              if (isHovered) {
-                return {
-                  fillColor: "transparent",
-                  color: "blue",
-                  opacity: 0.6,
-                };
-              }
+              const outlinedStyle = {
+                fillColor: "transparent",
+                color: "blue",
+                opacity: 0.6,
+              };
 
-              return {
-                fillColor: feature.properties.color,
+              const defaultStyle = {
+                fillColor: "transparent",
                 color: "transparent",
               };
+
+              if (isHovered) {
+                return outlinedStyle;
+              } else if (isActive && !hoveredCountry) {
+                return outlinedStyle;
+              } else {
+                return defaultStyle;
+              }
             }}
           />
         )}

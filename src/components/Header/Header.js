@@ -7,6 +7,7 @@ import Container from "../../design/components/Container";
 import { linearGradient, transparentize } from "polished";
 
 const SHeader = styled.header`
+  z-index: 10;
   position: sticky;
   top: 0;
   padding: 1rem 0;

@@ -1,12 +1,15 @@
 import grey from "@material-ui/core/colors/grey";
+import indigo from "@material-ui/core/colors/indigo";
+import blue from "@material-ui/core/colors/blue";
+import yellow from "@material-ui/core/colors/yellow";
 
 const light = {
   background: "#fff",
   foreground: "#000",
   text: grey[900],
-  accentPrimary: "blue",
-  accentSecondary: "red",
-  accentTertiary: "green",
+  accentPrimary: indigo[500],
+  accentSecondary: blue[500],
+  accentTertiary: yellow[500],
   grey50: grey[50],
   grey100: grey[100],
   grey200: grey[200],
@@ -23,9 +26,9 @@ const dark = {
   background: "#121212",
   foreground: "#fff",
   text: grey[50],
-  accentPrimary: "blue",
-  accentSecondary: "red",
-  accentTertiary: "green",
+  accentPrimary: indigo[500],
+  accentSecondary: blue[500],
+  accentTertiary: yellow[500],
   grey50: grey[900],
   grey100: grey[800],
   grey200: grey[700],
