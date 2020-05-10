@@ -40,10 +40,10 @@ const DataChartWrapper = styled.div`
   grid-column: span 2;
   display: flex;
   width: 100%;
-  height: 15rem;
+  height: 17rem;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
-    height: 30rem;
+    height: 25rem;
   }
 `;
 

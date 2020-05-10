@@ -29,8 +29,13 @@ const SContainer = styled(Container)`
   align-items: center;
 `;
 
-const Logo = styled.h2`
+const Logo = styled.p`
+  font-size: 1.5rem;
+  font-weight: 600;
   color: ${(props) => props.theme.colors.text};
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    font-size: 1.75rem;
+  }
 `;
 
 const ColorModeButton = styled.button`
@@ -58,7 +63,7 @@ const Header = () => {
   return (
     <SHeader>
       <SContainer>
-        <Logo>Covid19 Dashboard</Logo>
+        <Logo>COVID-19 STATISTICS</Logo>
         <ColorModeButton onClick={switchColorMode}>
           {colorMode === "dark" ? <MoonIcon /> : <SunIcon />}
         </ColorModeButton>

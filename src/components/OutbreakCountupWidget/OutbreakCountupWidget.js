@@ -7,7 +7,7 @@ const OutbreakCountupWidget = () => {
       <Widget.Header>
         <Widget.Title>Outbreak started</Widget.Title>
       </Widget.Header>
-      <Widget.Content>countdown</Widget.Content>
+      <Widget.Content>{/* TODO */}</Widget.Content>
     </Widget>
   );
 };

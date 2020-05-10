@@ -3,7 +3,6 @@ import styled from "styled-components/macro";
 import HistoricalDataContext from "../contexts/HistoricalDataContext";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { transparentize, setLightness } from "polished";
 
 const SToggleButtonGroup = styled(ToggleButtonGroup)`
   && {
@@ -14,7 +13,6 @@ const SToggleButtonGroup = styled(ToggleButtonGroup)`
 
     @media ${(props) => props.theme.breakpoints.tablet} {
       width: initial;
-      height: 3rem;
     }
   }
 `;
@@ -24,10 +22,11 @@ const SToggleButton = styled(ToggleButton)`
     flex-grow: 1;
     height: 100%;
     border-radius: ${(props) => props.theme.sizes.borderRadius};
+    background-color: ${(props) => props.theme.colors.grey100};
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     font-size: ${(props) => props.theme.typography.fontSizeBody};
     color: ${(props) => props.theme.colors.text};
-    background-color: ${(props) => props.theme.colors.grey100};
+    text-transform: none;
     transition: all ${(props) => props.theme.durations.baseTransition}
       ease-in-out;
 

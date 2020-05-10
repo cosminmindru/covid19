@@ -51,13 +51,13 @@ const HistoricalDataWidgetWrapper = styled.div`
   }
 `;
 
-const meta = {
-  title: "Home",
-};
+// const meta = {
+//   title: "Home",
+// };
 
 const HomePage = () => {
   return (
-    <MainLayout meta={meta}>
+    <MainLayout>
       <PageWrapper>
         <GlobalOverviewWrapper>
           <GlobalOverviewWidget />
