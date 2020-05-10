@@ -8,17 +8,16 @@ const Wrapper = styled.div`
   width: 100%;
   height: 3rem;
   background-color: ${(props) => props.theme.colors.grey100};
+  border: 1px solid ${(props) => props.theme.colors.grey300};
   border-radius: ${(props) => props.theme.sizes.borderRadius};
 
   && .MuiAutocomplete-root,
   && .MuiOutlinedInput-root,
-  && .MuiFormControl-root {
+  && .MuiFormControl-root,
+  && .MuiOutlinedInput-notchedOutline {
+    border: none;
     border-radius: inherit;
     height: 100%;
-  }
-
-  && .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: ${(props) => props.theme.colors.accentPrimary};
   }
 
   && .MuiOutlinedInput-root {

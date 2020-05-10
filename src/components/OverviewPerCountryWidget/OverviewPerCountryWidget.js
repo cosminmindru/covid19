@@ -16,11 +16,11 @@ import worldCountriesGeoJSON from "../../assets/world_countries.geo.json";
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
-  grid-template-rows: min-content minmax(min-content, 30rem);
+  grid-template-rows: min-content minmax(min-content, 25rem);
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-template-columns: 20rem auto;
-    grid-template-rows: minmax(min-content, 30rem);
+    grid-template-rows: minmax(min-content, 28rem);
     grid-template-areas: "country map";
   }
 `;
@@ -49,13 +49,11 @@ const WorldMapSection = styled.section`
   grid-row: 2 / last-line;
   grid-column: 1 / last-line;
   height: 100%;
-  max-height: 35rem;
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     grid-area: map;
     grid-column: initial;
     grid-row: initial;
-    max-height: 30rem;
   }
 `;
 

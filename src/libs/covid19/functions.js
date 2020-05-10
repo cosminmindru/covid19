@@ -145,6 +145,8 @@ const getCountries = async (key, { includeIcon = true, iconSize = 64 }) => {
             icon: `https://www.countryflags.io/${country.iso2}/flat/${iconSize}.png`,
           };
         }
+
+        return country;
       });
     }
 
