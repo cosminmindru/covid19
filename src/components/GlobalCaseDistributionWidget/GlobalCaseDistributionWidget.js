@@ -13,7 +13,7 @@ const SWidgetContent = styled(Widget.Content)`
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
     grid-template-columns: repeat(2, 1fr);
@@ -23,7 +23,7 @@ const SWidgetContent = styled(Widget.Content)`
 `;
 
 const StatWrapper = styled.div`
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   margin: 0;
 
   &:not(:last-child) {
