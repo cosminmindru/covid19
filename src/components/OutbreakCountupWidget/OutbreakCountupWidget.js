@@ -1,5 +1,6 @@
 import React, { useState, useLayoutEffect, useCallback } from "react";
 import dayjs from "dayjs";
+import { useTransition, animated } from "react-spring";
 import formatNumber from "../../utils/formatNumber";
 import Widget from "../../design/components/Widget";
 
@@ -8,6 +9,12 @@ const OutbreakCountupWidget = () => {
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+
+  const daysTransition = useTransition(seconds, (x) => x, {
+    from: { opacity: 0, transform: "translate3d(0,100%,0)" },
+    enter: { opacity: 1, transform: "translate3d(0,0%,0)" },
+    leave: { opacity: 0, transform: "translate3d(0,-100%,,0)" },
+  });
 
   const formatTime = (value) =>
     formatNumber({ value, options: { minimumIntegerDigits: 2 } });
@@ -51,9 +58,16 @@ const OutbreakCountupWidget = () => {
         <Widget.Title>Outbreak started</Widget.Title>
       </Widget.Header>
       <Widget.Content>
-        <h3>
+        <div>
+          {daysTransition.map(({ item, props, key }) => (
+            <animated.p key={key} style={props}>
+              {item}
+            </animated.p>
+          ))}
+          {/* <h3>
           {days} : {hours} : {minutes}: {seconds}
-        </h3>
+        </h3> */}
+        </div>
       </Widget.Content>
     </Widget>
   );

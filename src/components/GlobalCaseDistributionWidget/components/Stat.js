@@ -1,6 +1,6 @@
 import React from "react";
-import WidgetStat from "../../../design/components/WidgetStat";
 import { useSpring, animated } from "react-spring";
+import WidgetStat from "../../../design/components/WidgetStat";
 
 const Stat = ({ title, value }) => {
   const spring = useSpring({ number: value, from: { number: 0 } });
