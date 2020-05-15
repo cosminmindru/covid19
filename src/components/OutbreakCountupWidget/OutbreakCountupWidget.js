@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useLayoutEffect, useCallback } from "react";
 import dayjs from "dayjs";
 import formatNumber from "../../utils/formatNumber";
 import Widget from "../../design/components/Widget";
@@ -14,6 +14,8 @@ const OutbreakCountupWidget = () => {
 
   const getTime = useCallback(() => {
     const outbreakDay1 = dayjs("2019-12-01");
+    // For the time, use today's date starting at midnight
+    // to avoid having additional calculations
     const outbreakStartHour = dayjs().set("hour", 0);
     const outbreakStartMinute = dayjs().set("minute", 0);
     const outbreakStartSecond = dayjs().set("second", 0);
@@ -30,7 +32,7 @@ const OutbreakCountupWidget = () => {
     setSeconds(formatTime(secondsSince));
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Sync the time every 1s
     setInterval(getTime, 1000);
 
@@ -39,6 +41,9 @@ const OutbreakCountupWidget = () => {
       clearInterval(getTime);
     };
   }, [getTime]);
+
+  // 166 : 14 : 17 : 33
+  // days hours min  sec
 
   return (
     <Widget>

@@ -5,6 +5,7 @@ import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
+import StatSkeleton from "../StatSkeleton";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -49,7 +50,7 @@ const StatWrapper = styled.div`
 `;
 
 const GlobalOverviewWidget = () => {
-  const { data } = useQuery("globalOverview", getOverview);
+  const { status, data } = useQuery("globalOverview", getOverview);
 
   return (
     <Widget>
@@ -58,17 +59,25 @@ const GlobalOverviewWidget = () => {
       </Widget.Header>
       <SWidgetContent>
         <StatWrapper>
-          {data && (
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
             <Stat title="Confirmed" value={get(data, "confirmed.value")} />
           )}
         </StatWrapper>
         <StatWrapper>
-          {data && (
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
             <Stat title="Recovered" value={get(data, "recovered.value")} />
           )}
         </StatWrapper>
         <StatWrapper>
-          {data && <Stat title="Deaths" value={get(data, "deaths.value")} />}
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
+            <Stat title="Deaths" value={get(data, "deaths.value")} />
+          )}
         </StatWrapper>
       </SWidgetContent>
     </Widget>
