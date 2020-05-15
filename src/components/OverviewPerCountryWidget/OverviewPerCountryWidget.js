@@ -75,7 +75,7 @@ const OverviewPerCountryWidget = () => {
     theme.breakpoints.up(screenSizes.desktopWidth)
   );
 
-  const { data: countriesData } = useQuery("countries", getCountries);
+  const { data: countriesData, status } = useQuery("countries", getCountries);
 
   const countries = useMemo(() => {
     if (countriesData && countriesData.length) {
@@ -132,38 +132,42 @@ const OverviewPerCountryWidget = () => {
         <Widget.Title>Overview per country</Widget.Title>
       </Widget.Header>
       <SWidgetContent>
-        <CountrySelectSection>
-          {isDesktop ? (
-            <>
-              <CountrySearchWrapper>
-                <CountrySearch
-                  value={searchQuery}
-                  onChange={handleCountrySearchChange}
-                  onClear={handleCountrySearchClear}
-                />
-              </CountrySearchWrapper>
-              <CountryListWrapper>
-                <CountryList
-                  countries={filteredCountries}
-                  selectedCountry={selectedCountry}
+        {status === "success" && (
+          <>
+            <CountrySelectSection>
+              {isDesktop ? (
+                <>
+                  <CountrySearchWrapper>
+                    <CountrySearch
+                      value={searchQuery}
+                      onChange={handleCountrySearchChange}
+                      onClear={handleCountrySearchClear}
+                    />
+                  </CountrySearchWrapper>
+                  <CountryListWrapper>
+                    <CountryList
+                      countries={filteredCountries}
+                      selectedCountry={selectedCountry}
+                      onCountrySelect={handleCountrySelect}
+                    />
+                  </CountryListWrapper>
+                </>
+              ) : (
+                <CountryAutocomplete
+                  countries={countries}
                   onCountrySelect={handleCountrySelect}
                 />
-              </CountryListWrapper>
-            </>
-          ) : (
-            <CountryAutocomplete
-              countries={countries}
-              onCountrySelect={handleCountrySelect}
-            />
-          )}
-        </CountrySelectSection>
-        <WorldMapSection>
-          <WorldCountryMap
-            countries={countries}
-            activeCountry={selectedCountry}
-            onCountryClick={handleCountrySelect}
-          />
-        </WorldMapSection>
+              )}
+            </CountrySelectSection>
+            <WorldMapSection>
+              <WorldCountryMap
+                countries={countries}
+                activeCountry={selectedCountry}
+                onCountryClick={handleCountrySelect}
+              />
+            </WorldMapSection>
+          </>
+        )}
       </SWidgetContent>
     </Widget>
   );

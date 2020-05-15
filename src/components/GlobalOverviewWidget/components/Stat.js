@@ -1,19 +1,23 @@
 import React from "react";
 import WidgetStat from "../../../design/components/WidgetStat";
 import formatNumber from "../../../utils/formatNumber";
-import { useCountUp } from "react-countup";
+import { useSpring, animated } from "react-spring";
 
-const Stat = ({ title, value: rawValue = 0 }) => {
-  const { countUp: value } = useCountUp({
-    start: 0,
-    end: rawValue,
-    delay: 0, // Start animating immediately
-  });
+const Stat = ({ title, value }) => {
+  const spring = useSpring({ number: value, from: { number: 0 } });
+
+  const interpolateAndFormatValue = (val) => {
+    const formattedValue = formatNumber({ value: Math.floor(val) });
+
+    return formattedValue;
+  };
 
   return (
     <WidgetStat>
       <WidgetStat.Title>{title}</WidgetStat.Title>
-      <WidgetStat.Value>{formatNumber({ value })}</WidgetStat.Value>
+      <WidgetStat.Value as={animated.p} style={spring}>
+        {spring.number.interpolate(interpolateAndFormatValue)}
+      </WidgetStat.Value>
     </WidgetStat>
   );
 };

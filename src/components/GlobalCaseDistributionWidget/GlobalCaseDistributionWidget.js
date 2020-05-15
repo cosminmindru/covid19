@@ -1,20 +1,19 @@
-import React, { useEffect } from "react";
-import get from "lodash/get";
+import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
 import calculateDeathRate from "../../utils/calculateDeathRate";
 import calculateRecoveryRate from "../../utils/calculateRecoveryRate";
 import Widget from "../../design/components/Widget";
-import WidgetStat from "../../design/components/WidgetStat";
-import { useCountUp } from "react-countup";
+import StatSkeleton from "../StatSkeleton";
+import Stat from "./components/Stat";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
     grid-template-columns: repeat(2, 1fr);
@@ -24,7 +23,7 @@ const SWidgetContent = styled(Widget.Content)`
 `;
 
 const StatWrapper = styled.div`
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   margin: 0;
 
   &:not(:last-child) {
@@ -52,42 +51,25 @@ const StatWrapper = styled.div`
 `;
 
 const GlobalCaseDistributonWidget = () => {
-  const { status, data } = useQuery("globalOverview", getOverview);
+  const [recoveryRate, setRecoveryRate] = useState(0);
+  const [deathRate, setDeathRate] = useState(0);
 
-  // Recovery rate
-  const rawRecoveryRate = calculateRecoveryRate({
-    confirmedCases: get(data, "confirmed.value"),
-    recovered: get(data, "recovered.value"),
-    deaths: get(data, "deaths.value"),
-  });
-  const { countUp: recoveryRate, update: updateRecoveryRate } = useCountUp({
-    startOnMount: false,
-    start: 0,
-    end: rawRecoveryRate,
-    delay: 0,
-  });
+  const { status } = useQuery("globalOverview", getOverview, {
+    onSuccess: (data) => {
+      const computedRecoveryRate = calculateRecoveryRate({
+        confirmedCases: data.confirmed.value,
+        recovered: data.recovered.value,
+        deaths: data.deaths.value,
+      });
+      const computedDeathRate = calculateDeathRate({
+        confirmedCases: data.confirmed.value,
+        deaths: data.deaths.value,
+      });
 
-  // Death rate
-  const rawDeathRate = calculateDeathRate({
-    confirmedCases: get(data, "confirmed.value"),
-    deaths: get(data, "deaths.value"),
+      setRecoveryRate(computedRecoveryRate);
+      setDeathRate(computedDeathRate);
+    },
   });
-  const { countUp: deathRate, update: updateDeathRate } = useCountUp({
-    startOnMount: false,
-    start: 0,
-    end: rawDeathRate,
-    delay: 0,
-    useEasing: false,
-  });
-
-  // Animate the recovery & death rates
-  useEffect(() => {
-    if (status === "success") {
-      updateRecoveryRate(rawRecoveryRate);
-      updateDeathRate(rawDeathRate);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [status, rawRecoveryRate, rawDeathRate]);
 
   return (
     <Widget>
@@ -95,22 +77,20 @@ const GlobalCaseDistributonWidget = () => {
         <Widget.Title>Global case distribution</Widget.Title>
       </Widget.Header>
       <SWidgetContent>
-        {status === "success" && (
-          <StatWrapper>
-            <WidgetStat>
-              <WidgetStat.Title>Recovery rate</WidgetStat.Title>
-              <WidgetStat.Value>{recoveryRate}%</WidgetStat.Value>
-            </WidgetStat>
-          </StatWrapper>
-        )}
-        {status === "success" && (
-          <StatWrapper>
-            <WidgetStat>
-              <WidgetStat.Title>Death rate</WidgetStat.Title>
-              <WidgetStat.Value>{deathRate}%</WidgetStat.Value>
-            </WidgetStat>
-          </StatWrapper>
-        )}
+        <StatWrapper>
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
+            <Stat title="Recovery rate" value={recoveryRate} />
+          )}
+        </StatWrapper>
+        <StatWrapper>
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
+            <Stat title="Death rate" value={deathRate} />
+          )}
+        </StatWrapper>
       </SWidgetContent>
     </Widget>
   );

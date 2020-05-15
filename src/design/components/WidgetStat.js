@@ -8,11 +8,19 @@ const WidgetStat = styled.div`
 `;
 
 const Title = styled.h5`
-  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    font-size: ${(props) => props.theme.sizes.fontHeading5};
+  }
 `;
 
 const Value = styled.p`
-  font-size: ${(props) => props.theme.sizes.fontHeading2};
+  font-size: 1.5rem;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    font-size: ${(props) => props.theme.sizes.fontHeading2};
+  }
 `;
 
 WidgetStat.Title = Title;

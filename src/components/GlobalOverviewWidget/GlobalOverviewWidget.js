@@ -5,13 +5,14 @@ import { useQuery } from "react-query";
 import { getOverview } from "../../libs/covid19";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
+import StatSkeleton from "../StatSkeleton";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: auto;
   width: 100%;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
 
   @media ${(props) => props.theme.breakpoints.tablet} {
     grid-template-columns: repeat(3, 1fr);
@@ -21,7 +22,7 @@ const SWidgetContent = styled(Widget.Content)`
 `;
 
 const StatWrapper = styled.div`
-  padding: 1.5rem 0;
+  padding: 1rem 0;
   margin: 0;
 
   &:not(:last-child) {
@@ -49,7 +50,7 @@ const StatWrapper = styled.div`
 `;
 
 const GlobalOverviewWidget = () => {
-  const { data } = useQuery("globalOverview", getOverview);
+  const { status, data } = useQuery("globalOverview", getOverview);
 
   return (
     <Widget>
@@ -58,17 +59,25 @@ const GlobalOverviewWidget = () => {
       </Widget.Header>
       <SWidgetContent>
         <StatWrapper>
-          {data && (
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
             <Stat title="Confirmed" value={get(data, "confirmed.value")} />
           )}
         </StatWrapper>
         <StatWrapper>
-          {data && (
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
             <Stat title="Recovered" value={get(data, "recovered.value")} />
           )}
         </StatWrapper>
         <StatWrapper>
-          {data && <Stat title="Deaths" value={get(data, "deaths.value")} />}
+          {status === "loading" ? (
+            <StatSkeleton />
+          ) : (
+            <Stat title="Deaths" value={get(data, "deaths.value")} />
+          )}
         </StatWrapper>
       </SWidgetContent>
     </Widget>
