@@ -1,74 +1,34 @@
-import React, { useState, useLayoutEffect, useCallback } from "react";
-import dayjs from "dayjs";
-import { useTransition, animated } from "react-spring";
-import formatNumber from "../../utils/formatNumber";
+import React from "react";
+import styled from "styled-components/macro";
 import Widget from "../../design/components/Widget";
+import TimeElement from "./components/TimeElement";
+import useOutbreakCountup from "./hooks/useOutbreakCountup";
+
+const SWidgetContent = styled(Widget.Content)`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 7.25rem;
+
+  @media ${(props) => props.theme.breakpoints.tablet} {
+    height: 100%;
+  }
+`;
 
 const OutbreakCountupWidget = () => {
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
-
-  const daysTransition = useTransition(seconds, (x) => x, {
-    from: { opacity: 0, transform: "translate3d(0,100%,0)" },
-    enter: { opacity: 1, transform: "translate3d(0,0%,0)" },
-    leave: { opacity: 0, transform: "translate3d(0,-100%,,0)" },
-  });
-
-  const formatTime = (value) =>
-    formatNumber({ value, options: { minimumIntegerDigits: 2 } });
-
-  const getTime = useCallback(() => {
-    const outbreakDay1 = dayjs("2019-12-01");
-    // For the time, use today's date starting at midnight
-    // to avoid having additional calculations
-    const outbreakStartHour = dayjs().set("hour", 0);
-    const outbreakStartMinute = dayjs().set("minute", 0);
-    const outbreakStartSecond = dayjs().set("second", 0);
-
-    const today = dayjs();
-    const daysSince = today.diff(outbreakDay1, "day");
-    const hoursSince = today.diff(outbreakStartHour, "hour");
-    const minutesSince = today.diff(outbreakStartMinute, "minute");
-    const secondsSince = today.diff(outbreakStartSecond, "second");
-
-    setDays(formatTime(daysSince));
-    setHours(formatTime(hoursSince));
-    setMinutes(formatTime(minutesSince));
-    setSeconds(formatTime(secondsSince));
-  }, []);
-
-  useLayoutEffect(() => {
-    // Sync the time every 1s
-    setInterval(getTime, 1000);
-
-    return () => {
-      // Remove the listener on component unmount
-      clearInterval(getTime);
-    };
-  }, [getTime]);
-
-  // 166 : 14 : 17 : 33
-  // days hours min  sec
+  const { days, hours, minutes, seconds } = useOutbreakCountup();
 
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Outbreak started</Widget.Title>
+        <Widget.Title>Time since first case</Widget.Title>
       </Widget.Header>
-      <Widget.Content>
-        <div>
-          {daysTransition.map(({ item, props, key }) => (
-            <animated.p key={key} style={props}>
-              {item}
-            </animated.p>
-          ))}
-          {/* <h3>
-          {days} : {hours} : {minutes}: {seconds}
-        </h3> */}
-        </div>
-      </Widget.Content>
+      <SWidgetContent yPadding xPadding>
+        <TimeElement value={days} label="Days" />
+        <TimeElement value={hours} label="Hours" />
+        <TimeElement value={minutes} label="Minutes" />
+        <TimeElement value={seconds} label="Seconds" />
+      </SWidgetContent>
     </Widget>
   );
 };
