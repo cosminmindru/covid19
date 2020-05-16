@@ -1,15 +1,17 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import dayjs from "dayjs";
+import throttle from "lodash/throttle";
 import formatNumber from "../../../utils/formatNumber";
 
 /** @returns {{days: number, hours: number, minutes: number, seconds: number, }} */
 const useOutbreakCountup = () => {
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [seconds, setSeconds] = useState(0);
+  const [days, setDays] = useState();
+  const [hours, setHours] = useState();
+  const [minutes, setMinutes] = useState();
+  const [seconds, setSeconds] = useState();
 
   const requestRef = useRef();
+  const throttleTimeout = 1000; // 1s
 
   const formatTime = (value) =>
     formatNumber({ value, options: { minimumIntegerDigits: 2 } });
@@ -25,11 +27,15 @@ const useOutbreakCountup = () => {
     setMinutes(formatTime(minutesSince));
     setSeconds(formatTime(secondsSince));
 
-    requestRef.current = requestAnimationFrame(getTime);
+    requestRef.current = requestAnimationFrame(
+      throttle(getTime, throttleTimeout)
+    );
   }, []);
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(getTime);
+    requestRef.current = requestAnimationFrame(
+      throttle(getTime, throttleTimeout)
+    );
 
     return () => {
       cancelAnimationFrame(requestRef.current);
