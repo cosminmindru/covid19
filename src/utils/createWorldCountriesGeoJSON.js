@@ -1,5 +1,3 @@
-import worldCountriesGeoJSON from "../assets/world_countries.geo.json";
-
 /**
  * Find the country for a specific GeoJSON feature
  *
@@ -30,9 +28,10 @@ const findFeatureCountry = ({ feature, countries }) => {
  *
  * @param {object} params
  * @param {object[]} params.countries
+ * @param {GeoJSON} params.worldCountriesGeoJSON
  * @returns {GeoJSON}
  */
-const createWorldCountriesGeoJSON = ({ countries }) => {
+const createWorldCountriesGeoJSON = ({ countries, worldCountriesGeoJSON }) => {
   const features = worldCountriesGeoJSON.features
     .map((feature) => {
       const country = findFeatureCountry({ feature, countries });

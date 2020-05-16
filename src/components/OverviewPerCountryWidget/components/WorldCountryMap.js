@@ -12,7 +12,6 @@ import { Map, GeoJSON, TileLayer } from "react-leaflet";
 import { createWorldCountriesGeoJSON } from "../../../utils/createWorldCountriesGeoJSON";
 import config from "../../../config";
 import MapCountryPopup from "./MapCountryPopup";
-
 import "leaflet/dist/leaflet.css";
 
 const SWorldCountryMap = styled.div`
@@ -62,6 +61,7 @@ const WorldCountryMap = ({
   countries = [],
   activeCountry = null,
   onCountryClick = () => {},
+  worldCountriesGeoJSON,
 }) => {
   const { colorMode } = useContext(ThemeContext);
 
@@ -141,15 +141,18 @@ const WorldCountryMap = ({
 
   // Generate and set the countries GeoJSON and max bounds
   useEffect(() => {
-    if (mapRef && countries.length) {
-      const countriesGeoJSONObject = createWorldCountriesGeoJSON({ countries });
+    if (mapRef && countries.length && worldCountriesGeoJSON) {
+      const countriesGeoJSONObject = createWorldCountriesGeoJSON({
+        countries,
+        worldCountriesGeoJSON,
+      });
       const countriesGeoJSONClass = Leaflet.geoJSON(countriesGeoJSONObject);
       const countriesGeoJSONBounds = countriesGeoJSONClass.getBounds();
 
       setGeoJson(countriesGeoJSONObject);
       setMaxBounds(countriesGeoJSONBounds);
     }
-  }, [mapRef, countries]);
+  }, [mapRef, countries, worldCountriesGeoJSON]);
 
   // Control the map zoom
   useEffect(() => {

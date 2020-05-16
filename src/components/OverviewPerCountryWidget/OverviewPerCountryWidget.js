@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import styled from "styled-components/macro";
 import get from "lodash/get";
 import { useQuery } from "react-query";
-import { useTheme } from "@material-ui/core/styles";
+import useTheme from "@material-ui/core/styles/useTheme";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { screenSizes } from "../../design/theme/breakpoints";
 import getCountries from "../../libs/novelCovid/functions/get-countries";
@@ -11,7 +11,7 @@ import CountryList from "./components/CountryList";
 import CountrySearch from "./components/CountrySearch";
 import CountryAutocomplete from "./components/CountryAutocomplete";
 import WorldCountryMap from "./components/WorldCountryMap";
-import worldCountriesGeoJSON from "../../assets/world_countries.geo.json";
+import getWorldCountriesGeoJson from "../../libs/static/functions/get-world-countries-geo-json";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -77,8 +77,13 @@ const OverviewPerCountryWidget = () => {
 
   const { data: countriesData, status } = useQuery("countries", getCountries);
 
+  const { data: worldCountriesGeoJSON } = useQuery(
+    "world-countries-geo-json",
+    getWorldCountriesGeoJson
+  );
+
   const countries = useMemo(() => {
-    if (countriesData && countriesData.length) {
+    if (countriesData && countriesData.length && worldCountriesGeoJSON) {
       return countriesData.filter((country) => {
         const {
           countryInfo: { iso3: countryIso3 },
@@ -99,7 +104,7 @@ const OverviewPerCountryWidget = () => {
     }
 
     return [];
-  }, [countriesData]);
+  }, [countriesData, worldCountriesGeoJSON]);
 
   const filteredCountries = useMemo(() => {
     const normalizedSearchQuery = searchQuery.toLowerCase().trim();
@@ -164,6 +169,7 @@ const OverviewPerCountryWidget = () => {
                 countries={countries}
                 activeCountry={selectedCountry}
                 onCountryClick={handleCountrySelect}
+                worldCountriesGeoJSON={worldCountriesGeoJSON}
               />
             </WorldMapSection>
           </>
