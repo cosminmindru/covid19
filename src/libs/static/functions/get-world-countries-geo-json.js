@@ -1,9 +1,9 @@
 import client from "../index";
 
 /** @returns {Promise<{__origin: string, type: string, features: object[]}>} */
-const getWorldCountriesGeoJson = () => {
+const getWorldCountriesGeoJson = async () => {
   try {
-    const response = client.get("/world_countries.geo.json");
+    const response = await client.get("/world_countries.geo.json");
 
     return response.data;
   } catch (error) {
