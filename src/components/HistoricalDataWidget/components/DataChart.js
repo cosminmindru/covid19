@@ -12,7 +12,9 @@ import {
 import dayjs from "dayjs";
 import styled, { useTheme as useSCTheme } from "styled-components/macro";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-import * as muiColors from "@material-ui/core/colors";
+import muiIndigo from "@material-ui/core/colors/indigo";
+import muiRed from "@material-ui/core/colors/red";
+import muiGreen from "@material-ui/core/colors/green";
 import { default as useMUITheme } from "@material-ui/core/styles/useTheme";
 import { screenSizes } from "../../../design/theme/breakpoints";
 import formatNumber from "../../../utils/formatNumber";
@@ -90,40 +92,16 @@ const DataChart = () => {
           <CartesianGrid strokeDasharray="3 3" />
           <defs>
             <linearGradient id="colorCases" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor={muiColors.indigo[500]}
-                stopOpacity={0.8}
-              />
-              <stop
-                offset="95%"
-                stopColor={muiColors.indigo[500]}
-                stopOpacity={0}
-              />
+              <stop offset="5%" stopColor={muiIndigo[500]} stopOpacity={0.8} />
+              <stop offset="95%" stopColor={muiIndigo[500]} stopOpacity={0} />
             </linearGradient>
             <linearGradient id="colorDeaths" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor={muiColors.red[500]}
-                stopOpacity={0.8}
-              />
-              <stop
-                offset="95%"
-                stopColor={muiColors.red[500]}
-                stopOpacity={0}
-              />
+              <stop offset="5%" stopColor={muiRed[500]} stopOpacity={0.8} />
+              <stop offset="95%" stopColor={muiRed[500]} stopOpacity={0} />
             </linearGradient>
             <linearGradient id="colorRecovered" x1="0" y1="0" x2="0" y2="1">
-              <stop
-                offset="5%"
-                stopColor={muiColors.green[500]}
-                stopOpacity={0.8}
-              />
-              <stop
-                offset="95%"
-                stopColor={muiColors.green[500]}
-                stopOpacity={0}
-              />
+              <stop offset="5%" stopColor={muiGreen[500]} stopOpacity={0.8} />
+              <stop offset="95%" stopColor={muiGreen[500]} stopOpacity={0} />
             </linearGradient>
           </defs>
           <XAxis
@@ -149,21 +127,21 @@ const DataChart = () => {
           <Area
             type="monotone"
             dataKey="cases"
-            stroke={muiColors.indigo[500]}
+            stroke={muiIndigo[500]}
             fill="url(#colorCases)"
             fillOpacity={1}
           />
           <Area
             type="monotone"
             dataKey="deaths"
-            stroke={muiColors.red[500]}
+            stroke={muiRed[500]}
             fill="url(#colorDeaths)"
             fillOpacity={1}
           />
           <Area
             type="monotone"
             dataKey="recovered"
-            stroke={muiColors.green[500]}
+            stroke={muiGreen[500]}
             fill="url(#colorRecovered)"
             fillOpacity={1}
           />
