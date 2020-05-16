@@ -1,15 +1,15 @@
-import { useState, useLayoutEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import dayjs from "dayjs";
 import formatNumber from "../../../utils/formatNumber";
 
-/**
- * @returns {{days: number, hours: number, minutes: number, seconds: number, }}
- */
+/** @returns {{days: number, hours: number, minutes: number, seconds: number, }} */
 const useOutbreakCountup = () => {
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [minutes, setMinutes] = useState(0);
   const [seconds, setSeconds] = useState(0);
+
+  const requestRef = useRef();
 
   const formatTime = (value) =>
     formatNumber({ value, options: { minimumIntegerDigits: 2 } });
@@ -24,14 +24,15 @@ const useOutbreakCountup = () => {
     setHours(formatTime(hoursSince));
     setMinutes(formatTime(minutesSince));
     setSeconds(formatTime(secondsSince));
+
+    requestRef.current = requestAnimationFrame(getTime);
   }, []);
 
-  useLayoutEffect(() => {
-    // Recalculate the time every 1s
-    setInterval(getTime, 1000);
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(getTime);
 
     return () => {
-      clearInterval(getTime);
+      cancelAnimationFrame(requestRef.current);
     };
   }, [getTime]);
 
