@@ -24,10 +24,10 @@ const OutbreakCountupWidget = () => {
         <Widget.Title>Time since first case</Widget.Title>
       </Widget.Header>
       <SWidgetContent yPadding xPadding>
-        <TimeElement value={days} label="Days" />
-        <TimeElement value={hours} label="Hours" />
-        <TimeElement value={minutes} label="Minutes" />
-        <TimeElement value={seconds} label="Seconds" />
+        {days && <TimeElement value={days} label="Days" />}
+        {hours && <TimeElement value={hours} label="Hours" />}
+        {minutes && <TimeElement value={minutes} label="Minutes" />}
+        {seconds && <TimeElement value={seconds} label="Seconds" />}
       </SWidgetContent>
     </Widget>
   );
