@@ -53,6 +53,7 @@ const TimeElement = ({ value, label }) => {
       opacity: 1,
       transform: "translate3d(0,0%,0)",
     },
+    unique: true, // Prevent double-animating the same values
   });
 
   return (
