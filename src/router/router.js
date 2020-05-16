@@ -1,7 +1,9 @@
 import React from "react";
-import { Switch as Routes, Route } from "react-router-dom";
+// eslint-disable-next-line no-unused-vars
+import { Switch as Routes, Route, RouteProps } from "react-router-dom";
 import HomePage from "./pages/Home";
 
+/** @type {RouteProps[]} */
 const routes = [
   {
     name: "home",
