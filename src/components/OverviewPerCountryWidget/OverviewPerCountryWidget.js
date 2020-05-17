@@ -68,6 +68,7 @@ const CountryListWrapper = styled.section`
 const OverviewPerCountryWidget = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCountry, setSelectedCountry] = useState(null);
+  const [countries, setCountries] = useState([]);
 
   const theme = useTheme();
 
@@ -78,33 +79,32 @@ const OverviewPerCountryWidget = () => {
   const { data: countriesData, status } = useQuery("countries", getCountries);
 
   const { data: worldCountriesGeoJSON } = useQuery(
-    "world-countries-geo-json",
-    getWorldCountriesGeoJson
-  );
+    countriesData && "world-countries-geo-json",
+    getWorldCountriesGeoJson,
+    {
+      onSuccess: (geoJson) => {
+        const newCountries = countriesData.filter((country) => {
+          const {
+            countryInfo: { iso3: countryIso3 },
+          } = country;
 
-  const countries = useMemo(() => {
-    if (countriesData && countriesData.length && worldCountriesGeoJSON) {
-      return countriesData.filter((country) => {
-        const {
-          countryInfo: { iso3: countryIso3 },
-        } = country;
-
-        const countryFeature = worldCountriesGeoJSON.features.find(
-          (feature) => {
+          // Filter out the countries that do not have coresponding
+          // GeoJSON data available
+          const countryFeature = geoJson.features.find((feature) => {
             const {
               properties: { iso_a3: featureIso3 },
             } = feature;
 
             return featureIso3 === countryIso3;
-          }
-        );
+          });
 
-        return !!countryFeature;
-      });
+          return !!countryFeature;
+        });
+
+        setCountries(newCountries);
+      },
     }
-
-    return [];
-  }, [countriesData, worldCountriesGeoJSON]);
+  );
 
   const filteredCountries = useMemo(() => {
     const normalizedSearchQuery = searchQuery.toLowerCase().trim();
