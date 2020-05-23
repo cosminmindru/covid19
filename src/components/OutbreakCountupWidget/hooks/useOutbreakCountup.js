@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import dayjs from "dayjs";
-import throttle from "lodash/throttle";
 import formatNumber from "../../../utils/formatNumber";
 
 /** @returns {{days: number, hours: number, minutes: number, seconds: number, }} */
@@ -11,7 +10,6 @@ const useOutbreakCountup = () => {
   const [seconds, setSeconds] = useState();
 
   const requestRef = useRef();
-  const throttleTimeout = 1000; // 1s
 
   const formatTime = (value) =>
     formatNumber({ value, options: { minimumIntegerDigits: 2 } });
@@ -27,15 +25,11 @@ const useOutbreakCountup = () => {
     setMinutes(formatTime(minutesSince));
     setSeconds(formatTime(secondsSince));
 
-    requestRef.current = requestAnimationFrame(
-      throttle(getTime, throttleTimeout)
-    );
+    requestRef.current = requestAnimationFrame(getTime);
   }, []);
 
   useEffect(() => {
-    requestRef.current = requestAnimationFrame(
-      throttle(getTime, throttleTimeout)
-    );
+    requestRef.current = requestAnimationFrame(getTime);
 
     return () => {
       cancelAnimationFrame(requestRef.current);
