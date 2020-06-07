@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components/macro";
-import { transparentize } from "polished";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
@@ -10,7 +9,6 @@ import Container from "../../design/components/Container";
 const SFooter = styled.footer`
   padding: 1.5rem 0;
   background-color: ${(props) => props.theme.colors.grey50};
-  box-shadow: 0 -0.15rem 0.15rem ${(props) => transparentize(0.9, props.theme.colors.grey900)};
 `;
 
 const Content = styled.div`
