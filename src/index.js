@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
+import { StylesProvider } from "@material-ui/styles";
 import { ThemeProvider } from "./context/ThemeContext";
 
 import * as serviceWorker from "./serviceWorker";
@@ -8,9 +9,11 @@ import * as serviceWorker from "./serviceWorker";
 const rootEl = document.getElementById("root");
 
 ReactDOM.render(
-  <ThemeProvider>
-    <App />
-  </ThemeProvider>,
+  <StylesProvider injectFirst>
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  </StylesProvider>,
   rootEl
 );
 

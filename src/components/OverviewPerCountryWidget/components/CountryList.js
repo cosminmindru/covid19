@@ -4,10 +4,12 @@ import styled from "styled-components/macro";
 import get from "lodash/get";
 import kebabCase from "lodash/kebabCase";
 
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+} from "@material-ui/core";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
 
@@ -22,17 +24,15 @@ const SCountryIcon = styled.img`
 `;
 
 const SListItem = styled(ListItem)`
-  && {
-    border-radius: ${(props) => props.theme.sizes.borderRadius};
-  }
+  border-radius: ${(props) => props.theme.sizes.borderRadius};
 
-  &&:hover {
+  &:hover {
     background-color: ${(props) => props.theme.colors.grey100};
     color: ${(props) => props.theme.colors.foreground};
   }
 
-  &&.Mui-selected,
-  &&.Mui-selected:hover {
+  &.Mui-selected,
+  &.Mui-selected:hover {
     background-color: ${(props) => props.theme.colors.accentPrimary};
     color: ${(props) =>
       props.theme.colorMode === "dark"
@@ -42,7 +42,7 @@ const SListItem = styled(ListItem)`
 `;
 
 const SListItemText = styled(ListItemText)`
-  && {
+  & {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;

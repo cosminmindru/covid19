@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@material-ui/core";
 import HistoricalDataContext from "../contexts/HistoricalDataContext";
 
 const Wrapper = styled.div`
@@ -11,23 +11,23 @@ const Wrapper = styled.div`
   border: 1px solid ${(props) => props.theme.colors.grey300};
   border-radius: ${(props) => props.theme.sizes.borderRadius};
 
-  && .MuiAutocomplete-root,
-  && .MuiOutlinedInput-root,
-  && .MuiFormControl-root,
-  && .MuiOutlinedInput-notchedOutline {
+  & .MuiAutocomplete-root,
+  & .MuiOutlinedInput-root,
+  & .MuiFormControl-root,
+  & .MuiOutlinedInput-notchedOutline {
     border: none;
     border-radius: inherit;
     height: 100%;
   }
 
-  && .MuiOutlinedInput-root {
+  & .MuiOutlinedInput-root {
     border-radius: inherit;
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     font-size: ${(props) => props.theme.typography.fontSizeBody};
     color: ${(props) => props.theme.colors.text};
   }
 
-  &&
+  &
     .MuiAutocomplete-inputRoot[class*="MuiOutlinedInput-root"]
     .MuiAutocomplete-input {
     padding-top: 0;
@@ -44,8 +44,8 @@ const Wrapper = styled.div`
     }
   }
 
-  && .MuiAutocomplete-popupIndicator,
-  && .MuiAutocomplete-clearIndicator {
+  & .MuiAutocomplete-popupIndicator,
+  & .MuiAutocomplete-clearIndicator {
     color: ${(props) => props.theme.colors.grey900};
   }
 `;
