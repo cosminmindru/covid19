@@ -9,6 +9,7 @@ import Container from "../../design/components/Container";
 const SFooter = styled.footer`
   padding: 1.5rem 0;
   background-color: ${(props) => props.theme.colors.grey50};
+  border-top: 1px solid ${(props) => props.theme.colors.grey50};
 `;
 
 const Content = styled.div`
@@ -24,9 +25,13 @@ const LogoLink = styled(RouterLink)`
 `;
 
 const Logo = styled.p`
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: ${(props) => props.theme.colors.text};
+
+  @media ${(props) => props.theme.breakpoints.tablet} {
+    font-size: 1.5rem;
+  }
 
   @media ${(props) => props.theme.breakpoints.desktop} {
     font-size: 1.75rem;
