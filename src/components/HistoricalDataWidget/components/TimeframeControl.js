@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import HistoricalDataContext from "../contexts/HistoricalDataContext";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { ToggleButton, ToggleButtonGroup } from "@material-ui/lab";
 
 const SToggleButtonGroup = styled(ToggleButtonGroup)`
   display: flex;

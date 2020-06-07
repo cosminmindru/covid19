@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components/macro";
+import { transparentize } from "polished";
 import { Link as RouterLink } from "react-router-dom";
-import { Typography, Link } from "@material-ui/core";
+import { Link } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
 import InstagramIcon from "@material-ui/icons/Instagram";
 import Container from "../../design/components/Container";
-import { transparentize } from "polished";
 
 const SFooter = styled.footer`
   padding: 1.5rem 0;
@@ -21,6 +21,7 @@ const Content = styled.div`
 `;
 
 const LogoLink = styled(RouterLink)`
+  justify-self: start;
   text-decoration: none;
 `;
 
@@ -64,8 +65,13 @@ const Social = styled.div`
   }
 `;
 
-const Credit = styled(Typography)`
+const Credit = styled.p`
+  font-size: 1rem;
   grid-column: 1 / span 2;
+
+  @media ${(props) => props.theme.breakpoints.desktop} {
+    font-size: 1.15rem;
+  }
 `;
 
 function Footer() {
@@ -86,23 +92,25 @@ function Footer() {
             </Link>
             <Link
               href="https://instagram.com/cosmindev"
+              target="_blank"
+              rel="noopener noreferrer"
               title="Cosmin's Instagram"
               component={SocialLink}
             >
               <Social as={InstagramIcon} />
             </Link>
           </Socials>
-          <Credit variant="p">
+          <Credit>
             Developed by{" "}
             <Link href="https://cosminmindru.com/">Cosmin Mindru</Link>
           </Credit>
-          <Credit variant="p">
+          <Credit>
             API Provided by{" "}
             <Link
               href="https://disease.sh/"
               target="_blank"
               rel="noopener noreferrer"
-F            >
+            >
               The NovelCOVID API
             </Link>
           </Credit>

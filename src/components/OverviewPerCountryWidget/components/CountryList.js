@@ -4,10 +4,12 @@ import styled from "styled-components/macro";
 import get from "lodash/get";
 import kebabCase from "lodash/kebabCase";
 
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  ListItemAvatar,
+} from "@material-ui/core";
 import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
 

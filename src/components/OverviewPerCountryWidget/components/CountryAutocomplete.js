@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import { Autocomplete } from "@material-ui/lab";
+import { TextField } from "@material-ui/core";
 
 const Wrapper = styled.div`
   width: 100%;

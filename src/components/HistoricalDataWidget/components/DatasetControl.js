@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@material-ui/core";
 import HistoricalDataContext from "../contexts/HistoricalDataContext";
 
 const Wrapper = styled.div`

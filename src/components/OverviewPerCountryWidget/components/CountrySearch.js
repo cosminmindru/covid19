@@ -1,11 +1,12 @@
 import React from "react";
 import isEmpty from "validator/lib/isEmpty";
 import styled from "styled-components/macro";
-
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import IconButton from "@material-ui/core/IconButton";
+import {
+  FormControl,
+  Input,
+  InputAdornment,
+  IconButton,
+} from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
 
