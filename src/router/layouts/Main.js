@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 import config from "../../config";
 import Meta from "../../components/Meta";
 import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 import Container from "../../design/components/Container";
 
 const SLayout = styled.div`
@@ -43,6 +44,7 @@ const MainLayout = ({ children, meta }) => {
       <Content>
         <Container>{children}</Container>
       </Content>
+      <Footer />
     </SLayout>
   );
 };
