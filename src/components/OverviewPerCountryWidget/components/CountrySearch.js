@@ -10,14 +10,14 @@ import SearchIcon from "@material-ui/icons/Search";
 import ClearIcon from "@material-ui/icons/Clear";
 
 const SFormControl = styled(FormControl)`
-  && {
+  & {
     width: 100%;
     height: 100%;
   }
 `;
 
 const SInput = styled(Input)`
-  && {
+  & {
     padding: 0.5rem 0 0.5rem 1rem;
     background-color: ${(props) => props.theme.colors.grey100};
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
@@ -27,7 +27,7 @@ const SInput = styled(Input)`
 `;
 
 const SIconButton = styled(IconButton)`
-  && {
+  & {
     color: ${(props) => props.theme.colors.grey900};
   }
 

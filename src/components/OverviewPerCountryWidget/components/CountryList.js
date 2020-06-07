@@ -22,17 +22,15 @@ const SCountryIcon = styled.img`
 `;
 
 const SListItem = styled(ListItem)`
-  && {
-    border-radius: ${(props) => props.theme.sizes.borderRadius};
-  }
+  border-radius: ${(props) => props.theme.sizes.borderRadius};
 
-  &&:hover {
+  &:hover {
     background-color: ${(props) => props.theme.colors.grey100};
     color: ${(props) => props.theme.colors.foreground};
   }
 
-  &&.Mui-selected,
-  &&.Mui-selected:hover {
+  &.Mui-selected,
+  &.Mui-selected:hover {
     background-color: ${(props) => props.theme.colors.accentPrimary};
     color: ${(props) =>
       props.theme.colorMode === "dark"
@@ -42,7 +40,7 @@ const SListItem = styled(ListItem)`
 `;
 
 const SListItemText = styled(ListItemText)`
-  && {
+  & {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
