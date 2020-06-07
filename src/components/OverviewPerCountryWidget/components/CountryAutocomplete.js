@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
-import Autocomplete from "@material-ui/lab/Autocomplete";
-import TextField from "@material-ui/core/TextField";
+import { Autocomplete } from "@material-ui/lab";
+import { TextField } from "@material-ui/core";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -10,23 +10,23 @@ const Wrapper = styled.div`
   border: none;
   border-radius: 0;
 
-  && .MuiOutlinedInput-root {
+  & .MuiOutlinedInput-root {
     border: none;
     border-radius: 0;
   }
 
-  && .MuiInputBase-root {
+  & .MuiInputBase-root {
     border-radius: 0;
     font-family: ${(props) => props.theme.typography.fontFamilyPrimary};
     color: ${(props) => props.theme.colors.text};
   }
 
-  && .MuiOutlinedInput-notchedOutline {
+  & .MuiOutlinedInput-notchedOutline {
     border: none;
   }
 
-  && .MuiAutocomplete-popupIndicator,
-  && .MuiAutocomplete-clearIndicator {
+  & .MuiAutocomplete-popupIndicator,
+  & .MuiAutocomplete-clearIndicator {
     color: ${(props) => props.theme.colors.grey900};
   }
 `;

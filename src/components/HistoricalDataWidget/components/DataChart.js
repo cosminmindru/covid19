@@ -11,11 +11,12 @@ import {
 } from "recharts";
 import dayjs from "dayjs";
 import styled, { useTheme as useSCTheme } from "styled-components/macro";
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import muiIndigo from "@material-ui/core/colors/indigo";
-import muiRed from "@material-ui/core/colors/red";
-import muiGreen from "@material-ui/core/colors/green";
-import { default as useMUITheme } from "@material-ui/core/styles/useTheme";
+import { useMediaQuery, useTheme as useMUITheme } from "@material-ui/core";
+import {
+  indigo as muiIndigo,
+  red as muiRed,
+  green as muiGreen,
+} from "@material-ui/core/colors";
 import { screenSizes } from "../../../design/theme/breakpoints";
 import formatNumber from "../../../utils/formatNumber";
 import capitalizeFirstLetter from "../../../utils/capitalizeFirstLetter";
