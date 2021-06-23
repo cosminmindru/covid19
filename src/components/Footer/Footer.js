@@ -3,7 +3,6 @@ import styled from "styled-components/macro";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
-import InstagramIcon from "@material-ui/icons/Instagram";
 import Container from "../../design/components/Container";
 
 const SFooter = styled.footer`
