@@ -93,15 +93,6 @@ function Footer() {
             >
               <Social as={LanguageIcon} />
             </Link>
-            <Link
-              href="https://instagram.com/cosmindev"
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Cosmin's Instagram"
-              component={SocialLink}
-            >
-              <Social as={InstagramIcon} />
-            </Link>
           </Socials>
           <Credit>
             Developed by{" "}
