@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import styled from "styled-components/macro";
 import get from "lodash/get";
 import { useQuery } from "react-query";
