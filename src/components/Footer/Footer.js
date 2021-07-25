@@ -70,6 +70,19 @@ const Credit = styled.p`
   }
 `;
 
+const socialLinks = [
+  {
+    title: "Cosmin's LinkedIn",
+    url: "https://www.linkedin.com/in/cosminmindru",
+    icon: LinkedInIcon,
+  },
+  {
+    title: "Cosmin's Website",
+    url: "https://cosminmindru.com",
+    icon: LanguageIcon,
+  },
+];
+
 function Footer() {
   return (
     <SFooter>
@@ -79,20 +92,17 @@ function Footer() {
             <Logo>COVID-19 STATISTICS</Logo>
           </LogoLink>
           <Socials>
-            <Link
-              href="https://www.linkedin.com/in/cosminmindru"
-              title="Cosmin's LinkedIn"
-              component={SocialLink}
-            >
-              <Social as={LinkedInIcon} />
-            </Link>
-            <Link
-              href="https://cosminmindru.com"
-              title="Cosmin's Website"
-              component={SocialLink}
-            >
-              <Social as={LanguageIcon} />
-            </Link>
+            {socialLinks.map((link) => (
+              <Link
+                target="_blank"
+                rel="noreferrer noopener"
+                href={link.url}
+                title={link.title}
+                component={SocialLink}
+              >
+                <Social as={link.icon} />
+              </Link>
+            ))}
           </Socials>
           <Credit>
             Developed by{" "}

@@ -1,13 +1,21 @@
-import get from "lodash/get";
-
 /**
- * Predicate function for finding an entry
+ * Clean the result data by removing anomalies
  *
- * @param {[string]} entry
- * @param {string} comparisonKey
+ * @param {number} value
+ * @param {object} [opts={}]
+ * @param {boolean} [opts.keepAnomalies=false]
+ * @returns {number}
  */
-const findEntry = ([entryKey] = [], comparisonKey) =>
-  entryKey === comparisonKey;
+function sanitizeResult(value = 0, { keepAnomalies = false } = {}) {
+  let sanitizedValue = value;
+
+  // Remove anomalies
+  if (!keepAnomalies && value < 0) {
+    sanitizedValue = 0;
+  }
+
+  return sanitizedValue;
+}
 
 /**
  * @typedef RawHistoricalData
@@ -42,102 +50,37 @@ const formatHistoricalData = ({ data = {} }) => {
   // Return the unformatted data
   if (!cases || !deaths || !recovered) return data;
 
-  let output = {};
+  const results = [];
 
-  // Loop over the data
-  // Store the previous day
-  // While looping over the current day, compare with the previous day
-  // and do today cases = today cases - yesterday cases
+  let yCases;
+  let yDeaths;
+  let yRecovered;
+  for (let i = 0; i < Object.keys(cases).length; i++) {
+    const date = Object.keys(cases)[i];
+    const tCases = cases[date];
+    const tDeaths = deaths[date];
+    const tRecovered = recovered[date];
 
-  const caseEntries = Object.entries(cases);
-  let yCases = null;
-  for (let i = 0; i < caseEntries.length; i++) {
-    const [key, val] = caseEntries[i];
+    if (i >= 1) {
+      const nCases = sanitizeResult(tCases - yCases);
+      const nDeaths = sanitizeResult(tDeaths - yDeaths);
+      const nRecovered = sanitizeResult(tRecovered - yRecovered);
 
-    if (!yCases) {
-      yCases = val;
-    } else {
-      let tCases = val - yCases;
-
-      yCases = val;
-
-      if (tCases < 0) {
-        tCases = 0;
-      }
-
-      Object.assign(output, { [key]: { ...output[key], cases: tCases } });
+      const entry = {
+        date,
+        cases: nCases,
+        deaths: nDeaths,
+        recovered: nRecovered,
+      };
+      results.push(entry);
     }
-  }
-  const deathEntries = Object.entries(deaths);
-  let yDeaths = null;
-  for (let i = 0; i < deathEntries.length; i++) {
-    const [key, val] = deathEntries[i];
 
-    if (!yDeaths) {
-      yDeaths = val;
-    } else {
-      let tDeaths = val - yDeaths;
-
-      yDeaths = val;
-
-      if (tDeaths < 0) {
-        tDeaths = 0;
-      }
-
-      Object.assign(output, { [key]: { ...output[key], deaths: tDeaths } });
-    }
-  }
-  const recoveryEntries = Object.entries(recovered);
-  let yRecoveries = null;
-  for (let i = 0; i < recoveryEntries.length; i++) {
-    const [key, val] = recoveryEntries[i];
-
-    if (!yRecoveries) {
-      yRecoveries = val;
-    } else {
-      let tRecoveries = val - yRecoveries;
-
-      yRecoveries = val;
-
-      if (tRecoveries < 0) {
-        tRecoveries = 0;
-      }
-
-      Object.assign(output, {
-        [key]: { ...output[key], recovered: tRecoveries },
-      });
-    }
+    yCases = tCases;
+    yDeaths = tDeaths;
+    yRecovered = tRecovered;
   }
 
-  console.log("output", output);
-
-  const formattedData = Object.entries(output).map(([date, data]) => ({
-    date,
-    ...data,
-  }));
-
-  // const formattedData = Object.entries(cases).map(([date, casesValue]) => {
-  //   // Death cases for the current date
-  //   const deathsEntry = Object.entries(deaths).find((entry) =>
-  //     findEntry(entry, date)
-  //   );
-  //   const deathsValue = get(deathsEntry, "[1]") || 0;
-
-  //   // Recovered cases for the current date
-  //   const recoveredEntry = Object.entries(recovered).find((entry) =>
-  //     findEntry(entry, date)
-  //   );
-  //   const recoveredValue = get(recoveredEntry, "[1]") || 0;
-
-  //   return {
-  //     date,
-  //     cases: casesValue,
-  //     deaths: deathsValue,
-  //     recovered: recoveredValue,
-  //   };
-  // });
-
-  return formattedData;
+  return results;
 };
 
 export default formatHistoricalData;
