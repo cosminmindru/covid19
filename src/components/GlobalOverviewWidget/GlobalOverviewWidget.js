@@ -5,7 +5,6 @@ import { useQuery } from "react-query";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
 import StatSkeleton from "../StatSkeleton";
-import client from "../../libs/novelCovid";
 import getGlobalOverview from "../../libs/novelCovid/functions/get-global-overview";
 
 const SWidgetContent = styled(Widget.Content)`
