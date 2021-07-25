@@ -92,8 +92,9 @@ function Footer() {
             <Logo>COVID-19 STATISTICS</Logo>
           </LogoLink>
           <Socials>
-            {socialLinks.map((link) => (
+            {socialLinks.map((link, index) => (
               <Link
+                key={index}
                 target="_blank"
                 rel="noreferrer noopener"
                 href={link.url}
