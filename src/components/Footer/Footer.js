@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import Container from "../../design/components/Container";
 
 const SFooter = styled.footer`
@@ -33,9 +34,7 @@ const Logo = styled.p`
 `;
 
 const Socials = styled.aside`
-  display: grid;
-  grid-template-columns: repeat(2, 1.75rem);
-  grid-template-rows: 1fr;
+  display: flex;
   gap: 1rem;
   align-items: center;
 `;
@@ -81,7 +80,14 @@ function Footer() {
           </LogoLink>
           <Socials>
             <Link
-              href="https://cosminmindru.com/"
+              href="https://www.linkedin.com/in/cosminmindru"
+              title="Cosmin's LinkedIn"
+              component={SocialLink}
+            >
+              <Social as={LinkedInIcon} />
+            </Link>
+            <Link
+              href="https://cosminmindru.com"
               title="Cosmin's Website"
               component={SocialLink}
             >

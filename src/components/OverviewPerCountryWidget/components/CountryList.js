@@ -69,6 +69,12 @@ function CountryList({
     return false;
   };
 
+  const onCountryClick = (country) => {
+    const value = isCountrySelected(country) ? null : country;
+
+    onCountrySelect(value);
+  };
+
   return (
     <AutoSizer style={{ gridArea: "list", padding: "0.25rem 0" }}>
       {({ width, height }) => {
@@ -93,7 +99,7 @@ function CountryList({
                   <SListItem
                     button
                     selected={isCountrySelected(country)}
-                    onClick={() => onCountrySelect(country)}
+                    onClick={() => onCountryClick(country)}
                   >
                     <ListItemAvatar>
                       {country.icon ? (

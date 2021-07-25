@@ -23,10 +23,7 @@ const INITIAL_TIMEFRAMES = [
     label: "All time",
   },
 ];
-const INITIAL_ACTIVE_TIMEFRAME = {
-  value: 30,
-  label: "Month",
-};
+const INITIAL_ACTIVE_TIMEFRAME = INITIAL_TIMEFRAMES[1];
 const INITIAL_ACTIVE_COUNTRY = null;
 const INITIAL_GLOBAL_DATA = [];
 const INITIAL_COUNTRY_DATA = [];
@@ -48,7 +45,10 @@ const HistoricalDataProvider = ({ children }) => {
   useQuery(
     [
       `global-historical-data-${get(activeTimeframe, "value")}`,
-      { lastDays: activeTimeframe.value },
+      {
+        lastDays:
+          activeTimeframe.value === "all" ? "all" : activeTimeframe.value + 1,
+      },
     ],
     getGlobalHistoricalData,
     {
