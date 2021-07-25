@@ -13,7 +13,7 @@ const calculateRecoveryRate = ({
   returnFormatted = false,
 }) => {
   const finishedCases = deaths + recovered;
-  const recoveryRate = parseInt((recovered / finishedCases) * 100);
+  const recoveryRate = +(((recovered / finishedCases) * 100).toFixed(2));
 
   if (returnFormatted) {
     return `${recoveryRate}%`;

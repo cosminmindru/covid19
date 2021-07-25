@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
-import { getOverview } from "../../libs/covid19";
 import calculateDeathRate from "../../utils/calculateDeathRate";
 import calculateRecoveryRate from "../../utils/calculateRecoveryRate";
 import Widget from "../../design/components/Widget";
 import StatSkeleton from "../StatSkeleton";
 import Stat from "./components/Stat";
+import client from "../../libs/novelCovid";
+import getGlobalCaseDistribution from "../../libs/novelCovid/functions/get-global-case-distribution";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -54,22 +55,30 @@ const GlobalCaseDistributonWidget = () => {
   const [recoveryRate, setRecoveryRate] = useState(0);
   const [deathRate, setDeathRate] = useState(0);
 
-  const { status } = useQuery("globalOverview", getOverview, {
-    onSuccess: (data) => {
-      const computedRecoveryRate = calculateRecoveryRate({
-        confirmedCases: data.confirmed.value,
-        recovered: data.recovered.value,
-        deaths: data.deaths.value,
-      });
-      const computedDeathRate = calculateDeathRate({
-        confirmedCases: data.confirmed.value,
-        deaths: data.deaths.value,
-      });
+  const { status } = useQuery(
+    "global-case-distribution",
+    getGlobalCaseDistribution,
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        const computedRecoveryRate = calculateRecoveryRate({
+          confirmedCases: data.data.cases,
+          recovered: data.data.recovered,
+          deaths: data.data.deaths,
+        });
+        const computedDeathRate = calculateDeathRate({
+          confirmedCases: data.data.cases,
+          deaths: data.data.deaths,
+        });
 
-      setRecoveryRate(computedRecoveryRate);
-      setDeathRate(computedDeathRate);
-    },
-  });
+        console.log("computedRecoveryRate", computedRecoveryRate);
+        console.log("computedDeathRate", computedDeathRate);
+
+        setRecoveryRate(computedRecoveryRate);
+        setDeathRate(computedDeathRate);
+      },
+    }
+  );
 
   return (
     <Widget>
@@ -81,14 +90,14 @@ const GlobalCaseDistributonWidget = () => {
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Recovery rate" value={recoveryRate} />
+            <Stat title="Recovery rate" value={recoveryRate || 0} />
           )}
         </StatWrapper>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Death rate" value={deathRate} />
+            <Stat title="Death rate" value={deathRate || 0} />
           )}
         </StatWrapper>
       </SWidgetContent>

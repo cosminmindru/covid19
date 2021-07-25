@@ -2,10 +2,11 @@ import React from "react";
 import get from "lodash/get";
 import styled from "styled-components/macro";
 import { useQuery } from "react-query";
-import { getOverview } from "../../libs/covid19";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
 import StatSkeleton from "../StatSkeleton";
+import client from "../../libs/novelCovid";
+import getGlobalOverview from "../../libs/novelCovid/functions/get-global-overview";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -50,7 +51,7 @@ const StatWrapper = styled.div`
 `;
 
 const GlobalOverviewWidget = () => {
-  const { status, data } = useQuery("globalOverview", getOverview);
+  const { status, data } = useQuery("global-overview", getGlobalOverview);
 
   return (
     <Widget>
@@ -62,21 +63,21 @@ const GlobalOverviewWidget = () => {
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Confirmed" value={get(data, "confirmed.value")} />
+            <Stat title="Confirmed" value={get(data, "data.cases")} />
           )}
         </StatWrapper>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Recovered" value={get(data, "recovered.value")} />
+            <Stat title="Recovered" value={get(data, "data.recovered")} />
           )}
         </StatWrapper>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Deaths" value={get(data, "deaths.value")} />
+            <Stat title="Deaths" value={get(data, "data.deaths")} />
           )}
         </StatWrapper>
       </SWidgetContent>

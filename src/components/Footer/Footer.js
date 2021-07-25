@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import { Link as RouterLink } from "react-router-dom";
 import { Link } from "@material-ui/core";
 import LanguageIcon from "@material-ui/icons/Language";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import Container from "../../design/components/Container";
 
 const SFooter = styled.footer`
@@ -38,9 +39,7 @@ const Logo = styled.p`
 `;
 
 const Socials = styled.aside`
-  display: grid;
-  grid-template-columns: repeat(2, 1.75rem);
-  grid-template-rows: 1fr;
+  display: flex;
   gap: 1rem;
   align-items: center;
 `;
@@ -76,6 +75,19 @@ const Credit = styled.p`
   }
 `;
 
+const socialLinks = [
+  {
+    title: "Cosmin's LinkedIn",
+    url: "https://www.linkedin.com/in/cosminmindru",
+    icon: LinkedInIcon,
+  },
+  {
+    title: "Cosmin's Website",
+    url: "https://cosminmindru.com",
+    icon: LanguageIcon,
+  },
+];
+
 function Footer() {
   return (
     <SFooter>
@@ -85,13 +97,18 @@ function Footer() {
             <Logo>COVID-19 STATISTICS</Logo>
           </LogoLink>
           <Socials>
-            <Link
-              href="https://cosminmindru.com/"
-              title="Cosmin's Website"
-              component={SocialLink}
-            >
-              <Social as={LanguageIcon} />
-            </Link>
+            {socialLinks.map((link, index) => (
+              <Link
+                key={index}
+                target="_blank"
+                rel="noreferrer noopener"
+                href={link.url}
+                title={link.title}
+                component={SocialLink}
+              >
+                <Social as={link.icon} />
+              </Link>
+            ))}
           </Socials>
           <Credit>
             Developed by{" "}

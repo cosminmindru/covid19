@@ -1,13 +1,21 @@
-import get from "lodash/get";
-
 /**
- * Predicate function for finding an entry
+ * Clean the result data by removing anomalies
  *
- * @param {[string]} entry
- * @param {string} comparisonKey
+ * @param {number} value
+ * @param {object} [opts={}]
+ * @param {boolean} [opts.keepAnomalies=false]
+ * @returns {number}
  */
-const findEntry = ([entryKey] = [], comparisonKey) =>
-  entryKey === comparisonKey;
+function sanitizeResult(value = 0, { keepAnomalies = false } = {}) {
+  let sanitizedValue = value;
+
+  // Remove anomalies
+  if (!keepAnomalies && value < 0) {
+    sanitizedValue = 0;
+  }
+
+  return sanitizedValue;
+}
 
 /**
  * @typedef RawHistoricalData
@@ -42,28 +50,37 @@ const formatHistoricalData = ({ data = {} }) => {
   // Return the unformatted data
   if (!cases || !deaths || !recovered) return data;
 
-  const formattedData = Object.entries(cases).map(([date, casesValue]) => {
-    // Death cases for the current date
-    const deathsEntry = Object.entries(deaths).find((entry) =>
-      findEntry(entry, date)
-    );
-    const deathsValue = get(deathsEntry, "[1]") || 0;
+  const results = [];
 
-    // Recovered cases for the current date
-    const recoveredEntry = Object.entries(recovered).find((entry) =>
-      findEntry(entry, date)
-    );
-    const recoveredValue = get(recoveredEntry, "[1]") || 0;
+  let yCases;
+  let yDeaths;
+  let yRecovered;
+  for (let i = 0; i < Object.keys(cases).length; i++) {
+    const date = Object.keys(cases)[i];
+    const tCases = cases[date];
+    const tDeaths = deaths[date];
+    const tRecovered = recovered[date];
 
-    return {
-      date,
-      cases: casesValue,
-      deaths: deathsValue,
-      recovered: recoveredValue,
-    };
-  });
+    if (i >= 1) {
+      const nCases = sanitizeResult(tCases - yCases);
+      const nDeaths = sanitizeResult(tDeaths - yDeaths);
+      const nRecovered = sanitizeResult(tRecovered - yRecovered);
 
-  return formattedData;
+      const entry = {
+        date,
+        cases: nCases,
+        deaths: nDeaths,
+        recovered: nRecovered,
+      };
+      results.push(entry);
+    }
+
+    yCases = tCases;
+    yDeaths = tDeaths;
+    yRecovered = tRecovered;
+  }
+
+  return results;
 };
 
 export default formatHistoricalData;

@@ -12,7 +12,7 @@ const calculateDeathRate = ({
   deaths,
   returnFormatted = false,
 }) => {
-  const deathRate = parseInt((deaths / confirmedCases) * 100);
+  const deathRate = +(((deaths / confirmedCases) * 100).toFixed(2));
 
   if (returnFormatted) {
     return `${deathRate}%`;

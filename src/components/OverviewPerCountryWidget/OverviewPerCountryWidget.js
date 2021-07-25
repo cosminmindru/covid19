@@ -117,8 +117,16 @@ const OverviewPerCountryWidget = () => {
     return newFilteredCountries;
   }, [searchQuery, countries]);
 
-  const handleCountrySelect = (country) => {
+  const handleCountrySelect = (country, origin) => {
     setSelectedCountry(country);
+
+    if (origin === "map") {
+      setSearchQuery(country.country);
+    } else if (["list", "autocomplete"].includes(origin)) {
+      if (country === null) {
+        setSearchQuery("");
+      }
+    }
   };
 
   const handleCountrySearchChange = (event) => {
@@ -129,7 +137,10 @@ const OverviewPerCountryWidget = () => {
     }
   };
 
-  const handleCountrySearchClear = () => setSearchQuery("");
+  const handleCountrySearchClear = () => {
+    setSearchQuery("")
+    setSelectedCountry(null)
+  };
 
   return (
     <Widget>
@@ -153,14 +164,18 @@ const OverviewPerCountryWidget = () => {
                     <CountryList
                       countries={filteredCountries}
                       selectedCountry={selectedCountry}
-                      onCountrySelect={handleCountrySelect}
+                      onCountrySelect={(country) =>
+                        handleCountrySelect(country, "list")
+                      }
                     />
                   </CountryListWrapper>
                 </>
               ) : (
                 <CountryAutocomplete
                   countries={countries}
-                  onCountrySelect={handleCountrySelect}
+                  onCountrySelect={(country) =>
+                    handleCountrySelect(country, "autocomplete")
+                  }
                 />
               )}
             </CountrySelectSection>
@@ -168,7 +183,9 @@ const OverviewPerCountryWidget = () => {
               <WorldCountryMap
                 countries={countries}
                 activeCountry={selectedCountry}
-                onCountryClick={handleCountrySelect}
+                onCountryClick={(country) =>
+                  handleCountrySelect(country, "map")
+                }
                 worldCountriesGeoJSON={worldCountriesGeoJSON}
               />
             </WorldMapSection>
