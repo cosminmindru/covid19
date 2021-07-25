@@ -6,7 +6,6 @@ import calculateRecoveryRate from "../../utils/calculateRecoveryRate";
 import Widget from "../../design/components/Widget";
 import StatSkeleton from "../StatSkeleton";
 import Stat from "./components/Stat";
-import client from "../../libs/novelCovid";
 import getGlobalCaseDistribution from "../../libs/novelCovid/functions/get-global-case-distribution";
 
 const SWidgetContent = styled(Widget.Content)`
