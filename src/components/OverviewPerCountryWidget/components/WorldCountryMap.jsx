@@ -187,8 +187,7 @@ const WorldCountryMap = ({
           <MapCountryPopup
             name={activeCountry.country}
             icon={activeCountry.icon}
-            lastUpdated={activeCountry.updated}
-            confirmedCount={activeCountry.cases}
+            caseCount={activeCountry.cases}
             activeCount={activeCountry.active}
             recoveredCount={activeCountry.recovered}
             deathCount={activeCountry.deaths}

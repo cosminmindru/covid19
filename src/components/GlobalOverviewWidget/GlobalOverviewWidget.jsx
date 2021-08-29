@@ -4,8 +4,11 @@ import styled from "styled-components/macro";
 import { useQuery } from "react-query";
 import Widget from "../../design/components/Widget";
 import Stat from "./components/Stat";
+import SimpleMenu from "../SimpleMenu";
 import StatSkeleton from "../StatSkeleton";
 import getGlobalOverview from "../../libs/novelCovid/functions/get-global-overview";
+import { Button, MenuItem } from "@material-ui/core";
+import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -49,34 +52,85 @@ const StatWrapper = styled.div`
   }
 `;
 
+const TimePeriod = {
+  ALL: {
+    id: "all",
+    title: "All time",
+  },
+  TODAY: {
+    id: "today",
+    title: "Today",
+  },
+};
+
 const GlobalOverviewWidget = () => {
+  const [timePeriod, setTimePeriod] = React.useState(TimePeriod.ALL);
   const { status, data } = useQuery("global-overview", getGlobalOverview);
+  const cases = React.useMemo(() => {
+    if (timePeriod.id === TimePeriod.ALL.id) return get(data, "data.cases");
+
+    return get(data, "data.todayCases");
+  }, [data, timePeriod]);
+  const recovered = React.useMemo(() => {
+    if (timePeriod.id === TimePeriod.ALL.id) return get(data, "data.recovered");
+
+    return get(data, "data.todayRecovered");
+  }, [data, timePeriod]);
+  const deaths = React.useMemo(() => {
+    if (timePeriod.id === TimePeriod.ALL.id) return get(data, "data.deaths");
+
+    return get(data, "data.todayDeaths");
+  }, [data, timePeriod]);
+
+  const renderSimpleMenuChildren = ({ showMenu }) => (
+    <Button endIcon={<KeyboardArrowDownIcon />} onClick={showMenu}>
+      {timePeriod.title}
+    </Button>
+  );
+
+  const renderSimpleMenuOption = (option, { hideMenu }) => (
+    <MenuItem
+      onClick={() => {
+        setTimePeriod(option);
+        hideMenu();
+      }}
+    >
+      {option.title}
+    </MenuItem>
+  );
 
   return (
     <Widget>
       <Widget.Header>
         <Widget.HeaderTitle>Global case overview</Widget.HeaderTitle>
+        <Widget.HeaderAction>
+          <SimpleMenu
+            options={Object.values(TimePeriod)}
+            renderOption={renderSimpleMenuOption}
+            renderChildren={renderSimpleMenuChildren}
+          />
+        </Widget.HeaderAction>
       </Widget.Header>
       <SWidgetContent>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Cases" value={get(data, "data.cases")} />
+            <Stat title="Cases" value={cases} />
           )}
         </StatWrapper>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Recovered" value={get(data, "data.recovered")} />
+            <Stat title="Recovered" value={recovered} />
           )}
         </StatWrapper>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Deaths" value={get(data, "data.deaths")} />
+            <Stat title="Deaths" value={deaths} />
           )}
         </StatWrapper>
       </SWidgetContent>
