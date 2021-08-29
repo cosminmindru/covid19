@@ -10,7 +10,7 @@ const GlobalStyles = createGlobalStyle`
 
   * {
     transition: ${(props) =>
-      `background ${props.theme.durations.baseTransition}ms ease-in-out`}; // Use smoooth transition on color modes switch
+      `background ${props.theme.duration.baseTransition}ms ease-in-out`}; // Use smoooth transition on color modes switch
   }
 
   h1,

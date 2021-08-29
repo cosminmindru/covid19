@@ -1,7 +1,7 @@
 const sizes = {
   htmlBaseFontSize: "16px",
   containerMaxWidth: "75rem",
-  borderRadius: "0.25rem",
+  borderRadius: "0.5rem",
   fontHeading1: "2rem",
   fontHeading2: "1.8rem",
   fontHeading3: "1.6rem",

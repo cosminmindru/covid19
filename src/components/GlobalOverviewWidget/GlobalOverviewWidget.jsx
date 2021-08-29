@@ -55,14 +55,14 @@ const GlobalOverviewWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Global case overview</Widget.Title>
+        <Widget.HeaderTitle>Global case overview</Widget.HeaderTitle>
       </Widget.Header>
       <SWidgetContent>
         <StatWrapper>
           {status === "loading" ? (
             <StatSkeleton />
           ) : (
-            <Stat title="Confirmed" value={get(data, "data.cases")} />
+            <Stat title="Cases" value={get(data, "data.cases")} />
           )}
         </StatWrapper>
         <StatWrapper>
