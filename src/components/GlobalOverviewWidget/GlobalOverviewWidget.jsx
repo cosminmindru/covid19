@@ -102,7 +102,7 @@ const GlobalOverviewWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.HeaderTitle>Global case overview</Widget.HeaderTitle>
+        <Widget.HeaderTitle>Global overview</Widget.HeaderTitle>
         <Widget.HeaderAction>
           <SimpleMenu
             options={Object.values(TimePeriod)}
