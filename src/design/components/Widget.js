@@ -1,4 +1,4 @@
-import styled from "styled-components/macro";
+import styled, { css } from "styled-components/macro";
 import { transparentize } from "polished";
 
 const Widget = styled.article`
@@ -48,14 +48,33 @@ const Content = styled.main`
   }
 `;
 
-const Title = styled.h2`
+const HeaderTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: 600;
   color: ${(props) => props.theme.colors.text};
 `;
 
+const HeaderIcon = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 0 auto;
+  color: ${props => props.theme.colors.accentPrimary};
+
+  ${(props) =>
+    props.clickable &&
+    css`
+      &:hover {
+        transition: color ${props.theme.duration.baseTransition}ms ease-in-out;
+        color: ${props.theme.colors.grey600};
+        cursor: pointer;
+      }
+    `}
+`;
+
 Widget.Header = Header;
 Widget.Content = Content;
-Widget.Title = Title;
+Widget.HeaderTitle = HeaderTitle;
+Widget.HeaderIcon = HeaderIcon;
 
 export default Widget;

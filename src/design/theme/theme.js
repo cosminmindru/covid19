@@ -2,7 +2,8 @@ import breakpoints from "./breakpoints";
 import { light as lightColors, dark as darkColors } from "./colors";
 import sizes from "./sizes";
 import typography from "./typography";
-import durations from "./durations";
+import duration from "./duration";
+import shape from "./shape";
 
 const lightTheme = {
   colorMode: "light",
@@ -10,7 +11,8 @@ const lightTheme = {
   breakpoints,
   sizes,
   typography,
-  durations,
+  duration,
+  shape
 };
 
 const darkTheme = {
@@ -19,7 +21,8 @@ const darkTheme = {
   breakpoints,
   sizes,
   typography,
-  durations,
+  duration,
+  shape
 };
 
 /**

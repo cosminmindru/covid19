@@ -43,7 +43,7 @@ const SWorldCountryMap = styled.div`
 
   & .leaflet-popup-content-wrapper {
     padding: 0;
-    border-radius: 0;
+    border-radius: ${props => props.theme.shape.borderRadius}px;
     background-color: transparent;
   }
 

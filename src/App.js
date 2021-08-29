@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import styled, {
   ThemeProvider as SCThemeProvider,
 } from "styled-components/macro";
+import { ThemeProvider as MUIThemeProvider } from "@material-ui/core";
 import { ReactQueryConfigProvider } from "react-query";
 import { BrowserRouter } from "react-router-dom";
 import { ReactQueryDevtools } from "react-query-devtools";
@@ -12,6 +13,7 @@ import config from "./config";
 import { getTheme } from "./design/theme/theme";
 import GlobalStyles from "./design/globalStyles";
 import ThemeContext from "./context/ThemeContext";
+import { theme as muiTheme } from "./design/mui-theme"
 
 const SReactQueryDevtools = styled.div`
   z-index: 999999;
@@ -31,19 +33,21 @@ const App = () => {
   const scTheme = getTheme(colorMode);
 
   return (
-    <SCThemeProvider theme={scTheme}>
-      <GlobalStyles />
-      <ReactQueryConfigProvider config={queryConfig}>
-        <BrowserRouter>
-          <Router />
-        </BrowserRouter>
-        {!config.isProduction && (
-          <SReactQueryDevtools>
-            <ReactQueryDevtools />
-          </SReactQueryDevtools>
-        )}
-      </ReactQueryConfigProvider>
-    </SCThemeProvider>
+    <MUIThemeProvider theme={muiTheme}>
+      <SCThemeProvider theme={scTheme}>
+        <GlobalStyles />
+        <ReactQueryConfigProvider config={queryConfig}>
+          <BrowserRouter>
+            <Router />
+          </BrowserRouter>
+          {!config.isProduction && (
+            <SReactQueryDevtools>
+              <ReactQueryDevtools />
+            </SReactQueryDevtools>
+          )}
+        </ReactQueryConfigProvider>
+      </SCThemeProvider>
+    </MUIThemeProvider>
   );
 };
 

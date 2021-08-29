@@ -145,7 +145,7 @@ const OverviewPerCountryWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Overview per country</Widget.Title>
+        <Widget.HeaderTitle>Overview per country</Widget.HeaderTitle>
       </Widget.Header>
       <SWidgetContent>
         {status === "success" && (

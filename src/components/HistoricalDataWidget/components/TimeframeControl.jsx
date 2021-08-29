@@ -22,7 +22,7 @@ const SToggleButton = styled(ToggleButton)`
   font-size: ${(props) => props.theme.typography.fontSizeBody};
   color: ${(props) => props.theme.colors.text};
   text-transform: none;
-  transition: all ${(props) => props.theme.durations.baseTransition} ease-in-out;
+  transition: all ${(props) => props.theme.duration.baseTransition} ease-in-out;
 
   &,
   &.MuiToggleButtonGroup-grouped:not(:first-child) {

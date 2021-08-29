@@ -7,6 +7,8 @@ import Widget from "../../design/components/Widget";
 import StatSkeleton from "../StatSkeleton";
 import Stat from "./components/Stat";
 import getGlobalCaseDistribution from "../../libs/novelCovid/functions/get-global-case-distribution";
+import InfoIcon from "@material-ui/icons/Info";
+import { Popover, Typography } from "@material-ui/core";
 
 const SWidgetContent = styled(Widget.Content)`
   display: grid;
@@ -50,9 +52,26 @@ const StatWrapper = styled.div`
   }
 `;
 
+const InfoPopupWrapper = styled.div`
+  max-width: 30rem;
+  padding: 1rem;
+  background-color: ${props => props.theme.colors.grey100}
+`;
+
 const GlobalCaseDistributonWidget = () => {
   const [recoveryRate, setRecoveryRate] = useState(0);
   const [deathRate, setDeathRate] = useState(0);
+  const [oopoverAnchorEl, setPopoverAnchorEl] = React.useState(null);
+  const infoPopoverOpen = Boolean(oopoverAnchorEl);
+  const infoPopoverId = infoPopoverOpen ? "simple-popover" : undefined;
+
+  const onInfoClick = (event) => {
+    setPopoverAnchorEl(event.currentTarget);
+  };
+
+  const onPopoverClose = () => {
+    setPopoverAnchorEl(null);
+  };
 
   const { status } = useQuery(
     "global-case-distribution",
@@ -61,17 +80,14 @@ const GlobalCaseDistributonWidget = () => {
       onSuccess: (data) => {
         console.log(data);
         const computedRecoveryRate = calculateRecoveryRate({
-          confirmedCases: data.data.cases,
+          cases: data.data.cases,
           recovered: data.data.recovered,
           deaths: data.data.deaths,
         });
         const computedDeathRate = calculateDeathRate({
-          confirmedCases: data.data.cases,
+          cases: data.data.cases,
           deaths: data.data.deaths,
         });
-
-        console.log("computedRecoveryRate", computedRecoveryRate);
-        console.log("computedDeathRate", computedDeathRate);
 
         setRecoveryRate(computedRecoveryRate);
         setDeathRate(computedDeathRate);
@@ -82,7 +98,33 @@ const GlobalCaseDistributonWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Global case distribution</Widget.Title>
+        <Widget.HeaderTitle>Global death rate</Widget.HeaderTitle>
+        <Widget.HeaderIcon clickable onClick={onInfoClick}>
+          <InfoIcon />
+        </Widget.HeaderIcon>
+        <Popover
+          id={infoPopoverId}
+          open={infoPopoverOpen}
+          anchorEl={oopoverAnchorEl}
+          onClose={onPopoverClose}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
+          }}
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+        >
+          <InfoPopupWrapper>
+            <Typography>
+              This calculation is relative only! It does NOT take into account
+              different age groups, comorbidities or any other factors besides
+              the total reported numbers. Thus, it SHOULDN'T be used as an accurate
+              death/recovery rate indicator.
+            </Typography>
+          </InfoPopupWrapper>
+        </Popover>
       </Widget.Header>
       <SWidgetContent>
         <StatWrapper>

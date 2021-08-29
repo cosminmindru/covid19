@@ -58,7 +58,7 @@ const Social = styled.div`
   width: 100%;
   height: 100%;
   color: ${(props) => props.theme.colors.text};
-  transition: color ${(props) => `${props.theme.durations.baseTransition}ms`}
+  transition: color ${(props) => `${props.theme.duration.baseTransition}ms`}
     ease-in-out;
 
   &:hover {
@@ -94,7 +94,7 @@ function Footer() {
       <Container>
         <Content>
           <LogoLink to="/">
-            <Logo>COVID-19 STATISTICS</Logo>
+            <Logo>COVID-19 DASHBOARD</Logo>
           </LogoLink>
           <Socials>
             {socialLinks.map((link, index) => (

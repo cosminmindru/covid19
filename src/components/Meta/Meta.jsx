@@ -1,12 +1,12 @@
 import React from "react";
 import { Helmet as Head } from "react-helmet";
 
-const Meta = ({ title, description = "COVID-19 Statistics" }) => {
+const Meta = ({ title, description = "COVID-19 Dashboard" }) => {
   return (
     <Head
       title={title}
-      titleTemplate="%s | COVID-19 Statistics"
-      defaultTitle="COVID-19 Statistics"
+      titleTemplate="%s | COVID-19 Dashboard"
+      defaultTitle="COVID-19 Dashboard"
     >
       <meta name="description" content={description} />
     </Head>

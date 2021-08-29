@@ -73,7 +73,7 @@ const Header = () => {
     <SHeader>
       <SContainer>
         <LogoLink to="/">
-          <Logo>COVID-19 STATISTICS</Logo>
+          <Logo>COVID-19 DASHBOARD</Logo>
         </LogoLink>
         <ColorModeButton onClick={switchColorMode}>
           {colorMode === "dark" ? <MoonIcon /> : <SunIcon />}

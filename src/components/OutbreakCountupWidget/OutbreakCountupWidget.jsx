@@ -21,7 +21,7 @@ const OutbreakCountupWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Time since first case</Widget.Title>
+        <Widget.HeaderTitle>Time since first case</Widget.HeaderTitle>
       </Widget.Header>
       <SWidgetContent yPadding xPadding>
         {days && <TimeElement value={days} label="Days" />}

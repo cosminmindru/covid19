@@ -51,7 +51,7 @@ const HistoricalDataWidget = () => {
   return (
     <Widget>
       <Widget.Header>
-        <Widget.Title>Historical data</Widget.Title>
+        <Widget.HeaderTitle>Historical data</Widget.HeaderTitle>
       </Widget.Header>
       <SWidgetContent yPadding xPadding>
         <DatasetControlWrapper>
