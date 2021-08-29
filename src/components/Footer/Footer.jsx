@@ -121,7 +121,7 @@ function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              The NovelCOVID API
+              Disease.sh
             </Link>
           </Credit>
         </Content>
