@@ -10,10 +10,10 @@ import dayjs from "dayjs";
 import dayjsRelativeTime from "dayjs/plugin/relativeTime";
 import Router from "./router";
 import config from "./config";
-import { getTheme } from "./design/theme/theme";
+import { getTheme as getScTheme } from "./design/theme/theme";
 import GlobalStyles from "./design/globalStyles";
 import ThemeContext from "./context/ThemeContext";
-import { theme as muiTheme } from "./design/mui-theme"
+import { getTheme as getMuiTheme } from "./design/mui-theme"
 
 const SReactQueryDevtools = styled.div`
   z-index: 999999;
@@ -30,7 +30,8 @@ const queryConfig = {
 const App = () => {
   const { colorMode } = useContext(ThemeContext);
 
-  const scTheme = getTheme(colorMode);
+  const scTheme =  getScTheme(colorMode);
+  const muiTheme = getMuiTheme(colorMode)
 
   return (
     <MUIThemeProvider theme={muiTheme}>

@@ -59,7 +59,7 @@ const HeaderIcon = styled.span`
   justify-content: center;
   align-items: center;
   margin: 0 0 0 auto;
-  color: ${props => props.theme.colors.accentPrimary};
+  color: ${(props) => props.theme.colors.accentPrimary};
 
   ${(props) =>
     props.clickable &&
@@ -72,9 +72,14 @@ const HeaderIcon = styled.span`
     `}
 `;
 
+const HeaderAction = styled.div`
+  margin: 0 0 0 auto;
+`;
+
 Widget.Header = Header;
 Widget.Content = Content;
 Widget.HeaderTitle = HeaderTitle;
 Widget.HeaderIcon = HeaderIcon;
+Widget.HeaderAction = HeaderAction;
 
 export default Widget;

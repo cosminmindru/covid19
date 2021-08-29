@@ -68,7 +68,7 @@ const StatValue = styled.p`
 const MapCountryPopup = ({
   name,
   icon,
-  confirmedCount,
+  caseCount,
   activeCount,
   recoveredCount,
   deathCount,
@@ -93,19 +93,35 @@ const MapCountryPopup = ({
         <Separator />
         <Stat>
           <StatTitle>Confirmed</StatTitle>
-          <StatValue>{formatNumber({ value: confirmedCount })}</StatValue>
+          <StatValue>
+            {typeof caseCount === "number"
+              ? formatNumber({ value: caseCount })
+              : "N/A"}
+          </StatValue>
         </Stat>
         <Stat>
           <StatTitle>Active</StatTitle>
-          <StatValue>{formatNumber({ value: activeCount })}</StatValue>
+          <StatValue>
+            {typeof activeCount === "number"
+              ? formatNumber({ value: activeCount })
+              : "N/A"}
+          </StatValue>
         </Stat>
         <Stat>
           <StatTitle>Recovered</StatTitle>
-          <StatValue>{formatNumber({ value: recoveredCount })}</StatValue>
+          <StatValue>
+            {typeof recoveredCount === "number"
+              ? formatNumber({ value: recoveredCount })
+              : "N/A"}
+          </StatValue>
         </Stat>
         <Stat>
           <StatTitle>Deaths</StatTitle>
-          <StatValue>{formatNumber({ value: deathCount })}</StatValue>
+          <StatValue>
+            {typeof deathCount === "number"
+              ? formatNumber({ value: deathCount })
+              : "N/A"}
+          </StatValue>
         </Stat>
       </SMapCountryPopup>
     </LeafletPopup>
