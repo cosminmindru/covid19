@@ -1,6 +1,5 @@
 import client from "../index";
 import get from "lodash/get";
-import appConfig from "../../../config";
 
 /**
  * Gets a list of all countries with data
@@ -13,33 +12,14 @@ import appConfig from "../../../config";
  *
  * @returns {Promise<object[]|Error>}
  */
-const getCountries = async (
-  key,
-  { sortBy, includeIcon = true, iconSize = 64 } = {}
-) => {
+const getCountries = async (key, { sortBy } = {}) => {
   try {
     const response = await client.get("/countries", {
       params: {
-        sort: sortBy,
-      },
+        sort: sortBy
+      }
     });
-    let countries = get(response, "data");
-
-    // Add icon to countries
-    if (includeIcon && countries) {
-      countries = countries.map((country) => {
-        const countryCode = get(country, "countryInfo.iso2");
-
-        if (countryCode) {
-          return {
-            ...country,
-            icon: `${appConfig.countryFlagsApiBaseUrl}/${countryCode}/flat/${iconSize}.png`,
-          };
-        }
-
-        return country;
-      });
-    }
+    const countries = get(response, "data");
 
     return countries;
   } catch (error) {
