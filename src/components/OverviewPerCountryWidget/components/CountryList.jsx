@@ -18,8 +18,10 @@ const SCountryListItem = styled.li`
 `;
 
 const SCountryIcon = styled.img`
-  height: 2rem;
-  border-radius: 1rem;
+  width: 2.25rem;
+  height: 1.5rem;
+  object-fit: cover;
+  border-radius: 0.25rem;
   object-fit: cover;
 `;
 
@@ -102,9 +104,9 @@ function CountryList({
                     onClick={() => onCountryClick(country)}
                   >
                     <ListItemAvatar>
-                      {country.icon ? (
+                      {country.countryInfo.flag ? (
                         <SCountryIcon
-                          src={country.icon}
+                          src={country.countryInfo.flag}
                           alt={country.country}
                         />
                       ) : (
